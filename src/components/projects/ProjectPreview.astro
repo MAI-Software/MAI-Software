@@ -3,6 +3,7 @@ import type { CollectionEntry } from 'astro:content';
 import type { Locale } from '../../data/company';
 import { getCategory } from '../../data/categories';
 import { useTranslations, projectPath } from '../../i18n/utils';
+import { withBase } from '../../lib/base';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -20,7 +21,7 @@ const Heading = headingLevel;
 
 <article class="card project-card" data-reveal>
   <a href={href} class="card-cover" tabindex="-1" aria-hidden="true">
-    <img src={data.cover} alt={data.coverAlt} width="1280" height="800" loading="lazy" />
+    <img src={withBase(data.cover)} alt={data.coverAlt} width="1280" height="800" loading="lazy" />
   </a>
 
   <div class="card-meta">

@@ -1,4 +1,5 @@
 import type { Locale } from '../data/company';
+import { withBase } from '../lib/base';
 import { ui, type UIKey } from './ui';
 
 export function useTranslations(locale: Locale) {
@@ -9,20 +10,20 @@ export function useTranslations(locale: Locale) {
 
 /** Home path for a locale. */
 export function homePath(locale: Locale): string {
-  return locale === 'es' ? '/' : '/en/';
+  return withBase(locale === 'es' ? '/' : '/en/');
 }
 
 /** Contact path for a locale. */
 export function contactPath(locale: Locale): string {
-  return locale === 'es' ? '/contacto' : '/en/contact';
+  return withBase(locale === 'es' ? '/contacto' : '/en/contact');
 }
 
 /** Projects index path for a locale. */
 export function projectsPath(locale: Locale): string {
-  return locale === 'es' ? '/proyectos' : '/en/projects';
+  return withBase(locale === 'es' ? '/proyectos' : '/en/projects');
 }
 
 /** Project detail path for a locale. */
 export function projectPath(locale: Locale, slug: string): string {
-  return locale === 'es' ? `/proyectos/${slug}` : `/en/projects/${slug}`;
+  return withBase(locale === 'es' ? `/proyectos/${slug}` : `/en/projects/${slug}`);
 }

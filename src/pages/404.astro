@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { company } from '../data/company';
-import { useTranslations } from '../i18n/utils';
+import { useTranslations, homePath } from '../i18n/utils';
 
 // 404 compartida: Cloudflare Pages sirve /404.html para cualquier ruta no encontrada.
 const locale = 'es';
@@ -19,7 +19,7 @@ const t = useTranslations(locale);
       <p class="notfound-code" aria-hidden="true">404</p>
       <h1>{t('notfound.title')}</h1>
       <p class="lead">{t('notfound.text')}</p>
-      <a href="/" class="btn btn-primary">{t('notfound.back')}</a>
+      <a href={homePath(locale)} class="btn btn-primary">{t('notfound.back')}</a>
     </div>
   </section>
 </BaseLayout>

@@ -1,4 +1,5 @@
 import type { Locale } from './company';
+import { withBase } from '../lib/base';
 
 export type CategoryId = 'game' | 'saas' | 'web';
 
@@ -11,7 +12,7 @@ export interface Category {
   intro: Record<Locale, string>;
 }
 
-export const categories: Category[] = [
+const rawCategories: Category[] = [
   {
     id: 'game',
     number: '01',
@@ -55,6 +56,12 @@ export const categories: Category[] = [
     },
   },
 ];
+
+/** Se exportan con el `base` de Astro ya aplicado a las rutas. */
+export const categories: Category[] = rawCategories.map((cat) => ({
+  ...cat,
+  path: { es: withBase(cat.path.es), en: withBase(cat.path.en) },
+}));
 
 export function getCategory(id: CategoryId): Category {
   const found = categories.find((c) => c.id === id);

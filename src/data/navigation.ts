@@ -1,11 +1,13 @@
 import type { Locale } from './company';
+import { withBase } from '../lib/base';
 
 export interface NavItem {
   label: Record<Locale, string>;
   href: Record<Locale, string>;
 }
 
-export const mainNav: NavItem[] = [
+/** Rutas del sitio; se prefijan con el `base` de Astro al exportarse. */
+const items: NavItem[] = [
   {
     label: { es: 'Proyectos', en: 'Projects' },
     href: { es: '/proyectos', en: '/en/projects' },
@@ -32,8 +34,7 @@ export const mainNav: NavItem[] = [
   },
 ];
 
-export const footerNav: NavItem[] = [
-  ...mainNav,
+const legalItems: NavItem[] = [
   {
     label: { es: 'Legal', en: 'Legal' },
     href: { es: '/legal', en: '/en/legal' },
@@ -43,3 +44,12 @@ export const footerNav: NavItem[] = [
     href: { es: '/privacidad', en: '/en/privacy' },
   },
 ];
+
+const applyBase = (list: NavItem[]): NavItem[] =>
+  list.map((item) => ({
+    label: item.label,
+    href: { es: withBase(item.href.es), en: withBase(item.href.en) },
+  }));
+
+export const mainNav = applyBase(items);
+export const footerNav = applyBase([...items, ...legalItems]);

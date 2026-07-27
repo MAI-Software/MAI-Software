@@ -1,6 +1,7 @@
 ---
 import type { Locale } from '../../data/company';
 import { useTranslations, projectsPath, contactPath } from '../../i18n/utils';
+import { withBase } from '../../lib/base';
 
 interface Props {
   locale: Locale;
@@ -34,7 +35,13 @@ const titleEnd = title.slice(cut + 1);
 
     <div class="hero-visual" data-reveal aria-hidden="true">
       <div class="hero-panel panel" data-mouse-depth="16">
-        <img src="/brand/logo-light.webp" alt="" width="300" height="121" fetchpriority="high" />
+        <img
+          src={withBase('/brand/logo-light.webp')}
+          alt=""
+          width="300"
+          height="121"
+          fetchpriority="high"
+        />
         <span class="hero-panel-glow"></span>
       </div>
     </div>

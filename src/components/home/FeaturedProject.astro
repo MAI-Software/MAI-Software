@@ -3,6 +3,7 @@ import type { CollectionEntry } from 'astro:content';
 import type { Locale } from '../../data/company';
 import { getCategory } from '../../data/categories';
 import { useTranslations, projectPath } from '../../i18n/utils';
+import { withBase } from '../../lib/base';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -19,7 +20,7 @@ const href = projectPath(locale, data.slug);
 <section class="section section-line featured">
   <div class="container featured-inner">
     <a href={href} class="featured-cover" data-parallax="0.04" tabindex="-1" aria-hidden="true">
-      <img src={data.cover} alt={data.coverAlt} width="1280" height="800" loading="lazy" />
+      <img src={withBase(data.cover)} alt={data.coverAlt} width="1280" height="800" loading="lazy" />
       <span class="cover-sheen"></span>
     </a>
 

@@ -3,6 +3,7 @@ import type { CollectionEntry } from 'astro:content';
 import type { Locale } from '../../data/company';
 import { getCategory } from '../../data/categories';
 import { useTranslations, projectPath } from '../../i18n/utils';
+import { withBase } from '../../lib/base';
 
 interface Props {
   projects: CollectionEntry<'projects'>[];
@@ -15,7 +16,7 @@ const t = useTranslations(locale);
 
 const slides = projects.map((p) => ({
   href: projectPath(locale, p.data.slug),
-  cover: p.data.cover,
+  cover: withBase(p.data.cover),
   coverAlt: p.data.coverAlt,
   title: p.data.title,
   excerpt: p.data.excerpt,

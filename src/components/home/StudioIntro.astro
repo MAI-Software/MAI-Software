@@ -1,6 +1,7 @@
 ---
 import type { Locale } from '../../data/company';
 import { useTranslations } from '../../i18n/utils';
+import { withBase } from '../../lib/base';
 
 interface Props {
   locale: Locale;
@@ -8,7 +9,7 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = useTranslations(locale);
-const studioHref = locale === 'es' ? '/estudio' : '/en/studio';
+const studioHref = withBase(locale === 'es' ? '/estudio' : '/en/studio');
 ---
 
 <section class="section section-line">

@@ -2,6 +2,7 @@
 import { company, type Locale } from '../../data/company';
 import { mainNav } from '../../data/navigation';
 import { useTranslations, homePath, contactPath } from '../../i18n/utils';
+import { withBase } from '../../lib/base';
 
 interface Props {
   locale: Locale;
@@ -11,14 +12,14 @@ interface Props {
 const { locale, alternatePath } = Astro.props;
 const t = useTranslations(locale);
 const altLocale: Locale = locale === 'es' ? 'en' : 'es';
-const langHref = alternatePath ?? homePath(altLocale);
+const langHref = alternatePath ? withBase(alternatePath) : homePath(altLocale);
 const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 ---
 
 <header class="site-header">
   <div class="container header-inner">
     <a href={homePath(locale)} class="logo-link" aria-label={company.name}>
-      <img src="/brand/logo-light.webp" alt="" width="80" height="32" />
+      <img src={withBase('/brand/logo-light.webp')} alt="" width="80" height="32" />
       <span class="visually-hidden">{company.name}</span>
     </a>
 

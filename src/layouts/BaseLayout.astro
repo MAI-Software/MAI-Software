@@ -12,6 +12,7 @@ import Footer from '../components/global/Footer.astro';
 import ContactCTA from '../components/global/ContactCTA.astro';
 import { company, type Locale } from '../data/company';
 import { useTranslations } from '../i18n/utils';
+import { withBase } from '../lib/base';
 
 interface Props {
   locale: Locale;
@@ -34,11 +35,13 @@ const {
 } = Astro.props;
 
 const t = useTranslations(locale);
+// Astro.url.pathname ya incluye el base; el resto de rutas hay que prefijarlas.
 const canonical = new URL(Astro.url.pathname, Astro.site);
-const ogImageUrl = new URL(ogImage, Astro.site);
+const ogImageUrl = new URL(withBase(ogImage), Astro.site);
 const alternateLocale: Locale = locale === 'es' ? 'en' : 'es';
-const alternateUrl = alternatePath ? new URL(alternatePath, Astro.site) : null;
+const alternateUrl = alternatePath ? new URL(withBase(alternatePath), Astro.site) : null;
 const xDefaultUrl = locale === 'es' ? canonical : alternateUrl;
+const siteRoot = new URL(withBase('/'), Astro.site).toString();
 
 // Datos estructurados: solo hechos reales (spec §19/§32)
 const jsonLd = {
@@ -47,14 +50,14 @@ const jsonLd = {
     {
       '@type': 'Organization',
       name: company.name,
-      url: Astro.site?.toString(),
-      logo: new URL('/icon-512.png', Astro.site).toString(),
+      url: siteRoot,
+      logo: new URL(withBase('/icon-512.png'), Astro.site).toString(),
       sameAs: [company.social.github].filter(Boolean),
     },
     {
       '@type': 'WebSite',
       name: company.name,
-      url: Astro.site?.toString(),
+      url: siteRoot,
       inLanguage: ['es', 'en'],
     },
   ],
@@ -69,10 +72,10 @@ const jsonLd = {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
-    <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="icon" type="image/png" sizes="32x32" href={withBase('/favicon-32.png')} />
+    <link rel="icon" type="image/png" sizes="512x512" href={withBase('/icon-512.png')} />
+    <link rel="apple-touch-icon" href={withBase('/apple-touch-icon.png')} />
+    <link rel="sitemap" href={withBase('/sitemap-index.xml')} />
     <meta name="generator" content={Astro.generator} />
     <meta name="theme-color" content="#0B1220" />
 

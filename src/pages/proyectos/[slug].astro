@@ -7,6 +7,7 @@ import ProjectNavigation from '../../components/projects/ProjectNavigation.astro
 import { company } from '../../data/company';
 import { getCategory } from '../../data/categories';
 import { useTranslations, projectsPath, contactPath } from '../../i18n/utils';
+import { withBase } from '../../lib/base';
 import { getProjects, getProjectNeighbors } from '../../lib/projects';
 
 export async function getStaticPaths() {
@@ -46,7 +47,7 @@ const { prev, next } = await getProjectNeighbors(locale, data.slug);
       </header>
 
       <img
-        src={data.cover}
+        src={withBase(data.cover)}
         alt={data.coverAlt}
         width="1280"
         height="800"

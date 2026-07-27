@@ -2,11 +2,14 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// Sitio raíz de usuario en GitHub Pages. Sustituir si llega dominio propio.
+// GitHub Pages de proyecto: la web vive bajo /MAI-Software/.
+// Si algún día hay dominio propio, poner SITE_URL al dominio y BASE a '/'.
 const SITE_URL = 'https://mai-software.github.io';
+const BASE = '/MAI-Software';
 
 export default defineConfig({
   site: SITE_URL,
+  base: BASE,
   trailingSlash: 'ignore',
   i18n: {
     defaultLocale: 'es',

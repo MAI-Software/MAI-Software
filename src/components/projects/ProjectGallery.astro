@@ -1,4 +1,6 @@
 ---
+import { withBase } from '../../lib/base';
+
 interface Props {
   images: string[];
   /** Alt base; se numera cada imagen. */
@@ -13,7 +15,7 @@ const { images, altBase } = Astro.props;
     <div class="project-gallery">
       {images.map((src, i) => (
         <img
-          src={src}
+          src={withBase(src)}
           alt={`${altBase} — ${i + 1}`}
           width="1280"
           height="800"
