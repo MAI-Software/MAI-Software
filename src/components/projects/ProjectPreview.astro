@@ -20,7 +20,12 @@ const Heading = headingLevel;
 ---
 
 <article class="card project-card" data-reveal>
-  <a href={href} class="card-cover" tabindex="-1" aria-hidden="true">
+  <a href={href} class="card-cover mockup" tabindex="-1" aria-hidden="true">
+    <span class="mockup-bar">
+      <span></span>
+      <span></span>
+      <span></span>
+    </span>
     <img src={withBase(data.cover)} alt={data.coverAlt} width="1280" height="800" loading="lazy" />
   </a>
 
@@ -67,8 +72,9 @@ const Heading = headingLevel;
 
   .card-cover {
     display: block;
-    overflow: hidden;
+    border-radius: 0;
     border-bottom: 1px solid var(--line);
+    background: transparent;
   }
 
   .card-cover img {

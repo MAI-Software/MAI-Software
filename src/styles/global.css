@@ -203,6 +203,97 @@ button {
 }
 
 /* ============================================
+   Foco cenital, formas de marca y marco de ventana
+   ============================================ */
+
+/* Fuente de luz de marca sobre el hero */
+.lamp {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  translate: -50% 0;
+  width: min(1100px, 130%);
+  height: 460px;
+  pointer-events: none;
+  z-index: var(--z-base);
+  /* Dos elipses simétricas: haz de luz predecible en cualquier ancho */
+  background:
+    radial-gradient(46% 78% at 50% 0%, rgba(56, 130, 251, 0.34), transparent 72%),
+    radial-gradient(70% 100% at 50% -8%, rgba(98, 66, 252, 0.26), transparent 74%);
+}
+
+/* Filo luminoso: el borde del foco */
+.lamp::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 24%;
+  right: 24%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(130, 165, 255, 0.8), transparent);
+}
+
+/* Formas geométricas de marca al fondo */
+.brand-shape {
+  position: absolute;
+  pointer-events: none;
+  z-index: var(--z-base);
+  border-radius: var(--radius-pill);
+  background: var(--gradient-brand);
+  opacity: 0.34;
+  filter: blur(1.5px);
+  box-shadow: 0 0 70px rgba(56, 130, 251, 0.4);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .brand-shape {
+    animation: drift 15s ease-in-out infinite alternate;
+  }
+
+  @keyframes drift {
+    to {
+      translate: 0 -24px;
+    }
+  }
+}
+
+/* Marco de ventana para capturas de producto */
+.mockup {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--ink-900);
+}
+
+.mockup-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px var(--space-4);
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--line);
+}
+
+.mockup-bar span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--line-strong);
+}
+
+.mockup-bar span:first-child {
+  background: rgba(248, 113, 113, 0.65);
+}
+
+.mockup-bar span:nth-child(2) {
+  background: rgba(251, 191, 36, 0.65);
+}
+
+.mockup-bar span:nth-child(3) {
+  background: rgba(52, 211, 153, 0.65);
+}
+
+/* ============================================
    Superficies de cristal
    ============================================ */
 .panel {
@@ -225,19 +316,27 @@ button {
   pointer-events: none;
 }
 
-/* Tarjeta con foco de luz que sigue al puntero */
+/* Tarjeta: borde iluminado que sigue al puntero + foco interior.
+   El borde se pinta con dos fondos (padding-box / border-box), así el
+   degradado vive en el borde sin capas extra. */
 .card {
   position: relative;
   display: grid;
   gap: var(--space-4);
   align-content: start;
   padding: clamp(var(--space-5), 3vw, var(--space-6));
-  background: var(--glass);
-  border: 1px solid var(--line);
+  border: 1px solid transparent;
   border-radius: var(--radius-lg);
   overflow: hidden;
+  background:
+    linear-gradient(var(--glass), var(--glass)) padding-box,
+    radial-gradient(
+        16rem 16rem at var(--spot-x, 50%) var(--spot-y, 0%),
+        rgba(120, 150, 255, 0.55),
+        var(--line) 65%
+      )
+      border-box;
   transition:
-    border-color var(--duration-base) var(--ease-standard),
     background-color var(--duration-base) var(--ease-standard),
     box-shadow var(--duration-base) var(--ease-standard);
 }
@@ -249,27 +348,14 @@ button {
   pointer-events: none;
   opacity: 0;
   background: radial-gradient(
-    22rem 22rem at var(--spot-x, 50%) var(--spot-y, 0%),
-    rgba(98, 66, 252, 0.22),
-    transparent 60%
+    20rem 20rem at var(--spot-x, 50%) var(--spot-y, 0%),
+    rgba(98, 66, 252, 0.2),
+    transparent 62%
   );
   transition: opacity var(--duration-base) var(--ease-standard);
 }
 
-.card::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 12%;
-  right: 12%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  pointer-events: none;
-}
-
 .card:hover {
-  background: var(--glass-strong);
-  border-color: var(--line-strong);
   box-shadow: var(--shadow-md);
 }
 
@@ -488,8 +574,9 @@ button {
 /* ============================================
    Motion: reveals y parallax
    ============================================ */
+/* Solo se oculta si el script ha confirmado que puede animar (.motion-ready) */
 @media (prefers-reduced-motion: no-preference) {
-  [data-reveal] {
+  .motion-ready [data-reveal] {
     opacity: 0;
     transform: translateY(26px);
     transition:
@@ -497,7 +584,7 @@ button {
       transform 700ms var(--ease-standard);
   }
 
-  [data-reveal].is-visible {
+  .motion-ready [data-reveal].is-visible {
     opacity: 1;
     transform: none;
   }

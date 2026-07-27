@@ -25,6 +25,10 @@ const live = projects.filter((p) => p.data.demoUrl).length;
 ---
 
 <section class="hero" data-mouse-parallax>
+  <div class="lamp" aria-hidden="true"></div>
+  <div class="brand-shape shape-1" data-mouse-depth="26" aria-hidden="true"></div>
+  <div class="brand-shape shape-2" data-mouse-depth="16" aria-hidden="true"></div>
+
   <div class="container hero-inner">
     <div class="hero-copy" data-reveal-group>
       <p class="eyebrow" data-reveal>{t('hero.eyebrow')}</p>
@@ -56,12 +60,17 @@ const live = projects.filter((p) => p.data.demoUrl).length;
       </dl>
     </div>
 
-    <div class="hero-stack" data-reveal>
+    <div class="hero-stack" data-reveal data-scroll-tilt>
       <ul class="stack-list">
         {
           previews.map((p, i) => (
             <li class="stack-item" style={`--i:${i}`}>
-              <a href={projectPath(locale, p.data.slug)} class="stack-card">
+              <a href={projectPath(locale, p.data.slug)} class="stack-card mockup">
+                <span class="mockup-bar" aria-hidden="true">
+                  <span />
+                  <span />
+                  <span />
+                </span>
                 <img
                   src={withBase(p.data.cover)}
                   alt={p.data.coverAlt}
@@ -87,9 +96,29 @@ const live = projects.filter((p) => p.data.demoUrl).length;
   .hero {
     position: relative;
     padding-block: clamp(var(--space-7), 7vw, var(--space-9));
+    overflow: clip;
+  }
+
+  .shape-1 {
+    top: 12%;
+    right: 6%;
+    width: 320px;
+    height: 26px;
+    rotate: -34deg;
+  }
+
+  .shape-2 {
+    bottom: 14%;
+    left: -60px;
+    width: 240px;
+    height: 18px;
+    rotate: -34deg;
+    animation-delay: -6s;
   }
 
   .hero-inner {
+    position: relative;
+    z-index: var(--z-raised);
     display: grid;
     gap: clamp(var(--space-6), 5vw, var(--space-8));
     align-items: center;
@@ -146,6 +175,7 @@ const live = projects.filter((p) => p.data.demoUrl).length;
   /* --- Pila de proyectos --- */
   .hero-stack {
     display: none;
+    perspective: 1400px;
   }
 
   .stack-list {
@@ -153,6 +183,10 @@ const live = projects.filter((p) => p.data.demoUrl).length;
     margin: 0;
     padding: 0;
     display: grid;
+    transform-style: preserve-3d;
+    /* El script pone --tilt: 1 arriba y 0 al entrar en pantalla */
+    rotate: x calc(var(--tilt, 0) * 16deg);
+    transition: rotate var(--duration-slow) var(--ease-standard);
   }
 
   .stack-item {
@@ -166,13 +200,9 @@ const live = projects.filter((p) => p.data.demoUrl).length;
   }
 
   .stack-card {
-    position: relative;
     display: block;
-    border-radius: var(--radius-lg);
-    overflow: hidden;
     border: 1px solid var(--line-strong);
     box-shadow: var(--shadow-lg);
-    background: var(--ink-900);
   }
 
   .stack-card img {

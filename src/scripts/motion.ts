@@ -28,11 +28,16 @@ document.querySelectorAll('[data-reveal-group]').forEach((group) => {
   });
 });
 
-/* --- Reveals --- */
-const revealEls = document.querySelectorAll('[data-reveal]');
-if (reduced) {
-  revealEls.forEach((el) => el.classList.add('is-visible'));
-} else {
+/* --- Reveals ---
+   El contenido nace visible en CSS; solo se oculta cuando este script
+   confirma que puede animarlo. Así un fallo de JS nunca deja la página
+   en blanco. Además hay una red de seguridad por tiempo. */
+const revealEls = Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]'));
+const showAll = () => revealEls.forEach((el) => el.classList.add('is-visible'));
+
+if (!reduced && revealEls.length > 0 && 'IntersectionObserver' in window) {
+  document.documentElement.classList.add('motion-ready');
+
   const io = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
@@ -45,6 +50,13 @@ if (reduced) {
     { threshold: 0.1, rootMargin: '0px 0px -60px 0px' },
   );
   revealEls.forEach((el) => io.observe(el));
+
+  // Si el observador nunca reporta (contextos sin composición), se muestra todo.
+  window.setTimeout(() => {
+    if (!revealEls.some((el) => el.classList.contains('is-visible'))) showAll();
+  }, 2000);
+} else {
+  showAll();
 }
 
 /* --- Scroll: progreso, cabecera, parallax de capas y escenario --- */
@@ -82,6 +94,32 @@ const onScroll = perFrame(() => {
 window.addEventListener('scroll', () => onScroll(null), { passive: true });
 window.addEventListener('resize', () => onScroll(null), { passive: true });
 onScroll(null);
+
+/* --- Inclinación 3D que se endereza al entrar en pantalla --- */
+if (!reduced && 'IntersectionObserver' in window) {
+  const tilted = Array.from(document.querySelectorAll<HTMLElement>('[data-scroll-tilt]'));
+  for (const el of tilted) {
+    const list = el.querySelector<HTMLElement>('.stack-list') ?? el;
+    const flatten = () => list.style.setProperty('--tilt', '0');
+
+    list.style.setProperty('--tilt', '1');
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            flatten();
+            io.disconnect();
+          }
+        }
+      },
+      { threshold: 0.35 },
+    );
+    io.observe(el);
+
+    // Red de seguridad: nunca dejar la pila torcida si el observador no reporta
+    window.setTimeout(flatten, 2000);
+  }
+}
 
 /* --- Foco de luz que sigue al puntero dentro de las tarjetas --- */
 if (finePointer) {
