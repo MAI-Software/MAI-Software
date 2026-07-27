@@ -73,8 +73,8 @@ p {
 /* Cabecera de sección reutilizable */
 .section-head {
   display: grid;
-  gap: var(--space-4);
-  margin-bottom: clamp(var(--space-6), 5vw, var(--space-8));
+  gap: var(--space-3);
+  margin-bottom: clamp(var(--space-5), 4vw, var(--space-7));
   justify-items: start;
 }
 

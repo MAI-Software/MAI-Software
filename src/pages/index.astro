@@ -2,7 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/home/Hero.astro';
 import CategoryIndex from '../components/home/CategoryIndex.astro';
-import FeaturedProject from '../components/home/FeaturedProject.astro';
 import ProjectFeed from '../components/home/ProjectFeed.astro';
 import Process from '../components/home/Process.astro';
 import StudioIntro from '../components/home/StudioIntro.astro';
@@ -11,8 +10,12 @@ import { company } from '../data/company';
 import { getProjects, getFeaturedProject } from '../lib/projects';
 
 const locale = 'es';
+// El proyecto destacado encabeza la pila del hero
 const featured = await getFeaturedProject(locale);
-const projects = await getProjects(locale);
+const all = await getProjects(locale);
+const projects = featured
+  ? [featured, ...all.filter((p) => p.data.slug !== featured.data.slug)]
+  : all;
 ---
 
 <BaseLayout
@@ -21,9 +24,8 @@ const projects = await getProjects(locale);
   description={company.tagline.es}
   alternatePath="/en/"
 >
-  <Hero locale={locale} />
+  <Hero locale={locale} projects={projects} />
   <CategoryIndex locale={locale} />
-  {featured && <FeaturedProject project={featured} locale={locale} />}
   {projects.length > 0 && <ProjectFeed projects={projects} locale={locale} />}
   <Process locale={locale} />
   <StudioIntro locale={locale} />

@@ -1,13 +1,16 @@
 ---
+import type { CollectionEntry } from 'astro:content';
 import type { Locale } from '../../data/company';
-import { useTranslations, projectsPath, contactPath } from '../../i18n/utils';
+import { getCategory } from '../../data/categories';
+import { useTranslations, projectsPath, contactPath, projectPath } from '../../i18n/utils';
 import { withBase } from '../../lib/base';
 
 interface Props {
   locale: Locale;
+  projects: CollectionEntry<'projects'>[];
 }
 
-const { locale } = Astro.props;
+const { locale, projects } = Astro.props;
 const t = useTranslations(locale);
 
 // Última palabra del H1 con gradiente de marca
@@ -15,6 +18,10 @@ const title = t('hero.title');
 const cut = title.lastIndexOf(' ');
 const titleStart = title.slice(0, cut);
 const titleEnd = title.slice(cut + 1);
+
+// Pila de vistas previas reales: el hero enseña producto, no adornos
+const previews = projects.slice(0, 3);
+const live = projects.filter((p) => p.data.demoUrl).length;
 ---
 
 <section class="hero" data-mouse-parallax>
@@ -25,25 +32,53 @@ const titleEnd = title.slice(cut + 1);
         {titleStart}{' '}<span class="grad-text">{titleEnd}</span>
       </h1>
       <p class="lead hero-lead" data-reveal>{t('hero.text')}</p>
+
       <div class="hero-actions" data-reveal>
         <a href={projectsPath(locale)} class="btn btn-primary" data-magnetic>
           {t('cta.explore')}
         </a>
         <a href={contactPath(locale)} class="btn btn-ghost">{t('cta.talk')}</a>
       </div>
+
+      <dl class="hero-facts" data-reveal>
+        <div>
+          <dt>{t('facts.shipped')}</dt>
+          <dd>{live}</dd>
+        </div>
+        <div>
+          <dt>{t('facts.areas')}</dt>
+          <dd>3</dd>
+        </div>
+        <div>
+          <dt>{t('facts.stack')}</dt>
+          <dd>TypeScript</dd>
+        </div>
+      </dl>
     </div>
 
-    <div class="hero-visual" data-reveal aria-hidden="true">
-      <div class="hero-panel panel" data-mouse-depth="16">
-        <img
-          src={withBase('/brand/logo-light.webp')}
-          alt=""
-          width="300"
-          height="121"
-          fetchpriority="high"
-        />
-        <span class="hero-panel-glow"></span>
-      </div>
+    <div class="hero-stack" data-reveal>
+      <ul class="stack-list">
+        {
+          previews.map((p, i) => (
+            <li class="stack-item" style={`--i:${i}`}>
+              <a href={projectPath(locale, p.data.slug)} class="stack-card">
+                <img
+                  src={withBase(p.data.cover)}
+                  alt={p.data.coverAlt}
+                  width="1280"
+                  height="800"
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  fetchpriority={i === 0 ? 'high' : undefined}
+                />
+                <span class="stack-info">
+                  <span class="stack-cat">{getCategory(p.data.category).label[locale]}</span>
+                  <span class="stack-name">{p.data.title}</span>
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </div>
 </section>
@@ -51,12 +86,12 @@ const titleEnd = title.slice(cut + 1);
 <style>
   .hero {
     position: relative;
-    padding-block: clamp(var(--space-8), 11vw, var(--space-10));
+    padding-block: clamp(var(--space-7), 7vw, var(--space-9));
   }
 
   .hero-inner {
     display: grid;
-    gap: clamp(var(--space-6), 6vw, var(--space-9));
+    gap: clamp(var(--space-6), 5vw, var(--space-8));
     align-items: center;
   }
 
@@ -67,53 +102,141 @@ const titleEnd = title.slice(cut + 1);
   }
 
   .hero-copy h1 {
-    max-width: 20ch;
+    max-width: 14ch;
   }
 
   .hero-lead {
-    max-width: 46ch;
+    max-width: 44ch;
   }
 
   .hero-actions {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-3);
-    margin-top: var(--space-3);
   }
 
-  .hero-visual {
+  /* Datos verificables, no promesas */
+  .hero-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-6);
+    margin: var(--space-3) 0 0;
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--line);
+    width: 100%;
+    max-width: 34rem;
+  }
+
+  .hero-facts dt {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+  }
+
+  .hero-facts dd {
+    margin: var(--space-1) 0 0;
+    font-family: var(--font-display);
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  /* --- Pila de proyectos --- */
+  .hero-stack {
     display: none;
   }
 
-  .hero-panel {
+  .stack-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: grid;
-    place-items: center;
-    padding: clamp(var(--space-6), 4vw, var(--space-8));
-    background: linear-gradient(150deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-lg);
-    transition: translate 260ms var(--ease-standard);
   }
 
-  .hero-panel img {
-    width: min(300px, 100%);
+  .stack-item {
+    grid-area: 1 / 1;
+    translate: calc(var(--i) * 30px) calc(var(--i) * -22px);
+    scale: calc(1 - var(--i) * 0.07);
+    z-index: calc(10 - var(--i));
+    transition:
+      translate var(--duration-slow) var(--ease-standard),
+      scale var(--duration-slow) var(--ease-standard);
+  }
+
+  .stack-card {
     position: relative;
-    z-index: var(--z-raised);
+    display: block;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    box-shadow: var(--shadow-lg);
+    background: var(--ink-900);
   }
 
-  .hero-panel-glow {
+  .stack-card img {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+  }
+
+  .stack-info {
     position: absolute;
-    inset: 18% 12%;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(56, 130, 251, 0.4), transparent 68%);
+    inset: auto 0 0 0;
+    display: grid;
+    gap: 2px;
+    padding: var(--space-5) var(--space-5) var(--space-4);
+    background: linear-gradient(0deg, rgba(4, 5, 11, 0.95), transparent);
+    transition: opacity var(--duration-base) var(--ease-standard);
   }
 
-  @media (min-width: 900px) {
-    .hero-inner {
-      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  /* Solo la tarjeta frontal se rotula: las de detrás son profundidad */
+  .stack-item:not(:first-child) .stack-info {
+    opacity: 0;
+  }
+
+  .stack-item:not(:first-child) .stack-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(4, 5, 11, 0.55);
+  }
+
+  .stack-cat {
+    font-family: var(--font-display);
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+
+  .stack-name {
+    font-family: var(--font-display);
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--color-white);
+  }
+
+  /* Al pasar el puntero la pila se abre en abanico */
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .stack-list:hover .stack-item {
+      translate: calc(var(--i) * 44px) calc(var(--i) * -34px);
+      scale: calc(1 - var(--i) * 0.03);
     }
 
-    .hero-visual {
+    .stack-list:hover .stack-item:not(:first-child) .stack-card::after {
+      background: rgba(4, 5, 11, 0.3);
+    }
+  }
+
+  @media (min-width: 980px) {
+    .hero-inner {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr);
+    }
+
+    .hero-stack {
       display: block;
     }
   }

@@ -2,7 +2,7 @@
 import type { CollectionEntry } from 'astro:content';
 import type { Locale } from '../../data/company';
 import { useTranslations, projectsPath } from '../../i18n/utils';
-import ProjectCarousel from '../projects/ProjectCarousel.astro';
+import ProjectPreview from '../projects/ProjectPreview.astro';
 
 interface Props {
   projects: CollectionEntry<'projects'>[];
@@ -13,7 +13,7 @@ const { projects, locale } = Astro.props;
 const t = useTranslations(locale);
 ---
 
-<section class="section section-line feed-section">
+<section class="section section-line">
   <div class="container">
     <div class="feed-head" data-reveal>
       <div>
@@ -23,8 +23,8 @@ const t = useTranslations(locale);
       <a href={projectsPath(locale)} class="link-editorial">{t('feed.all')}</a>
     </div>
 
-    <div data-reveal>
-      <ProjectCarousel projects={projects} locale={locale} label={t('feed.title')} />
+    <div class="feed-grid" data-reveal-group>
+      {projects.map((project) => <ProjectPreview project={project} locale={locale} />)}
     </div>
   </div>
 </section>
@@ -36,10 +36,27 @@ const t = useTranslations(locale);
     align-items: flex-end;
     justify-content: space-between;
     gap: var(--space-4);
-    margin-bottom: var(--space-7);
+    margin-bottom: clamp(var(--space-5), 4vw, var(--space-7));
   }
 
   .feed-head .eyebrow {
     margin-bottom: var(--space-2);
+  }
+
+  .feed-grid {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  @media (min-width: 700px) {
+    .feed-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1060px) {
+    .feed-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
 </style>

@@ -134,7 +134,7 @@ button {
 
 .section {
   position: relative;
-  padding-block: clamp(var(--space-8), 9vw, var(--space-10));
+  padding-block: clamp(var(--space-7), 6vw, var(--space-9));
 }
 
 /* Separador con luz de marca entre secciones */
