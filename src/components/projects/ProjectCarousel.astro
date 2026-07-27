@@ -21,6 +21,7 @@ const slides = projects.map((p) => ({
   excerpt: p.data.excerpt,
   kicker: `${getCategory(p.data.category).label[locale]} · ${p.data.year}`,
   example: p.data.example,
+  live: Boolean(p.data.demoUrl),
   tags: p.data.technologies.slice(0, 3),
 }));
 ---
@@ -52,6 +53,7 @@ const slides = projects.map((p) => ({
               <p class="carousel-kicker">
                 {slide.kicker}
                 {slide.example && <span class="kicker-example">{t('projects.example')}</span>}
+                {slide.live && <span class="kicker-live">{t('projects.live')}</span>}
               </p>
               <h3 class="carousel-title">
                 <a href={slide.href}>{slide.title}</a>
@@ -277,6 +279,25 @@ const slides = projects.map((p) => ({
     border: 1px solid currentColor;
     border-radius: var(--radius-pill);
     padding: 1px var(--space-2);
+  }
+
+  /* Demo externa disponible: punto pulsante + etiqueta */
+  .kicker-live {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-success);
+    border: 1px solid currentColor;
+    border-radius: var(--radius-pill);
+    padding: 1px var(--space-2);
+  }
+
+  .kicker-live::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
   }
 
   .carousel-title {

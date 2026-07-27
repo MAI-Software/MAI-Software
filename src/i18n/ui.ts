@@ -83,6 +83,7 @@ export const ui = {
     'projects.prev': 'Proyecto anterior',
     'projects.next': 'Proyecto siguiente',
     'projects.example': 'Proyecto de ejemplo',
+    'projects.live': 'En vivo',
 
     'studio.page.title': 'Estudio',
     'studio.page.intro':
@@ -196,6 +197,7 @@ export const ui = {
     'projects.prev': 'Previous project',
     'projects.next': 'Next project',
     'projects.example': 'Example project',
+    'projects.live': 'Live',
 
     'studio.page.title': 'Studio',
     'studio.page.intro':

@@ -38,6 +38,7 @@ const Heading = headingLevel;
       <span aria-hidden="true">·</span>
       <span>{data.year}</span>
       {data.example && <span class="badge badge-example">{t('projects.example')}</span>}
+      {data.demoUrl && <span class="badge badge-live">{t('projects.live')}</span>}
     </p>
 
     <Heading class="preview-title">
