@@ -51,7 +51,7 @@ const filters = [
 
     {
       projects.length > 0 ? (
-        <div class="archive-list">
+        <div class="archive-list" data-reveal-group>
           {projects.map((project) => (
             <ProjectPreview project={project} locale={locale} headingLevel="h2" />
           ))}
@@ -72,7 +72,7 @@ const filters = [
   }
 
   .archive-head h1 {
-    font-size: clamp(var(--font-size-4xl), 5vw, var(--font-size-5xl));
+    font-size: clamp(2.5rem, 5.5vw, 4.5rem);
   }
 
   .archive-filters {
@@ -85,41 +85,55 @@ const filters = [
   .filter-pill {
     display: inline-flex;
     align-items: center;
-    min-height: 40px;
-    padding: var(--space-2) var(--space-5);
-    border: 1px solid var(--color-border);
+    min-height: 42px;
+    padding: 0 var(--space-5);
+    border: 1px solid var(--line);
     border-radius: var(--radius-pill);
+    background: var(--glass);
     font-family: var(--font-display);
     font-size: var(--font-size-sm);
     font-weight: 600;
-    color: var(--color-text-muted);
+    color: var(--text-muted);
     text-decoration: none;
     transition:
       color var(--duration-base) var(--ease-standard),
       border-color var(--duration-base) var(--ease-standard),
-      background-color var(--duration-base) var(--ease-standard);
+      background var(--duration-base) var(--ease-standard);
   }
 
   .filter-pill:hover {
-    color: var(--color-ink-900);
-    border-color: var(--color-ink-900);
+    color: var(--text);
+    border-color: var(--line-strong);
   }
 
   .filter-pill.active {
-    background: var(--color-ink-900);
-    border-color: var(--color-ink-900);
+    background: var(--gradient-brand-soft);
+    border-color: transparent;
     color: var(--color-white);
+    box-shadow: var(--glow-violet);
   }
 
   .archive-list {
     display: grid;
-    gap: clamp(var(--space-8), 8vw, var(--space-9));
+    gap: var(--space-5);
   }
 
   .archive-empty {
-    color: var(--color-text-muted);
-    border: 1px dashed var(--color-border);
+    color: var(--text-muted);
+    border: 1px dashed var(--line-strong);
     border-radius: var(--radius-lg);
     padding: var(--space-7);
+  }
+
+  @media (min-width: 700px) {
+    .archive-list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1080px) {
+    .archive-list {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
 </style>

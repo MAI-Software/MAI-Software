@@ -20,12 +20,12 @@ const socialLinks = [
 ].filter((s) => s.url !== '');
 ---
 
-<footer class="site-footer on-dark">
+<footer class="site-footer">
   <div class="container">
     <div class="footer-top">
       <div class="footer-brand">
-        <a href={homePath(locale)} aria-label={company.name} class="footer-logo">
-          <img src="/brand/logo.webp" alt="" width="80" height="32" />
+        <a href={homePath(locale)} aria-label={company.name}>
+          <img src="/brand/logo-light.webp" alt="" width="88" height="35" />
           <span class="visually-hidden">{company.name}</span>
         </a>
         <p>{company.description[locale]}</p>
@@ -47,13 +47,15 @@ const socialLinks = [
         (socialLinks.length > 0 || company.contact.email) && (
           <div class="footer-social">
             {company.contact.email && (
-              <a href={`mailto:${company.contact.email}`}>{company.contact.email}</a>
+              <a href={`mailto:${company.contact.email}`} class="footer-email">
+                {company.contact.email}
+              </a>
             )}
             <ul>
               {socialLinks.map((s) => (
                 <li>
                   <a href={s.url} rel="noopener noreferrer" target="_blank">
-                    {s.label}
+                    {s.label} ↗
                   </a>
                 </li>
               ))}
@@ -64,20 +66,19 @@ const socialLinks = [
     </div>
 
     <div class="footer-bottom">
-      <span class="footer-rule" aria-hidden="true"></span>
-      <p class="footer-copy">
-        © {year} {company.name}. {t('footer.rights')}
-      </p>
+      <span class="brand-rule" aria-hidden="true"></span>
+      <p class="footer-copy">© {year} {company.name}. {t('footer.rights')}</p>
     </div>
   </div>
 </footer>
 
 <style>
   .site-footer {
-    background: var(--color-surface-dark);
-    color: var(--color-white);
+    position: relative;
+    margin-top: clamp(var(--space-8), 8vw, var(--space-10));
     padding-block: var(--space-9) var(--space-6);
-    margin-top: var(--space-9);
+    border-top: 1px solid var(--line);
+    background: linear-gradient(180deg, transparent, rgba(98, 66, 252, 0.06));
   }
 
   .footer-top {
@@ -85,17 +86,11 @@ const socialLinks = [
     gap: var(--space-7);
   }
 
-  /* El logo tiene letras tinta: chip blanco para fondo oscuro */
-  .footer-logo {
-    display: inline-flex;
-    padding: var(--space-2) var(--space-4);
-    background: var(--color-white);
-    border-radius: var(--radius-md);
-  }
-
   .footer-brand p {
     margin-top: var(--space-4);
-    max-width: 36ch;
+    max-width: 34ch;
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
   }
 
   .footer-nav ul,
@@ -104,12 +99,12 @@ const socialLinks = [
     margin: 0;
     padding: 0;
     display: grid;
-    gap: var(--space-2);
+    gap: var(--space-3);
   }
 
   .footer-nav a,
   .footer-social a {
-    color: rgba(255, 255, 255, 0.78);
+    color: var(--text-muted);
     text-decoration: none;
     font-size: var(--font-size-sm);
     transition: color var(--duration-base) var(--ease-standard);
@@ -117,7 +112,7 @@ const socialLinks = [
 
   .footer-nav a:hover,
   .footer-social a:hover {
-    color: var(--color-cyan);
+    color: var(--cyan);
   }
 
   .footer-social {
@@ -126,22 +121,22 @@ const socialLinks = [
     align-content: start;
   }
 
-  .footer-bottom {
-    margin-top: var(--space-8);
+  .footer-email {
+    font-family: var(--font-display);
+    font-weight: 600;
   }
 
-  .footer-rule {
-    display: block;
-    height: 2px;
-    width: 56px;
-    border-radius: var(--radius-pill);
-    background: var(--gradient-brand);
-    margin-bottom: var(--space-5);
+  .footer-bottom {
+    display: grid;
+    gap: var(--space-4);
+    margin-top: var(--space-8);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--line);
   }
 
   .footer-copy {
     font-size: var(--font-size-sm);
-    color: rgba(255, 255, 255, 0.55);
+    color: var(--text-soft);
   }
 
   @media (min-width: 768px) {

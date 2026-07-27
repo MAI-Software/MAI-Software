@@ -10,41 +10,47 @@ const { locale } = Astro.props;
 const t = useTranslations(locale);
 ---
 
-<section class="section final-cta section-dark cut-top on-dark">
-  <div class="deco deco-blob final-blob" data-parallax="0.16" aria-hidden="true"></div>
-  <div class="container final-inner" data-reveal-group>
-    <h2 data-reveal>{t('final.title')}</h2>
-    <a href={contactPath(locale)} class="btn btn-gradient" data-reveal>{t('cta.contact')}</a>
+<section class="section final-cta">
+  <div class="container">
+    <div class="final-panel panel" data-reveal>
+      <span class="final-glow" aria-hidden="true"></span>
+      <div class="final-body">
+        <h2>{t('final.title')}</h2>
+        <a href={contactPath(locale)} class="btn btn-primary" data-magnetic>
+          {t('cta.contact')}
+        </a>
+      </div>
+    </div>
   </div>
 </section>
 
 <style>
-  .final-cta {
-    padding-block: clamp(var(--space-9), 12vw, calc(var(--space-10) + 2rem));
+  .final-panel {
+    padding: clamp(var(--space-7), 7vw, var(--space-9)) clamp(var(--space-5), 5vw, var(--space-8));
+    border-radius: var(--radius-xl);
+    background: linear-gradient(150deg, rgba(98, 66, 252, 0.14), rgba(16, 200, 252, 0.06));
   }
 
-  /* Halo de marca discreto (spec §8.2) con parallax */
-  .final-blob {
-    right: -10%;
+  .final-glow {
+    position: absolute;
     top: -40%;
-    background: radial-gradient(
-      circle,
-      rgba(56, 130, 251, 0.2),
-      rgba(98, 66, 252, 0.1) 55%,
-      transparent 75%
-    );
-    filter: none;
+    right: -10%;
+    width: 30rem;
+    height: 30rem;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(56, 130, 251, 0.28), transparent 68%);
+    pointer-events: none;
   }
 
-  .final-inner {
+  .final-body {
+    position: relative;
+    z-index: var(--z-raised);
     display: grid;
     gap: var(--space-6);
     justify-items: start;
-    position: relative;
-    z-index: var(--z-raised);
   }
 
-  .final-inner h2 {
-    max-width: 22ch;
+  .final-body h2 {
+    max-width: 20ch;
   }
 </style>

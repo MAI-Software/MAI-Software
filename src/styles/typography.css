@@ -1,6 +1,6 @@
 /* ============================================
    MAI Softwares — Tipografía
-   Display: Space Grotesk · Body: Inter
+   Display: Space Grotesk · Texto: Inter
    ============================================ */
 
 h1,
@@ -9,64 +9,75 @@ h3,
 h4 {
   font-family: var(--font-display);
   font-weight: 700;
-  line-height: 1.1;
-  color: var(--color-ink-900);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  color: var(--color-white);
   text-wrap: balance;
-  letter-spacing: -0.02em;
 }
 
 h1 {
-  font-size: clamp(var(--font-size-4xl), 6.5vw, var(--font-size-6xl));
+  font-size: clamp(2.4rem, 5.2vw, 4.5rem);
 }
 
 h2 {
-  font-size: clamp(var(--font-size-3xl), 4vw, var(--font-size-4xl));
+  font-size: clamp(2rem, 4.4vw, 3.25rem);
 }
 
 h3 {
-  font-size: clamp(var(--font-size-xl), 2.5vw, var(--font-size-2xl));
+  font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+  letter-spacing: -0.02em;
 }
 
 p {
-  max-width: 65ch;
+  max-width: 62ch;
 }
 
 .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
   font-family: var(--font-display);
-  font-size: var(--font-size-sm);
-  font-weight: 600;
-  letter-spacing: 0.14em;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--color-violet);
+  color: var(--cyan);
+}
+
+.eyebrow::before {
+  content: '';
+  width: 22px;
+  height: 1px;
+  background: currentColor;
 }
 
 .lead {
-  font-size: clamp(var(--font-size-lg), 2vw, var(--font-size-xl));
-  color: var(--color-text-muted);
+  font-size: clamp(var(--font-size-lg), 1.6vw, var(--font-size-xl));
+  color: var(--text-muted);
   line-height: 1.6;
 }
 
 .meta {
   font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+  color: var(--text-muted);
 }
 
-/* Número de sección editorial */
 .section-number {
   font-family: var(--font-display);
-  font-size: var(--font-size-sm);
-  font-weight: 600;
-  color: var(--color-text-soft);
-  letter-spacing: 0.1em;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--text-soft);
 }
 
-/* Texto sobre fondos oscuros */
-.on-dark h1,
-.on-dark h2,
-.on-dark h3 {
-  color: var(--color-white);
+/* Cabecera de sección reutilizable */
+.section-head {
+  display: grid;
+  gap: var(--space-4);
+  margin-bottom: clamp(var(--space-6), 5vw, var(--space-8));
+  justify-items: start;
 }
 
-.on-dark p {
-  color: rgba(255, 255, 255, 0.78);
+.section-head h2 {
+  max-width: 20ch;
 }

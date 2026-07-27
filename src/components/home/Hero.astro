@@ -9,68 +9,67 @@ interface Props {
 const { locale } = Astro.props;
 const t = useTranslations(locale);
 
-// Última palabra del H1 con gradiente de marca (acento editorial puntual)
+// Última palabra del H1 con gradiente de marca
 const title = t('hero.title');
-const lastSpace = title.lastIndexOf(' ');
-const titleStart = title.slice(0, lastSpace);
-const titleEnd = title.slice(lastSpace + 1);
+const cut = title.lastIndexOf(' ');
+const titleStart = title.slice(0, cut);
+const titleEnd = title.slice(cut + 1);
+
+const stack = ['Astro', 'TypeScript', 'Vite', 'MediaPipe', 'Tesseract.js', 'Cloudflare'];
 ---
 
-<section class="hero section-dark cut-bottom" data-mouse-parallax>
-  <div class="deco deco-diagonal hero-diag-1" data-parallax="0.14" aria-hidden="true"></div>
-  <div class="deco deco-diagonal hero-diag-2" data-parallax="0.09" aria-hidden="true"></div>
-
+<section class="hero" data-mouse-parallax>
   <div class="container hero-inner">
     <div class="hero-copy" data-reveal-group>
-      <p class="eyebrow hero-eyebrow" data-reveal>{t('hero.eyebrow')}</p>
+      <p class="eyebrow" data-reveal>{t('hero.eyebrow')}</p>
       <h1 data-reveal>
         {titleStart}{' '}<span class="grad-text">{titleEnd}</span>
       </h1>
       <p class="lead hero-lead" data-reveal>{t('hero.text')}</p>
       <div class="hero-actions" data-reveal>
-        <a href={projectsPath(locale)} class="btn btn-gradient">{t('cta.explore')}</a>
-        <a href={contactPath(locale)} class="btn btn-ghost-dark">{t('cta.talk')}</a>
+        <a href={projectsPath(locale)} class="btn btn-primary" data-magnetic>
+          {t('cta.explore')}
+        </a>
+        <a href={contactPath(locale)} class="btn btn-ghost">{t('cta.talk')}</a>
       </div>
     </div>
 
-    <div class="hero-visual" data-parallax="0.07" aria-hidden="true">
-      <div class="hero-logo-panel" data-mouse-depth="18">
-        <img
-          src="/brand/logo.webp"
-          alt=""
-          width="320"
-          height="129"
-          loading="eager"
-          fetchpriority="high"
-        />
+    <div class="hero-visual" data-reveal aria-hidden="true">
+      <div class="hero-panel panel" data-mouse-depth="16">
+        <img src="/brand/logo-light.webp" alt="" width="300" height="121" fetchpriority="high" />
+        <span class="hero-panel-glow"></span>
       </div>
+    </div>
+  </div>
+
+  <!-- Cinta de stack: repetida dos veces para un bucle continuo -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-row">
+      {
+        [0, 1].map(() => (
+          <ul class="ticker-group">
+            {stack.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        ))
+      }
     </div>
   </div>
 </section>
 
 <style>
   .hero {
-    padding-block: clamp(var(--space-8), 12vw, var(--space-10))
-      clamp(var(--space-9), 14vw, calc(var(--space-10) + 2rem));
-    border-bottom: none;
-  }
-
-  .hero-diag-1 {
-    top: 18%;
-    right: 30%;
-    opacity: 0.3;
-  }
-
-  .hero-diag-2 {
-    bottom: 16%;
-    left: -60px;
-    opacity: 0.2;
+    position: relative;
+    padding-top: clamp(var(--space-8), 11vw, var(--space-10));
+    padding-bottom: 0;
   }
 
   .hero-inner {
     display: grid;
-    gap: var(--space-7);
+    gap: clamp(var(--space-6), 6vw, var(--space-9));
     align-items: center;
+    padding-bottom: clamp(var(--space-8), 9vw, var(--space-9));
   }
 
   .hero-copy {
@@ -80,52 +79,112 @@ const titleEnd = title.slice(lastSpace + 1);
   }
 
   .hero-copy h1 {
-    max-width: 18ch;
-    color: var(--color-white);
-  }
-
-  .hero-eyebrow {
-    color: var(--color-cyan);
+    max-width: 20ch;
   }
 
   .hero-lead {
-    max-width: 52ch;
-    color: rgba(255, 255, 255, 0.78);
+    max-width: 46ch;
   }
 
   .hero-actions {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-3);
-    margin-top: var(--space-2);
+    margin-top: var(--space-3);
   }
 
   .hero-visual {
     display: none;
   }
 
+  .hero-panel {
+    display: grid;
+    place-items: center;
+    padding: clamp(var(--space-6), 4vw, var(--space-8));
+    background: linear-gradient(150deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    transition: translate 260ms var(--ease-standard);
+  }
+
+  .hero-panel img {
+    width: min(300px, 100%);
+    position: relative;
+    z-index: var(--z-raised);
+  }
+
+  .hero-panel-glow {
+    position: absolute;
+    inset: 18% 12%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(56, 130, 251, 0.4), transparent 68%);
+  }
+
+  /* --- Cinta de stack --- */
+  .ticker {
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.02);
+    mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+  }
+
+  .ticker-row {
+    display: flex;
+    width: max-content;
+  }
+
+  .ticker-group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-7);
+    list-style: none;
+    margin: 0;
+    padding: var(--space-4) var(--space-7) var(--space-4) 0;
+  }
+
+  .ticker-group li {
+    font-family: var(--font-display);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    white-space: nowrap;
+  }
+
+  .ticker-group li::after {
+    content: '';
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    margin-left: var(--space-7);
+    border-radius: 2px;
+    background: var(--blue);
+    transform: rotate(45deg);
+    vertical-align: middle;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .ticker-row {
+      animation: ticker 26s linear infinite;
+    }
+
+    @keyframes ticker {
+      to {
+        transform: translateX(-50%);
+      }
+    }
+  }
+
   @media (min-width: 900px) {
     .hero-inner {
-      grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
     }
 
     .hero-visual {
       display: block;
-      justify-self: end;
-    }
-
-    .hero-logo-panel {
-      display: grid;
-      place-items: center;
-      padding: var(--space-7) var(--space-6);
-      background: rgba(255, 255, 255, 0.94);
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      border-radius: var(--radius-xl);
-      /* box-shadow en vez de filter: mismo glow, mucho más barato de pintar */
-      box-shadow:
-        0 0 70px rgba(56, 130, 251, 0.3),
-        0 30px 70px rgba(0, 0, 0, 0.45);
-      transition: translate 200ms var(--ease-standard);
     }
   }
 </style>

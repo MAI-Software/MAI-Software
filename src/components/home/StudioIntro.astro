@@ -11,7 +11,7 @@ const t = useTranslations(locale);
 const studioHref = locale === 'es' ? '/estudio' : '/en/studio';
 ---
 
-<section class="section studio-section">
+<section class="section section-line">
   <div class="container studio-inner" data-reveal-group>
     <span class="brand-rule" aria-hidden="true" data-reveal></span>
     <h2 data-reveal>{t('studio.title')}</h2>
@@ -21,19 +21,14 @@ const studioHref = locale === 'es' ? '/estudio' : '/en/studio';
 </section>
 
 <style>
-  .studio-section {
-    background: var(--color-surface-soft);
-    border-block: 1px solid var(--color-border-soft);
-  }
-
   .studio-inner {
     display: grid;
     gap: var(--space-5);
     justify-items: start;
-    max-width: calc(var(--container-reading) + 8rem);
+    max-width: 56rem;
   }
 
   .studio-inner h2 {
-    max-width: 20ch;
+    max-width: 18ch;
   }
 </style>

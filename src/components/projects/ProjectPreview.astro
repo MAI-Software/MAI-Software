@@ -7,88 +7,70 @@ import { useTranslations, projectPath } from '../../i18n/utils';
 interface Props {
   project: CollectionEntry<'projects'>;
   locale: Locale;
-  /** Sobrescribe la variante del frontmatter (p. ej. 'featured' en portada). */
-  variant?: CollectionEntry<'projects'>['data']['layoutVariant'];
   headingLevel?: 'h2' | 'h3';
 }
 
-const { project, locale, variant, headingLevel = 'h3' } = Astro.props;
+const { project, locale, headingLevel = 'h3' } = Astro.props;
 const t = useTranslations(locale);
 const data = project.data;
 const category = getCategory(data.category);
-const layout = variant ?? data.layoutVariant;
 const href = projectPath(locale, data.slug);
 const Heading = headingLevel;
 ---
 
-<article class:list={['project-preview', `variant-${layout}`]} data-reveal>
-  <a href={href} class="cover-link" tabindex="-1" aria-hidden="true" data-parallax="0.04">
-    <img
-      src={data.cover}
-      alt={data.coverAlt}
-      width="1280"
-      height="800"
-      loading={layout === 'featured' ? 'eager' : 'lazy'}
-    />
+<article class="card project-card" data-reveal>
+  <a href={href} class="card-cover" tabindex="-1" aria-hidden="true">
+    <img src={data.cover} alt={data.coverAlt} width="1280" height="800" loading="lazy" />
   </a>
 
-  <div class="preview-body">
-    <p class="preview-meta meta">
-      <span class="preview-category">{category.label[locale]}</span>
-      <span aria-hidden="true">·</span>
-      <span>{data.year}</span>
-      {data.example && <span class="badge badge-example">{t('projects.example')}</span>}
-      {data.demoUrl && <span class="badge badge-live">{t('projects.live')}</span>}
-    </p>
+  <div class="card-meta">
+    <span class="card-category">{category.label[locale]}</span>
+    <span class="meta">{data.year}</span>
+    {data.demoUrl && <span class="badge badge-live">{t('projects.live')}</span>}
+    {data.example && <span class="badge badge-example">{t('projects.example')}</span>}
+  </div>
 
-    <Heading class="preview-title">
-      <a href={href}>{data.title}</a>
-    </Heading>
+  <Heading class="card-title">
+    <a href={href}>{data.title}</a>
+  </Heading>
 
-    <p class="preview-excerpt">{data.excerpt}</p>
+  <p class="card-excerpt">{data.excerpt}</p>
 
+  {
+    data.technologies.length > 0 && (
+      <ul class="tag-list" aria-label={t('projects.tech')}>
+        {data.technologies.map((tech) => (
+          <li>{tech}</li>
+        ))}
+      </ul>
+    )
+  }
+
+  <div class="card-actions">
+    <a href={href} class="link-editorial">{t('cta.viewProject')}</a>
     {
-      data.technologies.length > 0 && (
-        <ul class="preview-tech" aria-label={t('projects.tech')}>
-          {data.technologies.map((tech) => (
-            <li>{tech}</li>
-          ))}
-        </ul>
+      data.demoUrl && (
+        <a href={data.demoUrl} class="link-editorial" target="_blank" rel="noopener noreferrer">
+          {t('cta.openDemo')}
+        </a>
       )
     }
-
-    <div class="preview-actions">
-      <a href={href} class="link-editorial">{t('cta.viewProject')}</a>
-      {
-        data.demoUrl && (
-          <a
-            href={data.demoUrl}
-            class="link-editorial link-demo"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {t('cta.openDemo')}
-          </a>
-        )
-      }
-    </div>
   </div>
 </article>
 
 <style>
-  .project-preview {
-    display: grid;
-    gap: var(--space-5);
+  .project-card {
+    padding: 0;
+    gap: 0;
   }
 
-  .cover-link {
+  .card-cover {
     display: block;
-    border-radius: var(--radius-lg);
     overflow: hidden;
-    background: var(--color-surface-soft);
+    border-bottom: 1px solid var(--line);
   }
 
-  .cover-link img {
+  .card-cover img {
     width: 100%;
     aspect-ratio: 16 / 10;
     object-fit: cover;
@@ -96,142 +78,57 @@ const Heading = headingLevel;
   }
 
   @media (hover: hover) {
-    .project-preview:hover .cover-link img {
-      transform: scale(1.03);
+    .project-card:hover .card-cover img {
+      transform: scale(1.05);
     }
   }
 
-  .preview-body {
-    display: grid;
-    gap: var(--space-3);
-    align-content: start;
-    justify-items: start;
-  }
-
-  .preview-meta {
+  .card-meta {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: var(--space-2);
+    gap: var(--space-3);
+    padding: var(--space-5) var(--space-5) 0;
   }
 
-  .preview-category {
-    font-weight: 600;
-    color: var(--color-violet);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+  .card-category {
+    font-family: var(--font-display);
     font-size: var(--font-size-xs);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cyan);
   }
 
-  .preview-title {
-    font-size: clamp(var(--font-size-2xl), 3vw, var(--font-size-3xl));
+  .card-title {
+    padding: var(--space-3) var(--space-5) 0;
   }
 
-  .preview-title a {
-    color: var(--color-ink-900);
+  .card-title a {
+    color: var(--color-white);
     text-decoration: none;
     transition: color var(--duration-base) var(--ease-standard);
   }
 
-  .preview-title a:hover {
-    color: var(--color-violet);
+  .card-title a:hover {
+    color: var(--cyan);
   }
 
-  .preview-excerpt {
-    color: var(--color-text-muted);
-    max-width: 52ch;
+  .card-excerpt {
+    padding: var(--space-3) var(--space-5) 0;
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
   }
 
-  .preview-tech {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
+  .project-card .tag-list {
+    padding: var(--space-4) var(--space-5) 0;
   }
 
-  .preview-tech li {
-    font-size: var(--font-size-xs);
-    font-weight: 500;
-    color: var(--color-text-muted);
-    border: 1px solid var(--color-border-soft);
-    border-radius: var(--radius-pill);
-    padding: 2px var(--space-3);
-  }
-
-  .preview-actions {
+  .card-actions {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-5);
-    margin-top: var(--space-2);
-  }
-
-  /* --- Variantes (spec §2.2 / §20) --- */
-
-  @media (min-width: 768px) {
-    .variant-featured,
-    .variant-split-left {
-      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-      align-items: center;
-      gap: var(--space-7);
-    }
-
-    .variant-split-right {
-      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-      align-items: center;
-      gap: var(--space-7);
-    }
-
-    .variant-split-right .cover-link {
-      order: 2;
-    }
-
-    .variant-split-right .preview-body {
-      order: 1;
-    }
-
-    .variant-wide .preview-body {
-      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-      column-gap: var(--space-7);
-    }
-
-    .variant-wide .preview-title,
-    .variant-wide .preview-meta {
-      grid-column: 1;
-    }
-
-    .variant-wide .preview-excerpt,
-    .variant-wide .preview-tech,
-    .variant-wide .preview-actions {
-      grid-column: 2;
-    }
-
-    .variant-compact {
-      grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
-      align-items: start;
-      gap: var(--space-6);
-    }
-
-    .variant-compact .preview-title {
-      font-size: var(--font-size-2xl);
-    }
-
-    .variant-editorial .cover-link {
-      order: 2;
-      max-width: 72%;
-    }
-
-    .variant-editorial .preview-body {
-      order: 1;
-    }
-
-    .variant-editorial .preview-title {
-      font-size: clamp(var(--font-size-3xl), 4vw, var(--font-size-4xl));
-    }
-  }
-
-  .variant-featured .preview-title {
-    font-size: clamp(var(--font-size-3xl), 4.5vw, var(--font-size-5xl));
+    padding: var(--space-5);
+    margin-top: auto;
   }
 </style>

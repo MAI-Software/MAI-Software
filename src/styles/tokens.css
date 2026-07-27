@@ -1,42 +1,55 @@
 /* ============================================
-   MAI Softwares — Design tokens
-   Fuente: MAI_SOFTWARES_WEB_SPEC.md (§3–§9)
-   No añadir colores fuera de esta paleta.
+   MAI Softwares — Design tokens (dark-first)
+   Paleta de marca fija: tinta + violeta/azul/cian.
    ============================================ */
 
 :root {
-  /* --- Color --- */
-  --color-ink-950: #0b1220;
-  --color-ink-900: #10192d;
-  --color-ink-800: #17233a;
+  color-scheme: dark;
+
+  /* --- Base --- */
+  --ink-1000: #04050b;
+  --ink-950: #070912;
+  --ink-900: #0b0e1a;
+  --ink-850: #0f1322;
+  --ink-800: #141a2c;
+  --ink-700: #1c2440;
 
   --color-white: #ffffff;
-  --color-surface: #ffffff;
-  --color-surface-soft: #f4f7fb;
-  --color-surface-dark: #0b1220;
 
-  --color-text: #10192d;
-  --color-text-muted: #667085;
-  --color-text-soft: #98a2b3;
+  /* Superficies */
+  --surface: var(--ink-950);
+  --surface-raised: var(--ink-900);
+  --glass: rgba(255, 255, 255, 0.045);
+  --glass-strong: rgba(255, 255, 255, 0.075);
 
-  --color-border: #d8e0ec;
-  --color-border-soft: #e9eef5;
+  /* Texto */
+  --text: #eef1f8;
+  --text-muted: #9aa4bd;
+  --text-soft: #6b7590;
 
-  --color-violet: #6242fc;
-  --color-blue: #3882fb;
-  --color-cyan: #10c8fc;
+  /* Líneas */
+  --line: rgba(255, 255, 255, 0.09);
+  --line-strong: rgba(255, 255, 255, 0.18);
 
-  --color-success: #16a36a;
-  --color-warning: #d97706;
-  --color-danger: #dc3c4a;
+  /* --- Marca --- */
+  --violet: #6242fc;
+  --blue: #3882fb;
+  --cyan: #10c8fc;
+  --violet-soft: rgba(98, 66, 252, 0.16);
+  --blue-soft: rgba(56, 130, 251, 0.16);
+  --cyan-soft: rgba(16, 200, 252, 0.14);
 
-  /* Único gradiente de marca. Solo acento, nunca decoración permanente. */
-  --gradient-brand: linear-gradient(
-    135deg,
-    #6242fc 0%,
-    #3882fb 52%,
-    #10c8fc 100%
+  --gradient-brand: linear-gradient(120deg, #6242fc 0%, #3882fb 52%, #10c8fc 100%);
+  --gradient-brand-soft: linear-gradient(
+    120deg,
+    rgba(98, 66, 252, 0.9),
+    rgba(56, 130, 251, 0.9)
   );
+
+  /* Estado */
+  --success: #34d399;
+  --warning: #fbbf24;
+  --danger: #f87171;
 
   /* --- Tipografía --- */
   --font-display: 'Space Grotesk Variable', 'Space Grotesk', system-ui, sans-serif;
@@ -66,31 +79,58 @@
   --space-10: 8rem;
 
   /* --- Contenedores --- */
-  --container-main: 1280px;
-  --container-reading: 760px;
+  --container-main: 1240px;
+  --container-reading: 720px;
 
   /* --- Radios --- */
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 26px;
   --radius-pill: 999px;
 
-  /* --- Sombras --- */
-  --shadow-sm: 0 1px 2px rgba(11, 18, 32, 0.06);
-  --shadow-md: 0 12px 32px rgba(11, 18, 32, 0.1);
-  --shadow-lg: 0 24px 70px rgba(11, 18, 32, 0.14);
+  /* --- Sombras y glow --- */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 18px 44px -18px rgba(0, 0, 0, 0.7);
+  --shadow-lg: 0 40px 90px -30px rgba(0, 0, 0, 0.8);
+  --glow-violet: 0 20px 60px -22px rgba(98, 66, 252, 0.75);
+  --glow-blue: 0 20px 60px -22px rgba(56, 130, 251, 0.7);
 
   /* --- Motion --- */
   --duration-fast: 140ms;
-  --duration-base: 220ms;
-  --duration-slow: 420ms;
-  --ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --duration-base: 240ms;
+  --duration-slow: 480ms;
+  --ease-standard: cubic-bezier(0.22, 0.9, 0.24, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.5, 1);
 
-  /* --- Z-index --- */
+  /* --- Capas --- */
+  --z-bg: -1;
   --z-base: 0;
   --z-raised: 10;
   --z-sticky: 100;
   --z-overlay: 500;
   --z-modal: 1000;
+
+  --header-h: 68px;
+
+  /* --- Alias heredados ---
+     Mapean los nombres antiguos (paleta clara) al sistema oscuro actual,
+     para que cualquier componente sin migrar siga siendo coherente. */
+  --color-ink-950: var(--ink-950);
+  --color-ink-900: var(--ink-900);
+  --color-ink-800: var(--ink-800);
+  --color-surface: var(--surface);
+  --color-surface-soft: var(--surface-raised);
+  --color-surface-dark: var(--ink-1000);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-text-soft: var(--text-soft);
+  --color-border: var(--line);
+  --color-border-soft: var(--line);
+  --color-violet: var(--violet);
+  --color-blue: var(--blue);
+  --color-cyan: var(--cyan);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
 }

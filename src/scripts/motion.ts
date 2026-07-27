@@ -1,16 +1,30 @@
 /**
- * Sistema de motion: reveals, parallax de scroll, parallax de ratón,
- * tilt 3D, barra de progreso y sombra de cabecera.
- * Sin librerías. Respeta prefers-reduced-motion (spec §9.5).
+ * Motion: reveals, parallax, foco de luz en tarjetas, botones magnéticos,
+ * barra de progreso y estado de la cabecera. Sin librerías.
+ * Todo lo no esencial se desactiva con prefers-reduced-motion (spec §9.5).
  */
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const finePointer = window.matchMedia('(pointer: fine)').matches;
 
+/** Ejecuta `fn` como mucho una vez por frame con el último evento recibido. */
+function perFrame<T>(fn: (value: T) => void): (value: T) => void {
+  let queued = false;
+  let last: T;
+  return (value: T) => {
+    last = value;
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => {
+      queued = false;
+      fn(last);
+    });
+  };
+}
+
 /* --- Stagger dentro de grupos --- */
 document.querySelectorAll('[data-reveal-group]').forEach((group) => {
-  const items = group.querySelectorAll<HTMLElement>('[data-reveal]');
-  items.forEach((el, i) => {
-    el.style.transitionDelay = `${Math.min(i * 80, 480)}ms`;
+  group.querySelectorAll<HTMLElement>('[data-reveal]').forEach((el, i) => {
+    el.style.transitionDelay = `${Math.min(i * 90, 540)}ms`;
   });
 });
 
@@ -28,115 +42,94 @@ if (reduced) {
         }
       }
     },
-    { threshold: 0.12, rootMargin: '0px 0px -48px 0px' },
+    { threshold: 0.1, rootMargin: '0px 0px -60px 0px' },
   );
   revealEls.forEach((el) => io.observe(el));
 }
 
-/* --- Parallax de scroll + barra de progreso + cabecera --- */
+/* --- Scroll: progreso, cabecera, parallax de capas y escenario --- */
 const parallaxEls = Array.from(document.querySelectorAll<HTMLElement>('[data-parallax]'));
 const progressFill = document.querySelector<HTMLElement>('.progress-fill');
 const header = document.querySelector<HTMLElement>('.site-header');
+const scene = document.querySelector<HTMLElement>('.bg-scene');
 
-let ticking = false;
-
-const update = () => {
-  ticking = false;
+const onScroll = perFrame(() => {
   const doc = document.documentElement;
+  const y = window.scrollY;
 
   if (progressFill) {
     const max = doc.scrollHeight - window.innerHeight;
-    const pct = max > 0 ? (window.scrollY / max) * 100 : 0;
-    progressFill.style.width = `${pct.toFixed(2)}%`;
+    progressFill.style.width = `${max > 0 ? ((y / max) * 100).toFixed(2) : 0}%`;
   }
 
-  header?.classList.toggle('is-scrolled', window.scrollY > 8);
+  header?.classList.toggle('is-scrolled', y > 12);
 
-  if (!reduced) {
-    const mid = window.innerHeight / 2;
-    for (const el of parallaxEls) {
-      const speed = Number.parseFloat(el.dataset.parallax ?? '0.1');
-      const rect = el.getBoundingClientRect();
-      const offset = (rect.top + rect.height / 2 - mid) * -speed;
-      el.style.setProperty('--parallax-y', `${offset.toFixed(1)}px`);
-    }
+  if (reduced) return;
+
+  scene?.style.setProperty('--scene-y', `${(-y * 0.05).toFixed(1)}px`);
+
+  const mid = window.innerHeight / 2;
+  for (const el of parallaxEls) {
+    const speed = Number.parseFloat(el.dataset.parallax ?? '0.1');
+    const rect = el.getBoundingClientRect();
+    el.style.setProperty(
+      '--parallax-y',
+      `${((rect.top + rect.height / 2 - mid) * -speed).toFixed(1)}px`,
+    );
   }
-};
+});
 
-const requestUpdate = () => {
-  if (!ticking) {
-    ticking = true;
-    requestAnimationFrame(update);
-  }
-};
+window.addEventListener('scroll', () => onScroll(null), { passive: true });
+window.addEventListener('resize', () => onScroll(null), { passive: true });
+onScroll(null);
 
-window.addEventListener('scroll', requestUpdate, { passive: true });
-window.addEventListener('resize', requestUpdate, { passive: true });
-update();
-
-/* --- Parallax de ratón (capas del hero, solo puntero fino, rAF-throttled) --- */
-if (!reduced && finePointer) {
-  document.querySelectorAll<HTMLElement>('[data-mouse-parallax]').forEach((scene) => {
-    const layers = Array.from(scene.querySelectorAll<HTMLElement>('[data-mouse-depth]'));
-    if (layers.length === 0) return;
-
-    let pending = false;
-    let lastEv: PointerEvent | null = null;
-
-    scene.addEventListener('pointermove', (ev) => {
-      lastEv = ev;
-      if (pending) return;
-      pending = true;
-      requestAnimationFrame(() => {
-        pending = false;
-        if (!lastEv) return;
-        const rect = scene.getBoundingClientRect();
-        const nx = (lastEv.clientX - rect.left) / rect.width - 0.5;
-        const ny = (lastEv.clientY - rect.top) / rect.height - 0.5;
-        for (const layer of layers) {
-          const depth = Number.parseFloat(layer.dataset.mouseDepth ?? '10');
-          layer.style.translate = `${(-nx * depth).toFixed(1)}px ${(-ny * depth).toFixed(1)}px`;
-        }
-      });
+/* --- Foco de luz que sigue al puntero dentro de las tarjetas --- */
+if (finePointer) {
+  document.querySelectorAll<HTMLElement>('.card').forEach((card) => {
+    const move = perFrame<PointerEvent>((ev) => {
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty('--spot-x', `${((ev.clientX - rect.left) / rect.width) * 100}%`);
+      card.style.setProperty('--spot-y', `${((ev.clientY - rect.top) / rect.height) * 100}%`);
     });
+    card.addEventListener('pointermove', move, { passive: true });
+  });
+}
 
-    scene.addEventListener('pointerleave', () => {
-      lastEv = null;
-      for (const layer of layers) layer.style.translate = '0px 0px';
+/* --- Botones magnéticos --- */
+if (!reduced && finePointer) {
+  document.querySelectorAll<HTMLElement>('[data-magnetic]').forEach((el) => {
+    const move = perFrame<PointerEvent>((ev) => {
+      const rect = el.getBoundingClientRect();
+      const dx = (ev.clientX - (rect.left + rect.width / 2)) * 0.22;
+      const dy = (ev.clientY - (rect.top + rect.height / 2)) * 0.3;
+      el.style.translate = `${dx.toFixed(1)}px ${dy.toFixed(1)}px`;
+    });
+    el.addEventListener('pointermove', move, { passive: true });
+    el.addEventListener('pointerleave', () => {
+      el.style.translate = '0px 0px';
     });
   });
 }
 
-/* --- Tilt 3D en tarjetas (solo puntero fino, rAF-throttled) --- */
+/* --- Parallax de ratón en el hero --- */
 if (!reduced && finePointer) {
-  const MAX_DEG = 5;
-  document.querySelectorAll<HTMLElement>('[data-tilt]').forEach((card) => {
-    let pending = false;
-    let lastEv: PointerEvent | null = null;
+  document.querySelectorAll<HTMLElement>('[data-mouse-parallax]').forEach((sceneEl) => {
+    const layers = Array.from(sceneEl.querySelectorAll<HTMLElement>('[data-mouse-depth]'));
+    if (layers.length === 0) return;
 
-    card.addEventListener('pointermove', (ev) => {
-      lastEv = ev;
-      if (pending) return;
-      pending = true;
-      requestAnimationFrame(() => {
-        pending = false;
-        if (!lastEv) return;
-        const rect = card.getBoundingClientRect();
-        const nx = (lastEv.clientX - rect.left) / rect.width - 0.5;
-        const ny = (lastEv.clientY - rect.top) / rect.height - 0.5;
-        card.classList.add('is-tilting');
-        card.style.setProperty('--tilt-x', `${(-ny * MAX_DEG).toFixed(2)}deg`);
-        card.style.setProperty('--tilt-y', `${(nx * MAX_DEG).toFixed(2)}deg`);
-        card.style.setProperty('--tilt-lift', '-4px');
-      });
+    const move = perFrame<PointerEvent>((ev) => {
+      const rect = sceneEl.getBoundingClientRect();
+      const nx = (ev.clientX - rect.left) / rect.width - 0.5;
+      const ny = (ev.clientY - rect.top) / rect.height - 0.5;
+      for (const layer of layers) {
+        const depth = Number.parseFloat(layer.dataset.mouseDepth ?? '10');
+        layer.style.translate = `${(-nx * depth).toFixed(1)}px ${(-ny * depth).toFixed(1)}px`;
+      }
     });
 
-    card.addEventListener('pointerleave', () => {
-      lastEv = null;
-      card.classList.remove('is-tilting');
-      card.style.setProperty('--tilt-x', '0deg');
-      card.style.setProperty('--tilt-y', '0deg');
-      card.style.setProperty('--tilt-lift', '0px');
+    sceneEl.addEventListener('pointermove', move, { passive: true });
+    sceneEl.addEventListener('pointerleave', () => {
+      for (const layer of layers) layer.style.translate = '0px 0px';
     });
   });
 }

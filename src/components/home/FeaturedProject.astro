@@ -16,40 +16,44 @@ const category = getCategory(data.category);
 const href = projectPath(locale, data.slug);
 ---
 
-<section class="section featured section-dark cut-both">
-  <div class="deco deco-blob featured-blob" data-parallax="0.18" aria-hidden="true"></div>
-
+<section class="section section-line featured">
   <div class="container featured-inner">
-    <a href={href} class="featured-cover" data-parallax="0.05" tabindex="-1" aria-hidden="true">
+    <a href={href} class="featured-cover" data-parallax="0.04" tabindex="-1" aria-hidden="true">
       <img src={data.cover} alt={data.coverAlt} width="1280" height="800" loading="lazy" />
+      <span class="cover-sheen"></span>
     </a>
 
     <div class="featured-body" data-reveal-group>
-      <p class="eyebrow featured-eyebrow" data-reveal>{t('featured.label')}</p>
-      <p class="featured-meta" data-reveal>
-        <span>{category.label[locale]}</span>
-        <span aria-hidden="true">·</span>
-        <span>{data.year}</span>
+      <p class="eyebrow" data-reveal>{t('featured.label')}</p>
+
+      <div class="featured-meta" data-reveal>
+        <span class="badge">{category.label[locale]}</span>
+        <span class="badge">{data.year}</span>
+        {data.demoUrl && <span class="badge badge-live">{t('projects.live')}</span>}
         {data.example && <span class="badge badge-example">{t('projects.example')}</span>}
-      </p>
+      </div>
+
       <h2 data-reveal>
-        <a href={href} class="featured-title-link">{data.title}</a>
+        <a href={href} class="featured-title">{data.title}</a>
       </h2>
-      <p class="featured-excerpt" data-reveal>{data.excerpt}</p>
+
+      <p class="lead featured-excerpt" data-reveal>{data.excerpt}</p>
+
       {
         data.technologies.length > 0 && (
-          <ul class="featured-tags" data-reveal aria-label={t('projects.tech')}>
+          <ul class="tag-list" data-reveal aria-label={t('projects.tech')}>
             {data.technologies.map((tech) => (
               <li>{tech}</li>
             ))}
           </ul>
         )
       }
+
       <div class="featured-actions" data-reveal>
-        <a href={href} class="btn btn-gradient">{t('cta.viewProject')}</a>
+        <a href={href} class="btn btn-primary" data-magnetic>{t('cta.viewProject')}</a>
         {
           data.demoUrl && (
-            <a href={data.demoUrl} class="btn btn-ghost-dark" target="_blank" rel="noopener noreferrer">
+            <a href={data.demoUrl} class="btn btn-ghost" target="_blank" rel="noopener noreferrer">
               {t('cta.openDemo')} ↗
             </a>
           )
@@ -60,29 +64,19 @@ const href = projectPath(locale, data.slug);
 </section>
 
 <style>
-  .featured {
-    padding-block: clamp(var(--space-9), 12vw, calc(var(--space-10) + 2rem));
-  }
-
-  .featured-blob {
-    top: -15%;
-    left: -10%;
-  }
-
   .featured-inner {
     display: grid;
-    gap: var(--space-7);
+    gap: clamp(var(--space-6), 5vw, var(--space-8));
     align-items: center;
   }
 
   .featured-cover {
+    position: relative;
     display: block;
     border-radius: var(--radius-xl);
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    box-shadow:
-      0 0 80px rgba(56, 130, 251, 0.22),
-      0 32px 80px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-lg);
   }
 
   .featured-cover img {
@@ -92,9 +86,23 @@ const href = projectPath(locale, data.slug);
     transition: transform var(--duration-slow) var(--ease-standard);
   }
 
+  /* Brillo diagonal que cruza al pasar el puntero */
+  .cover-sheen {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, transparent 42%, rgba(255, 255, 255, 0.16) 50%, transparent 58%);
+    translate: -110% 0;
+    transition: translate 900ms var(--ease-standard);
+    pointer-events: none;
+  }
+
   @media (hover: hover) {
     .featured-cover:hover img {
-      transform: scale(1.03);
+      transform: scale(1.04);
+    }
+
+    .featured-cover:hover .cover-sheen {
+      translate: 110% 0;
     }
   }
 
@@ -104,62 +112,36 @@ const href = projectPath(locale, data.slug);
     justify-items: start;
   }
 
-  .featured-eyebrow {
-    color: var(--color-cyan);
-  }
-
   .featured-meta {
     display: flex;
-    align-items: center;
     flex-wrap: wrap;
     gap: var(--space-2);
-    color: rgba(255, 255, 255, 0.65);
-    font-size: var(--font-size-sm);
   }
 
-  .featured-title-link {
+  .featured-title {
     color: var(--color-white);
     text-decoration: none;
     transition: color var(--duration-base) var(--ease-standard);
   }
 
-  .featured-title-link:hover {
-    color: var(--color-cyan);
+  .featured-title:hover {
+    color: var(--cyan);
   }
 
   .featured-excerpt {
-    color: rgba(255, 255, 255, 0.75);
-    max-width: 48ch;
-  }
-
-  .featured-tags {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-  }
-
-  .featured-tags li {
-    font-size: var(--font-size-xs);
-    color: rgba(255, 255, 255, 0.72);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    border-radius: var(--radius-pill);
-    padding: 2px var(--space-3);
+    max-width: 46ch;
   }
 
   .featured-actions {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-3);
-    margin-top: var(--space-2);
+    margin-top: var(--space-3);
   }
 
   @media (min-width: 900px) {
     .featured-inner {
-      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-      gap: var(--space-8);
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
     }
   }
 </style>

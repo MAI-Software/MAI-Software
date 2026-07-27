@@ -13,36 +13,33 @@ const steps = [
   {
     number: '01',
     title: t('process.1.title'),
-    text: t('process.1.text'),
     bullets: [t('process.1.b1'), t('process.1.b2'), t('process.1.b3')],
   },
   {
     number: '02',
     title: t('process.2.title'),
-    text: t('process.2.text'),
     bullets: [t('process.2.b1'), t('process.2.b2'), t('process.2.b3')],
   },
   {
     number: '03',
     title: t('process.3.title'),
-    text: t('process.3.text'),
     bullets: [t('process.3.b1'), t('process.3.b2'), t('process.3.b3')],
   },
 ];
 ---
 
-<section class="section process-section">
+<section class="section section-line">
   <div class="container">
     <header class="section-head" data-reveal>
       <p class="eyebrow">{t('process.eyebrow')}</p>
       <h2>{t('process.title')}</h2>
     </header>
 
-    <ol class="process-grid" data-reveal>
+    <ol class="process-grid" data-reveal-group>
       {
         steps.map((step) => (
-          <li class="card process-card" data-tilt>
-            <span class="card-chip">{step.number}</span>
+          <li class="card process-card" data-reveal>
+            <span class="process-num">{step.number}</span>
             <h3>{step.title}</h3>
             <ul class="card-bullets">
               {step.bullets.map((b) => (
@@ -57,27 +54,26 @@ const steps = [
 </section>
 
 <style>
-  .process-section {
-    border-top: 1px solid var(--color-border-soft);
-  }
-
-  .section-head {
-    display: grid;
-    gap: var(--space-3);
-    margin-bottom: var(--space-7);
-  }
-
   .process-grid {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
-    gap: var(--space-5);
+    gap: var(--space-4);
   }
 
-  .process-card p {
-    color: var(--color-text-muted);
-    max-width: 40ch;
+  /* Número grande como marca de agua editorial */
+  .process-num {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 6vw, 4.5rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    background: var(--gradient-brand);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    opacity: 0.85;
   }
 
   @media (min-width: 768px) {

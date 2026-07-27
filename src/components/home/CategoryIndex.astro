@@ -15,19 +15,21 @@ const bulletKeys = (id: string): UIKey[] =>
   [`category.${id}.b1`, `category.${id}.b2`, `category.${id}.b3`] as UIKey[];
 ---
 
-<section class="section">
+<section class="section section-line">
   <div class="container">
     <header class="section-head" data-reveal>
       <p class="eyebrow">{t('categories.eyebrow')}</p>
       <h2>{t('categories.title')}</h2>
     </header>
 
-    <ol class="category-grid" data-reveal>
+    <ol class="category-grid" data-reveal-group>
       {
         categories.map((cat) => (
-          <li class="card category-card" data-tilt>
-            <span class="card-chip">{cat.number}</span>
-            <h3>{cat.label[locale]}</h3>
+          <li class="card category-card" data-reveal>
+            <div class="category-top">
+              <span class="card-chip">{cat.number}</span>
+              <h3>{cat.label[locale]}</h3>
+            </div>
             <ul class="card-bullets">
               {bulletKeys(cat.id).map((key) => (
                 <li>{t(key)}</li>
@@ -44,34 +46,26 @@ const bulletKeys = (id: string): UIKey[] =>
 </section>
 
 <style>
-  .section-head {
-    display: grid;
-    gap: var(--space-3);
-    margin-bottom: var(--space-7);
-  }
-
-  .section-head h2 {
-    max-width: 22ch;
-  }
-
   .category-grid {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
-    gap: var(--space-5);
+    gap: var(--space-4);
   }
 
-  .category-card h3 {
-    font-size: clamp(var(--font-size-xl), 3vw, var(--font-size-2xl));
+  .category-card {
+    min-height: 260px;
   }
 
-  .category-desc {
-    color: var(--color-text-muted);
+  .category-top {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
   }
 
   .category-link {
-    margin-top: var(--space-2);
+    margin-top: auto;
     justify-self: start;
   }
 
