@@ -13,10 +13,9 @@ export const ui = {
     'lang.label': 'EN',
 
     'hero.eyebrow': 'VIDEOJUEGOS · SAAS · EXPERIENCIAS WEB',
-    'hero.title':
-      'Convertimos ideas digitales en productos que se pueden ver, usar y recordar.',
+    'hero.title': 'Transformamos ideas en productos inolvidables',
     'hero.text':
-      'Videojuegos, herramientas SaaS y experiencias web. Productos claros, sólidos y preparados para crecer.',
+      'Estudio de producto digital: diseñamos y desarrollamos videojuegos, herramientas SaaS y webs que se lanzan y crecen.',
     'cta.explore': 'Explorar proyectos',
     'cta.talk': 'Hablemos de tu proyecto',
     'cta.contact': 'Hablemos',
@@ -131,10 +130,9 @@ export const ui = {
     'lang.label': 'ES',
 
     'hero.eyebrow': 'GAMES · SAAS · WEB EXPERIENCES',
-    'hero.title':
-      'We turn digital ideas into products you can see, use and remember.',
+    'hero.title': 'We turn ideas into unforgettable products',
     'hero.text':
-      'Video games, SaaS tools and web experiences. Clear, solid products built to grow.',
+      'A digital product studio: we design and build video games, SaaS tools and websites that ship and grow.',
     'cta.explore': 'Explore projects',
     'cta.talk': "Let's talk about your project",
     'cta.contact': "Let's talk",

@@ -61,10 +61,10 @@ const live = projects.filter((p) => p.data.demoUrl).length;
     </div>
 
     <div class="hero-stack" data-reveal data-scroll-tilt>
-      <ul class="stack-list">
+      <ul class="stack-list" data-autoplay="5000">
         {
           previews.map((p, i) => (
-            <li class="stack-item" style={`--i:${i}`}>
+            <li class:list={['stack-item', { 'is-front': i === 0 }]} style={`--i:${i}`}>
               <a href={projectPath(locale, p.data.slug)} class="stack-card mockup">
                 <span class="mockup-bar" aria-hidden="true">
                   <span />
@@ -91,6 +91,61 @@ const live = projects.filter((p) => p.data.demoUrl).length;
     </div>
   </div>
 </section>
+
+<script>
+  /**
+   * Rota la pila de proyectos: la tarjeta frontal pasa al fondo y la
+   * siguiente toma su sitio. Se pausa al pasar el puntero, al enfocar con
+   * teclado y cuando la pestaña no está visible.
+   */
+  const list = document.querySelector<HTMLElement>('.stack-list[data-autoplay]');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (list && !reducedMotion) {
+    const items = Array.from(list.querySelectorAll<HTMLElement>('.stack-item'));
+
+    if (items.length > 1) {
+      const delay = Number.parseInt(list.dataset.autoplay ?? '5000', 10);
+      let front = 0;
+      let timer: number | undefined;
+
+      const render = () => {
+        items.forEach((item, index) => {
+          const depth = (index - front + items.length) % items.length;
+          item.style.setProperty('--i', String(depth));
+          item.classList.toggle('is-front', depth === 0);
+          // Solo la tarjeta visible es navegable con teclado
+          item.querySelector('a')?.setAttribute('tabindex', depth === 0 ? '0' : '-1');
+        });
+      };
+
+      const advance = () => {
+        front = (front + 1) % items.length;
+        render();
+      };
+
+      const start = () => {
+        if (timer === undefined) timer = window.setInterval(advance, delay);
+      };
+
+      const stop = () => {
+        window.clearInterval(timer);
+        timer = undefined;
+      };
+
+      list.addEventListener('pointerenter', stop);
+      list.addEventListener('pointerleave', start);
+      list.addEventListener('focusin', stop);
+      list.addEventListener('focusout', start);
+      document.addEventListener('visibilitychange', () => {
+        document.hidden ? stop() : start();
+      });
+
+      render();
+      start();
+    }
+  }
+</script>
 
 <style>
   .hero {
@@ -222,15 +277,16 @@ const live = projects.filter((p) => p.data.demoUrl).length;
   }
 
   /* Solo la tarjeta frontal se rotula: las de detrás son profundidad */
-  .stack-item:not(:first-child) .stack-info {
+  .stack-item:not(.is-front) .stack-info {
     opacity: 0;
   }
 
-  .stack-item:not(:first-child) .stack-card::after {
+  .stack-item:not(.is-front) .stack-card::after {
     content: '';
     position: absolute;
     inset: 0;
     background: rgba(4, 5, 11, 0.55);
+    transition: background-color var(--duration-base) var(--ease-standard);
   }
 
   .stack-cat {
@@ -256,7 +312,7 @@ const live = projects.filter((p) => p.data.demoUrl).length;
       scale: calc(1 - var(--i) * 0.03);
     }
 
-    .stack-list:hover .stack-item:not(:first-child) .stack-card::after {
+    .stack-list:hover .stack-item:not(.is-front) .stack-card::after {
       background: rgba(4, 5, 11, 0.3);
     }
   }
