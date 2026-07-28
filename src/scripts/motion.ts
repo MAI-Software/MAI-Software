@@ -78,7 +78,9 @@ const onScroll = perFrame(() => {
 
   if (reduced) return;
 
-  scene?.style.setProperty('--scene-y', `${(-y * 0.05).toFixed(1)}px`);
+  // Dos capas de fondo a velocidades opuestas: da sensación de profundidad
+  scene?.style.setProperty('--scene-y', `${(-y * 0.12).toFixed(1)}px`);
+  scene?.style.setProperty('--scene-grid-y', `${(y * 0.05).toFixed(1)}px`);
 
   const mid = window.innerHeight / 2;
   for (const el of parallaxEls) {
@@ -120,6 +122,44 @@ if (!reduced && 'IntersectionObserver' in window) {
     window.setTimeout(flatten, 2000);
   }
 }
+
+/* --- Puntero: luz que lo acompaña y desplazamiento del fondo --- */
+if (!reduced && finePointer) {
+  const glow = document.querySelector<HTMLElement>('.cursor-glow');
+
+  const onPointer = perFrame<PointerEvent>((ev) => {
+    glow?.style.setProperty('--cursor-x', `${ev.clientX}px`);
+    glow?.style.setProperty('--cursor-y', `${ev.clientY}px`);
+
+    // El fondo se desplaza en sentido contrario al puntero
+    const nx = ev.clientX / window.innerWidth - 0.5;
+    scene?.style.setProperty('--scene-x', `${(-nx * 40).toFixed(1)}px`);
+  });
+
+  window.addEventListener('pointermove', onPointer, { passive: true });
+  document.addEventListener('pointerenter', () => glow?.classList.add('is-on'));
+  document.addEventListener('pointerleave', () => glow?.classList.remove('is-on'));
+  glow?.classList.add('is-on');
+}
+
+/* --- Onda al pulsar botones, desde el punto exacto del clic --- */
+document.querySelectorAll<HTMLElement>('.btn').forEach((btn) => {
+  btn.addEventListener(
+    'pointerdown',
+    (ev) => {
+      const rect = btn.getBoundingClientRect();
+      btn.style.setProperty('--ripple-x', `${ev.clientX - rect.left}px`);
+      btn.style.setProperty('--ripple-y', `${ev.clientY - rect.top}px`);
+      btn.classList.remove('is-rippling');
+      // Fuerza el reinicio de la animación si se pulsa repetidamente
+      void btn.offsetWidth;
+      btn.classList.add('is-rippling');
+    },
+    { passive: true },
+  );
+
+  btn.addEventListener('animationend', () => btn.classList.remove('is-rippling'));
+});
 
 /* --- Foco de luz que sigue al puntero dentro de las tarjetas --- */
 if (finePointer) {

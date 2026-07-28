@@ -45,7 +45,7 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
       <a href={langHref} class="lang-switch" aria-label={t('lang.switch')}>
         {t('lang.label')}
       </a>
-      <a href={contactPath(locale)} class="btn btn-primary header-cta">
+      <a href={contactPath(locale)} class="btn btn-primary header-cta" data-magnetic>
         {t('cta.contact')}
       </a>
       <button
