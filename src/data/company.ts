@@ -25,7 +25,7 @@ export const company = {
      * Mientras esté vacía, la página de contacto muestra los enlaces
      * directos en lugar de un formulario que no funcionaría.
      */
-    web3formsKey: '', // PENDIENTE
+    web3formsKey: '6154ee34-d67a-43e8-8214-3d428b81b1f1',
   },
 
   social: {
