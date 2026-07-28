@@ -19,6 +19,13 @@ export const company = {
   contact: {
     email: '', // PENDIENTE
     phone: '', // Opcional
+    /**
+     * Clave pública de Web3Forms (https://web3forms.com).
+     * Es una clave de cliente: se puede publicar sin riesgo.
+     * Mientras esté vacía, la página de contacto muestra los enlaces
+     * directos en lugar de un formulario que no funcionaría.
+     */
+    web3formsKey: '', // PENDIENTE
   },
 
   social: {

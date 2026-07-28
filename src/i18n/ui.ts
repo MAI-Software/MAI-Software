@@ -108,6 +108,22 @@ export const ui = {
     'contact.email.pending':
       'Email de contacto en preparación. Mientras tanto, puedes encontrarnos en GitHub.',
 
+    'form.name': 'Nombre',
+    'form.email': 'Email',
+    'form.subject': 'Asunto',
+    'form.message': 'Cuéntanos tu proyecto',
+    'form.messagePlaceholder': 'Qué quieres construir, para quién y en qué plazo.',
+    'form.send': 'Enviar mensaje',
+    'form.sending': 'Enviando…',
+    'form.ok': 'Mensaje enviado. Te respondemos en breve.',
+    'form.error': 'No se ha podido enviar. Inténtalo de nuevo o escríbenos por GitHub.',
+    'form.required': 'Obligatorio',
+
+    'links.title': 'Proyectos en vivo',
+    'links.text': 'Todo lo que publicamos está abierto para que lo pruebes.',
+    'links.github': 'Perfil de GitHub',
+    'links.githubText': 'Código y proyectos del estudio.',
+
     'legal.title': 'Aviso legal',
     'legal.pending':
       'MAI Softwares se encuentra en fase de constitución. Los datos societarios se publicarán en esta página cuando el proceso esté completado.',
@@ -224,6 +240,22 @@ export const ui = {
       "An idea, a product that needs improving, or an opportunity that doesn't have a shape yet. Let's start by understanding it.",
     'contact.email.pending':
       'Contact email coming soon. In the meantime, you can find us on GitHub.',
+
+    'form.name': 'Name',
+    'form.email': 'Email',
+    'form.subject': 'Subject',
+    'form.message': 'Tell us about your project',
+    'form.messagePlaceholder': 'What you want to build, who for, and by when.',
+    'form.send': 'Send message',
+    'form.sending': 'Sending…',
+    'form.ok': "Message sent. We'll get back to you shortly.",
+    'form.error': "Couldn't send it. Try again or reach us on GitHub.",
+    'form.required': 'Required',
+
+    'links.title': 'Live projects',
+    'links.text': 'Everything we ship is open for you to try.',
+    'links.github': 'GitHub profile',
+    'links.githubText': "The studio's code and projects.",
 
     'legal.title': 'Legal notice',
     'legal.pending':

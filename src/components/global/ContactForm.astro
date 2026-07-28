@@ -1,0 +1,179 @@
+---
+import { company, type Locale } from '../../data/company';
+import { useTranslations } from '../../i18n/utils';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const accessKey = company.contact.web3formsKey;
+---
+
+<form class="contact-form panel" data-contact-form action="https://api.web3forms.com/submit" method="POST">
+  <input type="hidden" name="access_key" value={accessKey} />
+  <input type="hidden" name="from_name" value={company.name} />
+  <input type="hidden" name="subject" value={`Nuevo mensaje desde ${company.name}`} />
+
+  <!-- Trampa antispam: invisible para personas, la rellenan los bots -->
+  <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" />
+
+  <div class="field">
+    <label for="cf-name">{t('form.name')}</label>
+    <input id="cf-name" name="name" type="text" required autocomplete="name" />
+  </div>
+
+  <div class="field">
+    <label for="cf-email">{t('form.email')}</label>
+    <input id="cf-email" name="email" type="email" required autocomplete="email" />
+  </div>
+
+  <div class="field">
+    <label for="cf-message">{t('form.message')}</label>
+    <textarea
+      id="cf-message"
+      name="message"
+      rows="5"
+      required
+      placeholder={t('form.messagePlaceholder')}></textarea>
+  </div>
+
+  <button type="submit" class="btn btn-primary form-submit">{t('form.send')}</button>
+
+  <!-- Los mensajes de estado se anuncian a los lectores de pantalla -->
+  <p class="form-status" role="status" aria-live="polite" data-ok={t('form.ok')} data-error={t('form.error')} data-sending={t('form.sending')}></p>
+</form>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+
+  form?.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+
+    const status = form.querySelector<HTMLElement>('.form-status');
+    const submit = form.querySelector<HTMLButtonElement>('.form-submit');
+    if (!status || !submit) return;
+
+    const original = submit.textContent;
+    submit.disabled = true;
+    submit.textContent = status.dataset.sending ?? '';
+    status.textContent = '';
+    status.classList.remove('is-ok', 'is-error');
+
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        body: new FormData(form),
+      });
+
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+      status.textContent = status.dataset.ok ?? '';
+      status.classList.add('is-ok');
+      form.reset();
+    } catch {
+      status.textContent = status.dataset.error ?? '';
+      status.classList.add('is-error');
+    } finally {
+      submit.disabled = false;
+      submit.textContent = original;
+    }
+  });
+</script>
+
+<style>
+  .contact-form {
+    display: grid;
+    gap: var(--space-5);
+    padding: clamp(var(--space-5), 4vw, var(--space-7));
+    width: 100%;
+    max-width: 34rem;
+  }
+
+  /* Trampa antispam */
+  .hp {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .field {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  label {
+    font-family: var(--font-display);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  input[type='text'],
+  input[type='email'],
+  textarea {
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    /* 16px evita el zoom automático en iOS al enfocar */
+    font-size: var(--font-size-base);
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    transition:
+      border-color var(--duration-base) var(--ease-standard),
+      background-color var(--duration-base) var(--ease-standard);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--text-soft);
+  }
+
+  input:hover,
+  textarea:hover {
+    border-color: var(--line-strong);
+  }
+
+  input:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--blue);
+    background: rgba(255, 255, 255, 0.07);
+    box-shadow: 0 0 0 3px rgba(56, 130, 251, 0.22);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 8rem;
+    font-family: inherit;
+    line-height: 1.6;
+  }
+
+  .form-submit {
+    justify-self: start;
+  }
+
+  .form-submit:disabled {
+    opacity: 0.6;
+    cursor: progress;
+  }
+
+  .form-status {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    min-height: 1.2em;
+  }
+
+  .form-status.is-ok {
+    color: var(--success);
+  }
+
+  .form-status.is-error {
+    color: var(--danger);
+  }
+</style>

@@ -1,0 +1,144 @@
+---
+import type { Locale } from '../../data/company';
+import { company } from '../../data/company';
+import { getCategory } from '../../data/categories';
+import { useTranslations } from '../../i18n/utils';
+import { getProjects } from '../../lib/projects';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+// Solo proyectos con demo pública: los enlaces salen del contenido, no a mano
+const live = (await getProjects(locale)).filter((p) => p.data.demoUrl);
+---
+
+<div class="live-links">
+  <div class="links-head">
+    <p class="eyebrow">{t('links.title')}</p>
+    <p class="links-text">{t('links.text')}</p>
+  </div>
+
+  <ul class="links-list">
+    {
+      live.map((p) => (
+        <li>
+          <a href={p.data.demoUrl} target="_blank" rel="noopener noreferrer" class="link-row">
+            <span class="link-main">
+              <span class="link-name">{p.data.title}</span>
+              <span class="link-meta">
+                {getCategory(p.data.category).label[locale]} ·{' '}
+                {new URL(p.data.demoUrl!).host}
+              </span>
+            </span>
+            <span class="link-go" aria-hidden="true">
+              ↗
+            </span>
+          </a>
+        </li>
+      ))
+    }
+
+    {
+      company.social.github && (
+        <li>
+          <a
+            href={company.social.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="link-row"
+          >
+            <span class="link-main">
+              <span class="link-name">{t('links.github')}</span>
+              <span class="link-meta">{t('links.githubText')}</span>
+            </span>
+            <span class="link-go" aria-hidden="true">
+              ↗
+            </span>
+          </a>
+        </li>
+      )
+    }
+  </ul>
+</div>
+
+<style>
+  .live-links {
+    display: grid;
+    gap: var(--space-5);
+    align-content: start;
+    width: 100%;
+  }
+
+  .links-head {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .links-text {
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+    max-width: 34ch;
+  }
+
+  .links-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .link-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-5);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background: var(--glass);
+    text-decoration: none;
+    transition:
+      border-color var(--duration-base) var(--ease-standard),
+      background-color var(--duration-base) var(--ease-standard),
+      transform var(--duration-base) var(--ease-spring);
+  }
+
+  .link-row:hover {
+    border-color: var(--line-strong);
+    background: var(--glass-strong);
+    transform: translateX(4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .link-row:hover {
+      transform: none;
+    }
+  }
+
+  .link-main {
+    display: grid;
+    gap: 2px;
+  }
+
+  .link-name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .link-meta {
+    font-size: var(--font-size-xs);
+    color: var(--text-soft);
+  }
+
+  .link-go {
+    color: var(--cyan);
+    font-size: var(--font-size-lg);
+    flex-shrink: 0;
+  }
+</style>

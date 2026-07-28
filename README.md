@@ -24,9 +24,19 @@ Web corporativa y portfolio editorial de **MAI Softwares**: videojuegos, SaaS y 
 
 **No hace falta tocar ningún componente.**
 
+## Activar el formulario de contacto
+
+1. Entra en [web3forms.com](https://web3forms.com), pon tu email y copia la **Access Key**.
+2. Pégala en `src/data/company.ts` → `contact.web3formsKey`.
+3. Haz push: el formulario aparece solo.
+
+La clave es pública por diseño (es de cliente), así que puede vivir en el repo.
+Mientras esté vacía, `/contacto` muestra los enlaces directos en lugar de un
+formulario que no funcionaría.
+
 ## Pendiente de contenido real
 
 - Email de contacto y redes en `src/data/company.ts`.
-- Dominio propio (opcional): configurar en Pages y actualizar `astro.config.mjs` y `public/robots.txt`.
+- Access Key de Web3Forms (ver arriba).
+- Dominio propio (opcional): configurar en Pages y actualizar `astro.config.mjs`.
 - Datos legales cuando exista constitución (`/legal`).
-- Sustituir los 3 proyectos de ejemplo por proyectos reales.
