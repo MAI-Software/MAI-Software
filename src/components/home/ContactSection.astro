@@ -1,0 +1,112 @@
+---
+import { company, type Locale } from '../../data/company';
+import { useTranslations, contactPath } from '../../i18n/utils';
+import ContactForm from '../global/ContactForm.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const hasForm = company.contact.web3formsKey !== '';
+---
+
+<!-- El formulario vive en la home: escribir no debe costar una navegación -->
+<section id="contacto" class="section contact-section">
+  <div class="container">
+    <div class="contact-panel panel">
+      <span class="contact-glow" aria-hidden="true"></span>
+
+      <div class="contact-inner">
+        <div class="contact-copy" data-reveal-group>
+          <p class="eyebrow" data-reveal>{t('cta.contact')}</p>
+          <h2 data-reveal>{t('final.title')}</h2>
+          <p class="lead" data-reveal>{t('contact.text')}</p>
+
+          {
+            company.social.github && (
+              <a
+                href={company.social.github}
+                class="link-editorial contact-alt"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-reveal
+              >
+                {t('links.github')}
+              </a>
+            )
+          }
+        </div>
+
+        <div class="contact-action" data-reveal>
+          {
+            hasForm ? (
+              <ContactForm locale={locale} />
+            ) : (
+              <a href={contactPath(locale)} class="btn btn-primary" data-magnetic>
+                {t('cta.contact')}
+              </a>
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact-panel {
+    padding: clamp(var(--space-6), 5vw, var(--space-8));
+    border-radius: var(--radius-xl);
+    background: linear-gradient(150deg, rgba(98, 66, 252, 0.14), rgba(16, 200, 252, 0.06));
+  }
+
+  .contact-glow {
+    position: absolute;
+    top: -40%;
+    right: -10%;
+    width: 30rem;
+    height: 30rem;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(56, 130, 251, 0.26), transparent 68%);
+    pointer-events: none;
+  }
+
+  .contact-inner {
+    position: relative;
+    z-index: var(--z-raised);
+    display: grid;
+    gap: clamp(var(--space-6), 4vw, var(--space-8));
+    align-items: start;
+  }
+
+  .contact-copy {
+    display: grid;
+    gap: var(--space-4);
+    justify-items: start;
+  }
+
+  .contact-copy h2 {
+    max-width: 18ch;
+  }
+
+  .contact-copy .lead {
+    max-width: 40ch;
+  }
+
+  .contact-alt {
+    margin-top: var(--space-2);
+  }
+
+  .contact-action {
+    justify-self: stretch;
+  }
+
+  @media (min-width: 900px) {
+    .contact-inner {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: center;
+    }
+  }
+</style>

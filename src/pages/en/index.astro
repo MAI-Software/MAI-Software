@@ -5,7 +5,7 @@ import CategoryIndex from '../../components/home/CategoryIndex.astro';
 import ProjectFeed from '../../components/home/ProjectFeed.astro';
 import Process from '../../components/home/Process.astro';
 import StudioIntro from '../../components/home/StudioIntro.astro';
-import FinalCTA from '../../components/home/FinalCTA.astro';
+import ContactSection from '../../components/home/ContactSection.astro';
 import { company } from '../../data/company';
 import { getProjects, getFeaturedProject } from '../../lib/projects';
 
@@ -29,5 +29,5 @@ const projects = featured
   {projects.length > 0 && <ProjectFeed projects={projects} locale={locale} />}
   <Process locale={locale} />
   <StudioIntro locale={locale} />
-  <FinalCTA locale={locale} />
+  <ContactSection locale={locale} />
 </BaseLayout>

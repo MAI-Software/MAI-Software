@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import FinalCTA from '../components/home/FinalCTA.astro';
+import ContactSection from '../components/home/ContactSection.astro';
 import { company } from '../data/company';
 import { categories } from '../data/categories';
 import { useTranslations } from '../i18n/utils';
@@ -60,7 +60,7 @@ const principles = [
       </div>
     </div>
   </section>
-  <FinalCTA locale={locale} />
+  <ContactSection locale={locale} />
 </BaseLayout>
 
 <style>

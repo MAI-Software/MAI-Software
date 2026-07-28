@@ -1,6 +1,6 @@
 ---
 import type { Locale } from '../../data/company';
-import { useTranslations, contactPath } from '../../i18n/utils';
+import { useTranslations, contactPath, homePath } from '../../i18n/utils';
 
 interface Props {
   locale: Locale;
@@ -8,9 +8,14 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = useTranslations(locale);
+
+// En la home el formulario ya está en la página: se baja hasta él en vez de navegar
+const current = Astro.url.pathname.replace(/\/$/, '');
+const isHome = current === homePath(locale).replace(/\/$/, '');
+const href = isHome ? '#contacto' : contactPath(locale);
 ---
 
-<a href={contactPath(locale)} class="mobile-cta">
+<a href={href} class="mobile-cta">
   {t('cta.contact')}
 </a>
 

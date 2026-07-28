@@ -41,7 +41,8 @@ const live = projects.filter((p) => p.data.demoUrl).length;
         <a href={projectsPath(locale)} class="btn btn-primary" data-magnetic>
           {t('cta.explore')}
         </a>
-        <a href={contactPath(locale)} class="btn btn-ghost">{t('cta.talk')}</a>
+        <!-- Baja al formulario de la propia home: sin cambiar de página -->
+        <a href="#contacto" class="btn btn-ghost">{t('cta.talk')}</a>
       </div>
 
       <dl class="hero-facts" data-reveal>
