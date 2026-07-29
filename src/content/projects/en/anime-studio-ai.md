@@ -8,7 +8,7 @@ published: true
 year: 2026
 status: "Lanzado"
 cover: "/projects/anime-studio-ai/cover.webp"
-coverAlt: "Three Anime Studio AI illustrations: an interior scene, Japanese folklore and an underwater composition"
+coverAlt: "Three Anime Studio AI illustrations: an urban punk character in neon light, a samurai before a cherry-blossom temple, and a kunoichi on a rooftop under the moon"
 demoUrl: "https://anime-studio-ai.pages.dev/"
 technologies:
   - HTML
@@ -34,7 +34,7 @@ The work was scattered across platforms. Each one crops images its own way, buri
 
 A lightweight site where the image leads. The gallery runs full-bleed and keeps each piece's original format, uncropped. Links are split by intent: commissions first, community second.
 
-The catalogue spans very different registers — everyday scenes, Japanese folklore, underwater compositions, urban portraits — so the interface stays dark and neutral, letting no palette compete with the artwork.
+The catalogue spans very different registers — urban portraits, Japanese folklore, night-time action scenes, underwater compositions — so the interface stays dark and neutral, letting no palette compete with the artwork.
 
 ## Outcome
 

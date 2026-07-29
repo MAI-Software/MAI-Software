@@ -8,7 +8,7 @@ published: true
 year: 2026
 status: "Lanzado"
 cover: "/projects/anime-studio-ai/cover.webp"
-coverAlt: "Tres ilustraciones de Anime Studio AI: escena de interior, folclore japonés y composición acuática"
+coverAlt: "Tres ilustraciones de Anime Studio AI: personaje punk urbano con luces de neón, samurái ante un templo con cerezos y kunoichi en una azotea bajo la luna"
 demoUrl: "https://anime-studio-ai.pages.dev/"
 technologies:
   - HTML
@@ -34,7 +34,7 @@ El trabajo estaba repartido entre plataformas. Cada una recorta las imágenes a 
 
 Una web ligera donde manda la imagen. La galería ocupa la pantalla completa y respeta el formato original de cada pieza, sin recortes. Los enlaces están separados por intención: primero encargos, después comunidad.
 
-El catálogo abarca registros muy distintos —escenas cotidianas, folclore japonés, composiciones acuáticas, retratos urbanos—, así que la interfaz se mantiene neutra y oscura para que ninguna paleta compita con la obra.
+El catálogo abarca registros muy distintos —retratos urbanos, folclore japonés, escenas de acción nocturna, composiciones acuáticas—, así que la interfaz se mantiene neutra y oscura para que ninguna paleta compita con la obra.
 
 ## Resultado
 
