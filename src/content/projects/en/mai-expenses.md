@@ -2,13 +2,13 @@
 title: "MAI Expenses"
 slug: "mai-expenses"
 category: "saas"
-excerpt: "Expense tracker that reads your receipts with the camera: snap, recognise the text, split by category — no accounts, no servers."
+excerpt: "Expense app that reads your receipts with the camera: snap, recognise the text, split by category. No accounts, no servers."
 featured: false
 published: true
 year: 2026
 status: "Lanzado"
 cover: "/projects/mai-expenses/cover.webp"
-coverAlt: "MAI Expenses interface showing the monthly expense summary"
+coverAlt: "MAI Expenses main screen showing the monthly expense summary"
 demoUrl: "https://maiexpenses.pages.dev/"
 technologies:
   - TypeScript
@@ -17,21 +17,23 @@ technologies:
 services:
   - UI/UX design
   - PWA development
+seoTitle: "MAI Expenses — Expense app with receipt scanning | MAI Softwares"
+seoDescription: "Development of an expense tracker that scans receipts with the camera. Text recognition runs on the phone itself, with no sign-up and no servers."
 layoutVariant: "split-left"
 ---
 
-## Context
+## The idea
 
-An expense app that removes the most tedious step: typing. Photograph the receipt and the text is recognised on the device itself.
+An expense app that removes the step everyone quits over: typing. Photograph the receipt and the text is recognised on the phone itself.
 
-## Problem / opportunity
+## The problem
 
-Finance apps demand sign-up, sync and trust in someone else's server. The opportunity: do it all locally, with no accounts.
+Finance apps ask you to sign up, sync your movements and keep data that says a lot about you on someone else's server. Plenty of people stop right there.
 
-## Solution
+## The solution
 
-Installable PWA with in-browser OCR, automatic category split, monthly summary, history and multi-language support. No backend: data never leaves the device.
+Everything happens locally. Text recognition runs in the browser, data never leaves the device, and there is no account to create. One screen: capture, see the split by category, check the history. Available in five languages.
 
-## Outcome / status
+## Outcome
 
-Published and in use. Available as an installable web app and as an Android APK.
+Published and in use. It installs as an app straight from the browser, and an Android APK is available too.

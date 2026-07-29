@@ -2,16 +2,13 @@
 title: "Anime Studio AI"
 slug: "anime-studio-ai"
 category: "web"
-excerpt: "Brand site for an AI anime illustration studio: editorial cover, artwork gallery and links for commissions and socials."
+excerpt: "Brand site for an anime illustration studio: full-bleed gallery and links ordered for commissions and socials."
 featured: false
 published: true
 year: 2026
 status: "Lanzado"
 cover: "/projects/anime-studio-ai/cover.webp"
-coverAlt: "Anime Studio AI cover with anime artwork and the brand name"
-gallery:
-  - "/projects/anime-studio-ai/screen-01.webp"
-  - "/projects/anime-studio-ai/screen-02.webp"
+coverAlt: "Three Anime Studio AI illustrations: an interior scene, Japanese folklore and an underwater composition"
 demoUrl: "https://anime-studio-ai.pages.dev/"
 technologies:
   - HTML
@@ -20,21 +17,25 @@ technologies:
 services:
   - Art direction
   - Web development
+seoTitle: "Anime Studio AI — Anime illustration website | MAI Softwares"
+seoDescription: "Design and development of an anime illustration studio's website: full-bleed gallery, fast loading and links ordered to win commissions."
 layoutVariant: "split-right"
 ---
 
-## Context
+## The brief
 
-Showcase site for an AI-generated anime illustration brand. It works as a portfolio of artwork and an entry point for commissions and socials.
+An anime illustration studio needed a home of its own: somewhere to show the work without each platform's rules, and somewhere to take commissions.
 
-## Problem / opportunity
+## The problem
 
-Visual work gets scattered across platforms. The opportunity: an owned space where the artwork leads and links are ordered by intent.
+The work was scattered across platforms. Each one crops images its own way, buries older posts and hides the links that matter in a bio.
 
-## Solution
+## The solution
 
-Neon cyber-noir aesthetic, full-bleed gallery, clear hierarchy between commission and community links. Static and very lightweight.
+A lightweight site where the image leads. The gallery runs full-bleed and keeps each piece's original format, uncropped. Links are split by intent: commissions first, community second.
 
-## Outcome / status
+The catalogue spans very different registers — everyday scenes, Japanese folklore, underwater compositions, urban portraits — so the interface stays dark and neutral, letting no palette compete with the artwork.
 
-Published and in use as the brand's main site.
+## Outcome
+
+Published and in use as the brand's main site. Static, dependency-free, and easy to extend with new work without touching the code.

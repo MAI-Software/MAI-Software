@@ -29,15 +29,15 @@ export const ui = {
     'categories.eyebrow': 'Qué hacemos',
     'categories.title': 'Tres disciplinas. Una misma forma de construir.',
     'categories.cta': 'Ver proyectos',
-    'category.game.b1': 'Prototipos jugables desde el inicio',
-    'category.game.b2': 'La mecánica como núcleo del diseño',
-    'category.game.b3': 'Experiencias para móvil y web',
-    'category.saas.b1': 'Interfaces claras y funcionales',
-    'category.saas.b2': 'Automatización de procesos',
-    'category.saas.b3': 'Bases preparadas para escalar',
-    'category.web.b1': 'Diseño editorial a medida',
-    'category.web.b2': 'Rendimiento y SEO cuidados',
-    'category.web.b3': 'Fáciles de mantener y ampliar',
+    'category.game.b1': 'Desarrollo de videojuegos para móvil y web',
+    'category.game.b2': 'Prototipo jugable desde la primera semana',
+    'category.game.b3': 'Mecánicas propias, no plantillas',
+    'category.saas.b1': 'Aplicaciones y herramientas a medida',
+    'category.saas.b2': 'Automatizamos el trabajo repetitivo',
+    'category.saas.b3': 'Preparadas para crecer contigo',
+    'category.web.b1': 'Páginas web a medida, sin plantillas',
+    'category.web.b2': 'Rápidas y posicionadas en Google',
+    'category.web.b3': 'Las actualizas tú, sin depender de nadie',
 
     'featured.label': 'Proyecto destacado',
     'feed.eyebrow': 'Trabajo reciente',
@@ -45,7 +45,7 @@ export const ui = {
     'feed.all': 'Ver todos los proyectos',
 
     'process.eyebrow': 'Cómo trabajamos',
-    'process.title': 'Forma de trabajar',
+    'process.title': 'De la idea al lanzamiento en tres pasos.',
     'process.1.title': 'Idea',
     'process.1.text':
       'Definimos el problema, la oportunidad y el resultado que debe conseguir el producto.',
@@ -74,7 +74,7 @@ export const ui = {
 
     'projects.title': 'Todos los proyectos',
     'projects.intro':
-      'Archivo de todo lo que construimos: videojuegos, herramientas SaaS y experiencias web.',
+      'Videojuegos, herramientas SaaS y páginas web que hemos desarrollado. Todos con demo abierta para que los pruebes.',
     'projects.filter.all': 'Todos',
     'projects.empty': 'Todavía no hay proyectos en esta categoría.',
     'projects.back': 'Volver a proyectos',

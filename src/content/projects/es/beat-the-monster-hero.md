@@ -2,13 +2,13 @@
 title: "Beat the Monster Hero"
 slug: "beat-the-monster-hero"
 category: "game"
-excerpt: "JRPG rítmico para móvil donde luchas moviendo el teléfono: la cámara detecta tus golpes al ritmo de la música."
+excerpt: "JRPG rítmico para móvil: la cámara detecta tus golpes y el combate se juega moviendo el cuerpo, no pulsando botones."
 featured: true
 published: true
 year: 2026
 status: "En desarrollo"
 cover: "/projects/beat-the-monster-hero/cover.webp"
-coverAlt: "Logotipo de Beat the Monster Hero sobre fondo morado"
+coverAlt: "Logotipo de Beat the Monster Hero sobre un fondo morado con ondas concéntricas"
 gallery:
   - "/projects/beat-the-monster-hero/screen-01.webp"
 demoUrl: "https://beatthemonsterhero.pages.dev/"
@@ -19,21 +19,25 @@ technologies:
 services:
   - Diseño de juego
   - Desarrollo móvil
+seoTitle: "Beat the Monster Hero — Juego rítmico con cámara | MAI Softwares"
+seoDescription: "Desarrollo de un JRPG rítmico para móvil que usa la cámara como mando: detección de movimiento en tiempo real con TypeScript y MediaPipe."
 layoutVariant: "featured"
 ---
 
-## Contexto
+## La idea
 
-Un JRPG por turnos donde el combate no se juega con botones: la cámara del móvil detecta el movimiento del jugador y traduce sus golpes al compás de la música.
+Un JRPG por turnos donde el combate no se pulsa: la cámara del móvil lee tu movimiento y convierte cada golpe en un acierto al compás de la música.
 
-## Problema u oportunidad
+## El problema
 
-El control táctil limita la sensación física de un juego de combate rítmico. La oportunidad: usar la cámara como mando y convertir el cuerpo en el sistema de entrada.
+Los juegos rítmicos móviles se juegan con el pulgar. Eso limita justo lo que hace divertido un combate: la sensación física de golpear.
 
-## Solución
+## La solución
 
-Detección de movimiento en tiempo real, combos ligados al tempo, progresión con equipo y coach que guía al jugador. Todo pensado para una sola mano y sesiones cortas.
+La cámara pasa a ser el mando. El juego detecta la postura en tiempo real y valida los golpes contra el tempo de cada canción. Alrededor hay progresión con equipo, un entrenador que guía al jugador y partidas cortas pensadas para jugar de pie.
 
-## Resultado o estado
+Todo corre en el propio dispositivo: nada de vídeo sale del móvil.
 
-En desarrollo activo. Versión web jugable disponible; APK Android en preparación.
+## Estado
+
+En desarrollo activo. Hay versión web jugable y el APK de Android está en preparación.

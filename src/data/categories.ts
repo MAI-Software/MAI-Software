@@ -23,8 +23,8 @@ const rawCategories: Category[] = [
       en: 'Interactive experiences, prototypes and projects built around a mechanic or a strong idea.',
     },
     intro: {
-      es: 'Videojuegos y experiencias interactivas construidas alrededor de una idea, una mecánica o una forma distinta de jugar.',
-      en: 'Video games and interactive experiences built around an idea, a mechanic or a different way to play.',
+      es: 'Desarrollo de videojuegos para móvil y web, construidos alrededor de una mecánica propia y jugables desde las primeras semanas.',
+      en: 'Video game development for mobile and web, built around an original mechanic and playable within the first few weeks.',
     },
   },
   {
@@ -37,8 +37,8 @@ const rawCategories: Category[] = [
       en: 'Digital tools that simplify processes, automate work and solve specific problems.',
     },
     intro: {
-      es: 'Productos y herramientas digitales pensados para simplificar procesos, automatizar tareas y crear valor de forma sostenible.',
-      en: 'Digital products and tools designed to simplify processes, automate tasks and create sustainable value.',
+      es: 'Aplicaciones y herramientas a medida que automatizan el trabajo repetitivo y simplifican procesos, preparadas para crecer con el negocio.',
+      en: 'Custom apps and tools that automate repetitive work and simplify processes, built to grow with the business.',
     },
   },
   {
@@ -51,8 +51,8 @@ const rawCategories: Category[] = [
       en: 'Fast, visual sites and digital experiences built to present, sell or validate a proposal.',
     },
     intro: {
-      es: 'Webs y experiencias digitales diseñadas para presentar una marca, validar una idea o convertir atención en acción.',
-      en: 'Websites and digital experiences designed to present a brand, validate an idea or turn attention into action.',
+      es: 'Diseño y desarrollo de páginas web a medida: rápidas, posicionadas en buscadores y pensadas para convertir visitas en clientes.',
+      en: 'Custom website design and development: fast, search-friendly and built to turn visits into customers.',
     },
   },
 ];

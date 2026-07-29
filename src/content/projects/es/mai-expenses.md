@@ -2,13 +2,13 @@
 title: "MAI Expenses"
 slug: "mai-expenses"
 category: "saas"
-excerpt: "Control de gastos que lee tus tickets con la cámara: foto, reconocimiento de texto y reparto por categorías, sin cuentas ni servidores."
+excerpt: "App de gastos que lee tus tickets con la cámara: foto, reconocimiento de texto y reparto por categorías. Sin cuentas ni servidores."
 featured: false
 published: true
 year: 2026
 status: "Lanzado"
 cover: "/projects/mai-expenses/cover.webp"
-coverAlt: "Interfaz de MAI Expenses con resumen mensual de gastos"
+coverAlt: "Pantalla principal de MAI Expenses con el resumen mensual de gastos"
 demoUrl: "https://maiexpenses.pages.dev/"
 technologies:
   - TypeScript
@@ -17,21 +17,23 @@ technologies:
 services:
   - Diseño UI/UX
   - Desarrollo PWA
+seoTitle: "MAI Expenses — App de gastos con lectura de tickets | MAI Softwares"
+seoDescription: "Desarrollo de una app de control de gastos que escanea tickets con la cámara. Reconocimiento de texto en el propio móvil, sin registro ni servidores."
 layoutVariant: "split-left"
 ---
 
-## Contexto
+## La idea
 
-Una app de gastos que elimina el paso más tedioso: teclear. Se fotografía el ticket y el texto se reconoce en el propio dispositivo.
+Una app de gastos que elimina el paso que hace que todo el mundo la abandone: teclear. Se fotografía el ticket y el texto se reconoce en el propio móvil.
 
-## Problema u oportunidad
+## El problema
 
-Las apps de finanzas exigen registro, sincronización y confianza en un servidor ajeno. La oportunidad: hacerlo todo en local, sin cuentas.
+Las apps de finanzas piden registro, sincronizan tus movimientos y guardan en un servidor ajeno datos que dicen mucho de ti. Mucha gente lo deja ahí.
 
-## Solución
+## La solución
 
-PWA instalable con OCR en el navegador, reparto automático por categorías, resumen mensual, historial y soporte multiidioma. Sin backend: los datos no salen del dispositivo.
+Todo ocurre en local. El reconocimiento de texto corre en el navegador, los datos no salen del dispositivo y no hay cuenta que crear. Una sola pantalla: capturar, ver el reparto por categorías y consultar el histórico. Disponible en cinco idiomas.
 
-## Resultado o estado
+## Resultado
 
-Publicada y en uso. Disponible como web instalable y como APK para Android.
+Publicada y en uso. Se instala como app desde el navegador y también existe APK para Android.

@@ -2,16 +2,13 @@
 title: "Anime Studio AI"
 slug: "anime-studio-ai"
 category: "web"
-excerpt: "Web de marca para un estudio de ilustración anime con IA: portada editorial, galería de obra y enlaces a encargos y redes."
+excerpt: "Web de marca para un estudio de ilustración anime: galería a pantalla completa y enlaces ordenados para encargos y redes."
 featured: false
 published: true
 year: 2026
 status: "Lanzado"
 cover: "/projects/anime-studio-ai/cover.webp"
-coverAlt: "Portada de Anime Studio AI con ilustración anime y el nombre de la marca"
-gallery:
-  - "/projects/anime-studio-ai/screen-01.webp"
-  - "/projects/anime-studio-ai/screen-02.webp"
+coverAlt: "Tres ilustraciones de Anime Studio AI: escena de interior, folclore japonés y composición acuática"
 demoUrl: "https://anime-studio-ai.pages.dev/"
 technologies:
   - HTML
@@ -20,21 +17,25 @@ technologies:
 services:
   - Dirección de arte
   - Desarrollo web
+seoTitle: "Anime Studio AI — Web de ilustración anime | MAI Softwares"
+seoDescription: "Diseño y desarrollo de la web de un estudio de ilustración anime: galería a pantalla completa, carga rápida y enlaces ordenados para captar encargos."
 layoutVariant: "split-right"
 ---
 
-## Contexto
+## El encargo
 
-Sitio de presentación para una marca de ilustración anime generada con IA. Funciona como escaparate de obra y punto de entrada a encargos y redes.
+Un estudio de ilustración anime necesitaba un sitio propio: un lugar donde enseñar la obra sin las reglas de cada red social y donde recibir encargos.
 
-## Problema u oportunidad
+## El problema
 
-El trabajo visual se dispersa entre plataformas. La oportunidad: un espacio propio donde la obra manda y los enlaces están ordenados por intención.
+El trabajo estaba repartido entre plataformas. Cada una recorta las imágenes a su manera, entierra las publicaciones antiguas y deja los enlaces importantes escondidos en la biografía.
 
-## Solución
+## La solución
 
-Estética cyber-noir de neón, galería a pantalla completa, jerarquía clara entre enlaces de encargo y de comunidad. Estático y muy ligero.
+Una web ligera donde manda la imagen. La galería ocupa la pantalla completa y respeta el formato original de cada pieza, sin recortes. Los enlaces están separados por intención: primero encargos, después comunidad.
 
-## Resultado o estado
+El catálogo abarca registros muy distintos —escenas cotidianas, folclore japonés, composiciones acuáticas, retratos urbanos—, así que la interfaz se mantiene neutra y oscura para que ninguna paleta compita con la obra.
 
-Publicada y en uso como web principal de la marca.
+## Resultado
+
+Publicada y en uso como web principal de la marca. Estática, sin dependencias y con margen para añadir obra nueva sin tocar el código.
