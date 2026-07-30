@@ -351,6 +351,14 @@ button {
   pointer-events: none;
 }
 
+/* Intensidad del brillo: registrada para poder animarla.
+   Sin esto el borde se quedaría encendido en la última posición del cursor. */
+@property --spot-a {
+  syntax: '<number>';
+  initial-value: 0;
+  inherits: false;
+}
+
 /* Tarjeta: borde iluminado que sigue al puntero + foco interior.
    El borde se pinta con dos fondos (padding-box / border-box), así el
    degradado vive en el borde sin capas extra. */
@@ -366,12 +374,13 @@ button {
   background:
     linear-gradient(var(--glass), var(--glass)) padding-box,
     radial-gradient(
-        16rem 16rem at var(--spot-x, 50%) var(--spot-y, 0%),
-        rgba(120, 150, 255, 0.55),
+        16rem 16rem at var(--spot-x, 50%) var(--spot-y, 50%),
+        rgba(120, 150, 255, calc(0.55 * var(--spot-a))),
         var(--line) 65%
       )
       border-box;
   transition:
+    --spot-a var(--duration-base) var(--ease-standard),
     background-color var(--duration-base) var(--ease-standard),
     box-shadow var(--duration-base) var(--ease-standard);
 }
@@ -381,21 +390,22 @@ button {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0;
+  opacity: var(--spot-a);
   background: radial-gradient(
-    20rem 20rem at var(--spot-x, 50%) var(--spot-y, 0%),
+    20rem 20rem at var(--spot-x, 50%) var(--spot-y, 50%),
     rgba(98, 66, 252, 0.2),
     transparent 62%
   );
   transition: opacity var(--duration-base) var(--ease-standard);
 }
 
-.card:hover {
-  box-shadow: var(--shadow-md);
-}
-
-.card:hover::before {
-  opacity: 1;
+/* Solo se enciende con puntero fino y mientras esté encima: al salir,
+   --spot-a vuelve a 0 y el brillo se apaga solo. */
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    --spot-a: 1;
+    box-shadow: var(--shadow-md);
+  }
 }
 
 .card-bullets {

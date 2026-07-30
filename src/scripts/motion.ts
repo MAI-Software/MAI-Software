@@ -161,31 +161,61 @@ document.querySelectorAll<HTMLElement>('.btn').forEach((btn) => {
   btn.addEventListener('animationend', () => btn.classList.remove('is-rippling'));
 });
 
-/* --- Foco de luz que sigue al puntero dentro de las tarjetas --- */
+/* --- Foco de luz que sigue al puntero dentro de las tarjetas ---
+   La intensidad la controla CSS (--spot-a con :hover), así el brillo se
+   apaga solo al salir. Aquí únicamente se actualiza la posición, y solo
+   mientras el puntero está dentro. */
 if (finePointer) {
   document.querySelectorAll<HTMLElement>('.card').forEach((card) => {
+    let inside = false;
+
     const move = perFrame<PointerEvent>((ev) => {
+      if (!inside) return; // descarta el frame que llega tras salir
       const rect = card.getBoundingClientRect();
       card.style.setProperty('--spot-x', `${((ev.clientX - rect.left) / rect.width) * 100}%`);
       card.style.setProperty('--spot-y', `${((ev.clientY - rect.top) / rect.height) * 100}%`);
     });
+
+    card.addEventListener('pointerenter', () => {
+      inside = true;
+    });
     card.addEventListener('pointermove', move, { passive: true });
+    card.addEventListener('pointerleave', () => {
+      inside = false;
+    });
   });
 }
 
 /* --- Botones magnéticos --- */
 if (!reduced && finePointer) {
   document.querySelectorAll<HTMLElement>('[data-magnetic]').forEach((el) => {
+    let inside = false;
+
+    const release = () => {
+      inside = false;
+      el.style.translate = '0px 0px';
+    };
+
     const move = perFrame<PointerEvent>((ev) => {
+      if (!inside) return; // el frame pendiente no debe recolocarlo tras salir
       const rect = el.getBoundingClientRect();
       const dx = (ev.clientX - (rect.left + rect.width / 2)) * 0.22;
       const dy = (ev.clientY - (rect.top + rect.height / 2)) * 0.3;
       el.style.translate = `${dx.toFixed(1)}px ${dy.toFixed(1)}px`;
     });
-    el.addEventListener('pointermove', move, { passive: true });
-    el.addEventListener('pointerleave', () => {
-      el.style.translate = '0px 0px';
+
+    el.addEventListener('pointerenter', () => {
+      inside = true;
     });
+    el.addEventListener('pointermove', move, { passive: true });
+
+    // Varias salidas posibles: puntero fuera, gesto cancelado, clic que
+    // navega, o el puntero abandonando la ventana sin pasar por el borde.
+    el.addEventListener('pointerleave', release);
+    el.addEventListener('pointercancel', release);
+    el.addEventListener('blur', release);
+    document.addEventListener('pointerleave', release);
+    window.addEventListener('blur', release);
   });
 }
 
