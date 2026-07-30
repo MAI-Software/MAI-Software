@@ -109,6 +109,9 @@ const Heading = headingLevel;
 
   .card-title {
     padding: var(--space-3) var(--space-5) 0;
+    /* Nombres largos de una sola palabra no deben desbordar la tarjeta */
+    overflow-wrap: anywhere;
+    hyphens: auto;
   }
 
   .card-title a {
