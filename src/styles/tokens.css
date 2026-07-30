@@ -19,6 +19,10 @@
   /* Superficies */
   --surface: var(--ink-950);
   --surface-raised: var(--ink-900);
+  /* Opacas a propósito: si fueran translúcidas, las luces del fondo se
+     verían a través de tarjetas y paneles y parecerían brillos pegados. */
+  --card: #11151f;
+  --card-hover: #151a26;
   --glass: rgba(255, 255, 255, 0.045);
   --glass-strong: rgba(255, 255, 255, 0.075);
 

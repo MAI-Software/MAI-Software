@@ -100,7 +100,7 @@ const live = (await getProjects(locale)).filter((p) => p.data.demoUrl);
     padding: var(--space-4) var(--space-5);
     border: 1px solid var(--line);
     border-radius: var(--radius-md);
-    background: var(--glass);
+    background: var(--card);
     text-decoration: none;
     transition:
       border-color var(--duration-base) var(--ease-standard),
@@ -110,7 +110,7 @@ const live = (await getProjects(locale)).filter((p) => p.data.demoUrl);
 
   .link-row:hover {
     border-color: var(--line-strong);
-    background: var(--glass-strong);
+    background: var(--card-hover);
     transform: translateX(4px);
   }
 

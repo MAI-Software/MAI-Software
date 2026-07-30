@@ -59,7 +59,9 @@ const hasForm = company.contact.web3formsKey !== '';
   .contact-panel {
     padding: clamp(var(--space-6), 5vw, var(--space-8));
     border-radius: var(--radius-xl);
-    background: linear-gradient(150deg, rgba(98, 66, 252, 0.14), rgba(16, 200, 252, 0.06));
+    /* El tinte va sobre base opaca: si no, el fondo se transparenta */
+    background: linear-gradient(150deg, rgba(98, 66, 252, 0.14), rgba(16, 200, 252, 0.06)),
+      var(--card);
   }
 
   .contact-glow {

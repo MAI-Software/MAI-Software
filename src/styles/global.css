@@ -333,7 +333,7 @@ button {
    ============================================ */
 .panel {
   position: relative;
-  background: var(--glass);
+  background: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   overflow: hidden;
@@ -372,7 +372,7 @@ button {
   border-radius: var(--radius-lg);
   overflow: hidden;
   background:
-    linear-gradient(var(--glass), var(--glass)) padding-box,
+    linear-gradient(var(--card), var(--card)) padding-box,
     radial-gradient(
         16rem 16rem at var(--spot-x, 50%) var(--spot-y, 50%),
         rgba(120, 150, 255, calc(0.55 * var(--spot-a))),
@@ -441,7 +441,7 @@ button {
   height: 42px;
   border-radius: var(--radius-md);
   border: 1px solid var(--line);
-  background: linear-gradient(140deg, var(--violet-soft), var(--cyan-soft));
+  background: linear-gradient(140deg, var(--violet-soft), var(--cyan-soft)), var(--card);
   font-family: var(--font-display);
   font-weight: 700;
   font-size: var(--font-size-sm);
@@ -532,13 +532,13 @@ button {
 }
 
 .btn-ghost {
-  background: var(--glass);
+  background: var(--card);
   border-color: var(--line);
   color: var(--text);
 }
 
 .btn-ghost:hover {
-  background: var(--glass-strong);
+  background: var(--card-hover);
   border-color: var(--line-strong);
   transform: translateY(-2px);
 }
@@ -584,7 +584,7 @@ button {
   padding: 3px var(--space-3);
   border-radius: var(--radius-pill);
   border: 1px solid var(--line);
-  background: var(--glass);
+  background: var(--card);
   font-size: var(--font-size-xs);
   font-weight: 600;
   letter-spacing: 0.07em;

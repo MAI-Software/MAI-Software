@@ -127,13 +127,11 @@ if (!reduced && 'IntersectionObserver' in window) {
 if (!reduced && finePointer) {
   const glow = document.querySelector<HTMLElement>('.cursor-glow');
 
+  // Solo la luz sigue al cursor. El fondo no se mueve con el ratón: al
+  // desplazarse hacía que sus luces parecieran brillos sueltos vagando.
   const onPointer = perFrame<PointerEvent>((ev) => {
     glow?.style.setProperty('--cursor-x', `${ev.clientX}px`);
     glow?.style.setProperty('--cursor-y', `${ev.clientY}px`);
-
-    // El fondo se desplaza en sentido contrario al puntero
-    const nx = ev.clientX / window.innerWidth - 0.5;
-    scene?.style.setProperty('--scene-x', `${(-nx * 40).toFixed(1)}px`);
   });
 
   window.addEventListener('pointermove', onPointer, { passive: true });
