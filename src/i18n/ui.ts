@@ -22,8 +22,8 @@ export const ui = {
     'cta.viewProject': 'Ver proyecto',
     'cta.openDemo': 'Abrir demo',
 
-    'facts.shipped': 'En producción',
-    'facts.areas': 'Disciplinas',
+    'facts.repos': 'Repositorios',
+    'facts.live': 'Webs en producción',
     'facts.stack': 'Base técnica',
 
     'categories.eyebrow': 'Qué hacemos',
@@ -155,8 +155,8 @@ export const ui = {
     'cta.viewProject': 'View project',
     'cta.openDemo': 'Open demo',
 
-    'facts.shipped': 'In production',
-    'facts.areas': 'Disciplines',
+    'facts.repos': 'Repositories',
+    'facts.live': 'Live websites',
     'facts.stack': 'Tech base',
 
     'categories.eyebrow': 'What we do',

@@ -36,6 +36,17 @@ export const company = {
     youtube: '', // PENDIENTE
   },
 
+  /**
+   * Cifras verificables que se muestran en el hero.
+   * `repos` cuenta todos los repositorios de github.com/MAI-Software,
+   * públicos y privados, así que no puede leerse de la API sin token:
+   * actualízalo a mano cuando cambie. Las webs en producción se cuentan
+   * solas a partir de los proyectos que tienen demo.
+   */
+  stats: {
+    repos: 13,
+  },
+
   legal: {
     legalName: '', // PENDIENTE de constitución
     taxId: '', // PENDIENTE de constitución
