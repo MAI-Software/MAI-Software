@@ -41,5 +41,3 @@ Every calculation runs in the browser: nothing is sent or stored. Around it sit 
 ## Outcome
 
 Live at calcuneto.com, free and without sign-up, using 2026 tax figures.
-
-Built together with Alex.

@@ -43,5 +43,3 @@ Everything is calculated in the browser, with no sign-up and no data sent.
 ## Outcome
 
 Live at calcuautonomo.com using the official 2026 brackets.
-
-Built together with Alex.

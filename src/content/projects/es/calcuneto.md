@@ -41,5 +41,3 @@ Todo el cálculo ocurre en el navegador: no se envía ni se guarda ningún dato.
 ## Resultado
 
 Publicada en calcuneto.com, gratis y sin registro, con los datos del ejercicio 2026.
-
-Proyecto desarrollado junto a Alex.

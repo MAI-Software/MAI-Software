@@ -43,5 +43,3 @@ Todo se calcula en el navegador, sin registro ni envío de datos.
 ## Resultado
 
 Publicada en calcuautonomo.com con los tramos oficiales de 2026.
-
-Proyecto desarrollado junto a Alex.

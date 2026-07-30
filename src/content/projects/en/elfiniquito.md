@@ -43,5 +43,3 @@ Calculation happens in the browser; data never leaves the device. The design dep
 ## Outcome
 
 Live at elfiniquito.com, free and without sign-up, using 2026 regulations.
-
-Built together with Alex.

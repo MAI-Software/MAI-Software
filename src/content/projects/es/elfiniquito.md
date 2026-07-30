@@ -43,5 +43,3 @@ El cálculo se hace en el navegador; los datos no salen del dispositivo. El dise
 ## Resultado
 
 Publicada en elfiniquito.com, gratis y sin registro, con la normativa de 2026.
-
-Proyecto desarrollado junto a Alex.
