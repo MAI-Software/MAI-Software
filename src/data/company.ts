@@ -38,13 +38,13 @@ export const company = {
 
   /**
    * Cifras verificables que se muestran en el hero.
-   * `repos` cuenta todos los repositorios de github.com/MAI-Software,
-   * públicos y privados, así que no puede leerse de la API sin token:
-   * actualízalo a mano cuando cambie. Las webs en producción se cuentan
-   * solas a partir de los proyectos que tienen demo.
+   * `projects` = 13 repositorios de github.com/MAI-Software (públicos y
+   * privados) + 3 webs aportadas por el socio. No puede leerse de la API
+   * sin token, así que se actualiza a mano. Las webs en producción sí se
+   * cuentan solas a partir de los proyectos con demo pública.
    */
   stats: {
-    repos: 13,
+    projects: 16,
   },
 
   legal: {
