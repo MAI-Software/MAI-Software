@@ -24,7 +24,6 @@ export const ui = {
 
     'facts.projects': 'Proyectos',
     'facts.live': 'Webs en producción',
-    'facts.stack': 'Base técnica',
 
     'categories.eyebrow': 'Qué hacemos',
     'categories.title': 'Tres disciplinas. Una misma forma de construir.',
@@ -157,7 +156,6 @@ export const ui = {
 
     'facts.projects': 'Projects',
     'facts.live': 'Live websites',
-    'facts.stack': 'Tech base',
 
     'categories.eyebrow': 'What we do',
     'categories.title': 'Three disciplines. One way of building.',
