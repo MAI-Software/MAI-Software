@@ -1,7 +1,7 @@
----
+﻿---
 title: "CalcuAutónomo"
 slug: "calcuautonomo"
-category: "saas"
+category: "calc"
 excerpt: "Calculadora para autónomos: de lo que facturas a lo que puedes gastar de verdad, separando gastos, cuota, IVA e IRPF."
 featured: false
 published: true

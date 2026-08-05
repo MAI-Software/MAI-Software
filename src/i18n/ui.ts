@@ -12,7 +12,7 @@ export const ui = {
     'lang.switch': 'English version',
     'lang.label': 'EN',
 
-    'hero.eyebrow': 'VIDEOJUEGOS · SAAS · EXPERIENCIAS WEB',
+    'hero.eyebrow': 'VIDEOJUEGOS · SAAS · CALCULADORAS · WEBS',
     'hero.title': 'Transformamos ideas en productos inolvidables',
     'hero.text':
       'Estudio de producto digital: diseñamos y desarrollamos videojuegos, herramientas SaaS y webs que se lanzan y crecen.',
@@ -26,7 +26,7 @@ export const ui = {
     'facts.live': 'Webs en producción',
 
     'categories.eyebrow': 'Qué hacemos',
-    'categories.title': 'Tres disciplinas. Una misma forma de construir.',
+    'categories.title': 'Cuatro disciplinas. Una misma forma de construir.',
     'categories.cta': 'Ver proyectos',
     'category.game.b1': 'Desarrollo de videojuegos para móvil y web',
     'category.game.b2': 'Prototipo jugable desde la primera semana',
@@ -144,7 +144,7 @@ export const ui = {
     'lang.switch': 'Versión en español',
     'lang.label': 'ES',
 
-    'hero.eyebrow': 'GAMES · SAAS · WEB EXPERIENCES',
+    'hero.eyebrow': 'GAMES · SAAS · CALCULATORS · WEBS',
     'hero.title': 'We turn ideas into unforgettable products',
     'hero.text':
       'A digital product studio: we design and build video games, SaaS tools and websites that ship and grow.',
@@ -158,7 +158,7 @@ export const ui = {
     'facts.live': 'Live websites',
 
     'categories.eyebrow': 'What we do',
-    'categories.title': 'Three disciplines. One way of building.',
+    'categories.title': 'Four disciplines. One way of building.',
     'categories.cta': 'View projects',
     'category.game.b1': 'Playable prototypes from day one',
     'category.game.b2': 'Mechanics at the core of the design',

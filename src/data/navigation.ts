@@ -21,6 +21,10 @@ const items: NavItem[] = [
     href: { es: '/saas', en: '/en/saas' },
   },
   {
+    label: { es: 'Calculadoras', en: 'Calculators' },
+    href: { es: '/calculadoras', en: '/en/calculators' },
+  },
+  {
     label: { es: 'Webs', en: 'Webs' },
     href: { es: '/webs', en: '/en/webs' },
   },

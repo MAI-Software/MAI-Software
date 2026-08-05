@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectArchive from '../../components/projects/ProjectArchive.astro';
+import { company } from '../../data/company';
+import { getCategory } from '../../data/categories';
+import { getProjects } from '../../lib/projects';
+
+const locale = 'en';
+const category = getCategory('calc');
+const projects = await getProjects(locale, 'calc');
+---
+
+<BaseLayout
+  locale={locale}
+  title={`Tax and payroll calculators — ${company.name}`}
+  description={category.intro.en}
+  alternatePath="/calculadoras"
+>
+  <ProjectArchive
+    locale={locale}
+    title={category.label.en}
+    intro={category.intro.en}
+    projects={projects}
+    activeCategory="calc"
+  />
+</BaseLayout>

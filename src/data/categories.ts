@@ -1,7 +1,7 @@
 import type { Locale } from './company';
 import { withBase } from '../lib/base';
 
-export type CategoryId = 'game' | 'saas' | 'web';
+export type CategoryId = 'game' | 'saas' | 'web' | 'calc';
 
 export interface Category {
   id: CategoryId;
@@ -42,8 +42,22 @@ const rawCategories: Category[] = [
     },
   },
   {
-    id: 'web',
+    id: 'calc',
     number: '03',
+    label: { es: 'Calculadoras', en: 'Calculators' },
+    path: { es: '/calculadoras', en: '/en/calculators' },
+    description: {
+      es: 'Herramientas de cálculo laboral y fiscal que explican de dónde sale cada euro, sin registro y con los datos del año en curso.',
+      en: 'Tax and payroll calculators that show where every euro comes from, with no sign-up and current-year figures.',
+    },
+    intro: {
+      es: 'Calculadoras de sueldo, finiquito, autónomos, IVA e inversiones. Cálculo en tu navegador, sin registro y con los datos vigentes en España.',
+      en: 'Calculators for salary, severance, freelancers, VAT and investments. Everything runs in your browser, with no sign-up and current Spanish figures.',
+    },
+  },
+  {
+    id: 'web',
+    number: '04',
     label: { es: 'Webs', en: 'Webs' },
     path: { es: '/webs', en: '/en/webs' },
     description: {

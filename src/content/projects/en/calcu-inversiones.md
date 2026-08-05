@@ -1,7 +1,7 @@
----
+﻿---
 title: "Calcu-Inversiones"
 slug: "calcu-inversiones"
-category: "saas"
+category: "calc"
 excerpt: "Investment portfolio simulator: split your money across bonds, equities, gold or bitcoin and see where it lands, with compound interest and inflation."
 featured: false
 published: true

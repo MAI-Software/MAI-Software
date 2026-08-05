@@ -1,7 +1,7 @@
----
+﻿---
 title: "CalcuNeto"
 slug: "calcuneto"
-category: "saas"
+category: "calc"
 excerpt: "Calculadora de sueldo neto en España: del bruto anual al dinero real de cada mes, con el desglose de IRPF y Seguridad Social."
 featured: false
 published: true

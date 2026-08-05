@@ -1,7 +1,7 @@
----
+﻿---
 title: "Calcu-Inversiones"
 slug: "calcu-inversiones"
-category: "saas"
+category: "calc"
 excerpt: "Simulador de carteras de inversión: reparte tu dinero entre renta fija, acciones, oro o bitcoin y mira a dónde te lleva con interés compuesto e inflación."
 featured: false
 published: true

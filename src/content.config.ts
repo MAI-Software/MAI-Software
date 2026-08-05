@@ -18,7 +18,7 @@ const projects = defineCollection({
   schema: z.object({
     title: z.string(),
     slug: z.string(),
-    category: z.enum(['game', 'saas', 'web']),
+    category: z.enum(['game', 'saas', 'web', 'calc']),
     excerpt: z.string(),
 
     featured: z.boolean().default(false),
