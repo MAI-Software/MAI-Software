@@ -20,25 +20,22 @@ const Heading = headingLevel;
 ---
 
 <article class="card project-card" data-reveal>
-  <a href={href} class="card-cover mockup" tabindex="-1" aria-hidden="true">
-    <span class="mockup-bar">
-      <span></span>
-      <span></span>
-      <span></span>
-    </span>
+  <header class="card-head">
+    <p class="card-meta">
+      <span class="card-category">{category.label[locale]}</span>
+      <span class="meta">{data.year}</span>
+      {data.demoUrl && <span class="badge badge-live">{t('projects.live')}</span>}
+      {data.example && <span class="badge badge-example">{t('projects.example')}</span>}
+    </p>
+
+    <Heading class="card-title">
+      <a href={href}>{data.title}</a>
+    </Heading>
+  </header>
+
+  <a href={href} class="card-cover" tabindex="-1" aria-hidden="true">
     <img src={withBase(data.cover)} alt={data.coverAlt} width="1280" height="800" loading="lazy" />
   </a>
-
-  <div class="card-meta">
-    <span class="card-category">{category.label[locale]}</span>
-    <span class="meta">{data.year}</span>
-    {data.demoUrl && <span class="badge badge-live">{t('projects.live')}</span>}
-    {data.example && <span class="badge badge-example">{t('projects.example')}</span>}
-  </div>
-
-  <Heading class="card-title">
-    <a href={href}>{data.title}</a>
-  </Heading>
 
   <p class="card-excerpt">{data.excerpt}</p>
 
@@ -68,12 +65,55 @@ const Heading = headingLevel;
   .project-card {
     padding: 0;
     gap: 0;
+    /* Permite dimensionar el título según el ancho real de la tarjeta */
+    container-type: inline-size;
+  }
+
+  .card-head {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-5) var(--space-5) var(--space-4);
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .card-category {
+    font-family: var(--font-display);
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+
+  /* El tamaño depende del ancho de la tarjeta, no de la ventana: así el
+     nombre más largo entra entero sin partirse ni añadir guiones. */
+  .card-title {
+    font-size: clamp(1.15rem, 7.5cqi, 1.6rem);
+    line-height: 1.15;
+    text-wrap: balance;
+    hyphens: none;
+    overflow-wrap: normal;
+  }
+
+  .card-title a {
+    color: var(--color-white);
+    text-decoration: none;
+    transition: color var(--duration-base) var(--ease-standard);
+  }
+
+  .card-title a:hover {
+    color: var(--cyan);
   }
 
   .card-cover {
     display: block;
-    border-radius: 0;
-    border-bottom: 1px solid var(--line);
+    border-block: 1px solid var(--line);
     background: transparent;
   }
 
@@ -90,42 +130,8 @@ const Heading = headingLevel;
     }
   }
 
-  .card-meta {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-    padding: var(--space-5) var(--space-5) 0;
-  }
-
-  .card-category {
-    font-family: var(--font-display);
-    font-size: var(--font-size-xs);
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--cyan);
-  }
-
-  .card-title {
-    padding: var(--space-3) var(--space-5) 0;
-    /* Nombres largos de una sola palabra no deben desbordar la tarjeta */
-    overflow-wrap: anywhere;
-    hyphens: auto;
-  }
-
-  .card-title a {
-    color: var(--color-white);
-    text-decoration: none;
-    transition: color var(--duration-base) var(--ease-standard);
-  }
-
-  .card-title a:hover {
-    color: var(--cyan);
-  }
-
   .card-excerpt {
-    padding: var(--space-3) var(--space-5) 0;
+    padding: var(--space-5) var(--space-5) 0;
     color: var(--text-muted);
     font-size: var(--font-size-sm);
   }
