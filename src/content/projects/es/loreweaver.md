@@ -10,7 +10,6 @@ year: 2026
 status: "En desarrollo"
 cover: "/projects/loreweaver/cover.webp"
 coverAlt: "Cabecera de Loreweaver con el panel de proyectos de escritura"
-demoUrl: "https://ryugarret.github.io/loreweaver/"
 repositoryUrl: "https://github.com/ryugarret/loreweaver"
 technologies:
   - TypeScript
@@ -44,4 +43,4 @@ Se completa con tablero de notas, seguimiento de progreso con rachas y objetivos
 
 ## Estado
 
-En desarrollo, publicada en GitHub Pages y con el **código abierto**.
+En desarrollo, con el **código abierto en GitHub**.

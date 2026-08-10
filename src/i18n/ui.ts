@@ -24,10 +24,11 @@ export const ui = {
     'cta.contact': 'Hablemos',
     'cta.viewProject': 'Ver proyecto',
     'cta.openDemo': 'Abrir demo',
+    'cta.openRepo': 'Ver código',
 
     'categories.eyebrow': 'Qué hacemos',
-    /* El número lo pone el componente a partir de las disciplinas con
-       proyectos publicados; no se escribe a mano. */
+    /* El número lo pone el componente contando las disciplinas; no se
+       escribe a mano para que nunca contradiga a las tarjetas. */
     'categories.title': '{n} disciplinas. Una misma forma de construir.',
     'categories.title.one': 'Una disciplina. Una misma forma de construir.',
     'categories.cta': 'Ver proyectos',
@@ -79,7 +80,7 @@ export const ui = {
 
     'projects.title': 'Todos los proyectos',
     'projects.intro':
-      'Videojuegos, herramientas SaaS y páginas web que hemos desarrollado. Todos con demo abierta para que los pruebes.',
+      'Videojuegos, herramientas SaaS y páginas web que hemos desarrollado. Casi todos con demo abierta para que los pruebes.',
     'projects.filter.all': 'Todos',
     'projects.empty':
       'Trabajamos en esta disciplina, pero todavía no hay ningún proyecto publicado aquí. Cuéntanos el tuyo y lo construimos.',
@@ -169,6 +170,7 @@ export const ui = {
     'cta.contact': "Let's talk",
     'cta.viewProject': 'View project',
     'cta.openDemo': 'Open demo',
+    'cta.openRepo': 'View code',
 
     'categories.eyebrow': 'What we do',
     'categories.title': '{n} disciplines. One way of building.',

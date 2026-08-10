@@ -52,10 +52,22 @@ const Heading = headingLevel;
   <div class="card-actions">
     <a href={href} class="link-editorial">{t('cta.viewProject')}</a>
     {
-      data.demoUrl && (
+      data.demoUrl ? (
         <a href={data.demoUrl} class="link-editorial" target="_blank" rel="noopener noreferrer">
           {t('cta.openDemo')}
         </a>
+      ) : (
+        /* Sin demo pública, la tarjeta lleva al código */
+        data.repositoryUrl && (
+          <a
+            href={data.repositoryUrl}
+            class="link-editorial"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {t('cta.openRepo')}
+          </a>
+        )
       )
     }
   </div>
