@@ -57,72 +57,75 @@ const t = useTranslations(locale);
 
 <script>
   const KEY = 'mai:music';
-  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-music-toggle]');
-
   const AT = 'mai:music-at';
 
-  if (buttons.length) {
-    const track = document.querySelector<HTMLAudioElement>('[data-music-track]');
-    let on = false;
+  const read = (key: string) => {
+    try {
+      return localStorage.getItem(key);
+    } catch {
+      return null; // almacenamiento bloqueado: se arranca en silencio
+    }
+  };
 
-    const read = (key: string) => {
-      try {
-        return localStorage.getItem(key);
-      } catch {
-        return null; // almacenamiento bloqueado: se arranca en silencio
-      }
+  const write = (key: string, value: string) => {
+    try {
+      localStorage.setItem(key, value);
+    } catch {
+      /* sin persistencia, el estado dura lo que la página */
+    }
+  };
+
+  let on = read(KEY) === 'on';
+  let waiting = false;
+
+  const currentTrack = () => document.querySelector<HTMLAudioElement>('[data-music-track]');
+
+  /* El navegador bloquea el audio hasta que la persona interactúa. Si al
+     cargar ya venía encendido, se reintenta en el primer gesto. */
+  const playOnFirstGesture = () => {
+    if (waiting) return;
+    waiting = true;
+    const retry = () => {
+      waiting = false;
+      if (on) void currentTrack()?.play().catch(() => {});
     };
+    addEventListener('pointerdown', retry, { once: true });
+    addEventListener('keydown', retry, { once: true });
+  };
 
-    const write = (key: string, value: string) => {
-      try {
-        localStorage.setItem(key, value);
-      } catch {
-        /* sin persistencia, el estado dura lo que la página */
-      }
-    };
+  const render = () => {
+    document.querySelectorAll<HTMLButtonElement>('[data-music-toggle]').forEach((btn) => {
+      const label = on ? btn.dataset.labelPause! : btn.dataset.labelPlay!;
+      btn.setAttribute('aria-pressed', String(on));
+      btn.setAttribute('aria-label', label);
+      btn.title = label;
+      btn.classList.toggle('is-on', on);
+    });
 
-    on = read(KEY) === 'on';
+    const track = currentTrack();
+    if (!track) return;
+    if (on) {
+      void track.play().catch(playOnFirstGesture);
+    } else {
+      track.pause();
+    }
+  };
 
+  /* Los botones se sustituyen en cada navegación; el <audio> no, porque
+     lleva transition:persist y así la canción no se corta. */
+  const bind = () => {
+    const track = currentTrack();
     if (track) {
       // Música de fondo: presente, no protagonista
       track.volume = 0.35;
-      // Cada página es un documento nuevo; se retoma donde se quedó
-      const at = Number(read(AT));
-      if (Number.isFinite(at) && at > 0) track.currentTime = at;
+      // Solo tras una recarga completa hay que recolocar la aguja
+      if (track.currentTime === 0) {
+        const at = Number(read(AT));
+        if (Number.isFinite(at) && at > 0) track.currentTime = at;
+      }
     }
 
-    /* El navegador bloquea el audio hasta que la persona interactúa. Si al
-       cargar ya venía encendido, se reintenta en el primer gesto. */
-    let waiting = false;
-    const playOnFirstGesture = () => {
-      if (waiting) return;
-      waiting = true;
-      const retry = () => {
-        waiting = false;
-        if (on) void track?.play().catch(() => {});
-      };
-      addEventListener('pointerdown', retry, { once: true });
-      addEventListener('keydown', retry, { once: true });
-    };
-
-    const render = () => {
-      buttons.forEach((btn) => {
-        const label = on ? btn.dataset.labelPause! : btn.dataset.labelPlay!;
-        btn.setAttribute('aria-pressed', String(on));
-        btn.setAttribute('aria-label', label);
-        btn.title = label;
-        btn.classList.toggle('is-on', on);
-      });
-
-      if (!track) return;
-      if (on) {
-        void track.play().catch(playOnFirstGesture);
-      } else {
-        track.pause();
-      }
-    };
-
-    buttons.forEach((btn) => {
+    document.querySelectorAll<HTMLButtonElement>('[data-music-toggle]').forEach((btn) => {
       btn.addEventListener('click', () => {
         on = !on;
         write(KEY, on ? 'on' : 'off');
@@ -130,13 +133,17 @@ const t = useTranslations(locale);
       });
     });
 
-    // Guardar el punto exacto al salir mantiene la pista continua entre páginas
-    addEventListener('pagehide', () => {
-      if (track) write(AT, String(track.currentTime));
-    });
-
     render();
-  }
+  };
+
+  // Guardar el punto exacto al salir mantiene la pista continua entre visitas
+  addEventListener('pagehide', () => {
+    const track = currentTrack();
+    if (track) write(AT, String(track.currentTime));
+  });
+
+  bind();
+  document.addEventListener('astro:after-swap', bind);
 </script>
 
 <style>

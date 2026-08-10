@@ -40,63 +40,150 @@ const accessKey = company.contact.web3formsKey;
       data-prefill={t('upcoming.prefill')}></textarea>
   </div>
 
-  <button type="submit" class="btn btn-primary form-submit">{t('form.send')}</button>
+  <button type="submit" class="btn btn-primary form-submit" data-done={t('form.done')}>
+    <svg class="check" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+      <path
+        d="m4 12.5 5.2 5.2L20 7"
+        stroke="currentColor"
+        stroke-width="2.4"
+        stroke-linecap="round"
+        stroke-linejoin="round"></path>
+    </svg>
+    <span class="form-submit-label">{t('form.send')}</span>
+  </button>
 
   <!-- Los mensajes de estado se anuncian a los lectores de pantalla -->
   <p class="form-status" role="status" aria-live="polite" data-ok={t('form.ok')} data-error={t('form.error')} data-sending={t('form.sending')}></p>
 </form>
 
 <script>
-  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+  function bindContactForm() {
+    const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+    if (!form || form.dataset.bound === 'true') return;
+    form.dataset.bound = 'true';
 
-  /* Quien llega desde "Avísame cuando esté" encuentra el mensaje escrito:
-     el parámetro solo lleva el nombre del proyecto. */
-  const app = new URLSearchParams(location.search).get('aviso');
-  if (form && app) {
-    const message = form.querySelector<HTMLTextAreaElement>('[data-prefill]');
-    if (message && !message.value) {
-      message.value = (message.dataset.prefill ?? '').replace('{app}', app);
-      form.scrollIntoView({ block: 'center' });
-      form.querySelector<HTMLInputElement>('#cf-name')?.focus();
+    /* Quien llega desde "Avísame cuando esté" encuentra el mensaje escrito:
+       el parámetro solo lleva el nombre del proyecto. */
+    const app = new URLSearchParams(location.search).get('aviso');
+    if (app) {
+      const message = form.querySelector<HTMLTextAreaElement>('[data-prefill]');
+      if (message && !message.value) {
+        message.value = (message.dataset.prefill ?? '').replace('{app}', app);
+        form.scrollIntoView({ block: 'center' });
+        form.querySelector<HTMLInputElement>('#cf-name')?.focus();
+      }
     }
+
+    form.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+
+      const status = form.querySelector<HTMLElement>('.form-status');
+      const submit = form.querySelector<HTMLButtonElement>('.form-submit');
+      if (!status || !submit) return;
+
+      const label = submit.querySelector<HTMLElement>('.form-submit-label');
+      if (!label) return;
+      const original = label.textContent;
+      submit.disabled = true;
+      submit.classList.add('is-sending');
+      label.textContent = status.dataset.sending ?? '';
+      status.textContent = '';
+      status.classList.remove('is-ok', 'is-error');
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: new FormData(form),
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        status.textContent = status.dataset.ok ?? '';
+        status.classList.add('is-ok');
+        form.reset();
+
+        /* El botón confirma el envío antes de volver a su sitio: el mensaje
+           de estado por sí solo pasa desapercibido. */
+        submit.classList.remove('is-sending');
+        submit.classList.add('is-done');
+        label.textContent = submit.dataset.done ?? '';
+        window.setTimeout(() => {
+          submit.classList.remove('is-done');
+          label.textContent = original;
+          submit.disabled = false;
+        }, 2200);
+        return;
+      } catch {
+        status.textContent = status.dataset.error ?? '';
+        status.classList.add('is-error');
+      }
+
+      submit.classList.remove('is-sending');
+      submit.disabled = false;
+      label.textContent = original;
+    });
   }
 
-  form?.addEventListener('submit', async (ev) => {
-    ev.preventDefault();
-
-    const status = form.querySelector<HTMLElement>('.form-status');
-    const submit = form.querySelector<HTMLButtonElement>('.form-submit');
-    if (!status || !submit) return;
-
-    const original = submit.textContent;
-    submit.disabled = true;
-    submit.textContent = status.dataset.sending ?? '';
-    status.textContent = '';
-    status.classList.remove('is-ok', 'is-error');
-
-    try {
-      const res = await fetch(form.action, {
-        method: 'POST',
-        headers: { Accept: 'application/json' },
-        body: new FormData(form),
-      });
-
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-      status.textContent = status.dataset.ok ?? '';
-      status.classList.add('is-ok');
-      form.reset();
-    } catch {
-      status.textContent = status.dataset.error ?? '';
-      status.classList.add('is-error');
-    } finally {
-      submit.disabled = false;
-      submit.textContent = original;
-    }
-  });
+  bindContactForm();
+  document.addEventListener('astro:after-swap', bindContactForm);
 </script>
 
 <style>
+  /* Enviado: el botón se vuelve verde y dibuja el visto.
+     El icono va en el marcado y no en ::before/::after, que ya los ocupa
+     la onda de pulsación. */
+  .form-submit.is-done {
+    background-image: none;
+    background-color: var(--success);
+    color: var(--ink-950);
+    box-shadow: 0 18px 40px -20px rgba(52, 211, 153, 0.9);
+  }
+
+  .form-submit .check {
+    width: 0;
+    height: 18px;
+    opacity: 0;
+    overflow: visible;
+    transition:
+      width 240ms var(--ease-spring),
+      opacity 160ms var(--ease-standard);
+  }
+
+  .form-submit.is-done .check {
+    width: 18px;
+    opacity: 1;
+  }
+
+  .form-submit .check path {
+    stroke-dasharray: 22;
+    stroke-dashoffset: 22;
+  }
+
+  .form-submit.is-done .check path {
+    animation: check-draw 320ms var(--ease-standard) 120ms forwards;
+  }
+
+  @keyframes check-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .form-submit.is-sending {
+    opacity: 0.85;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .form-submit .check path {
+      stroke-dashoffset: 0;
+    }
+
+    .form-submit.is-done .check path {
+      animation: none;
+    }
+  }
+
   .contact-form {
     display: grid;
     gap: var(--space-5);

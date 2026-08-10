@@ -53,6 +53,7 @@ const { prev, next } = await getProjectNeighbors(locale, data.slug);
         width="1280"
         height="800"
         class="project-cover"
+        transition:name={`cover-${data.slug}`}
       />
 
       {data.upcoming && <UpcomingNote locale={locale} text={data.upcoming} project={data.title} />}

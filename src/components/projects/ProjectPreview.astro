@@ -35,7 +35,16 @@ const Heading = headingLevel;
   </header>
 
   <a href={href} class="card-cover" tabindex="-1" aria-hidden="true">
-    <img src={withBase(data.cover)} alt={data.coverAlt} width="1280" height="800" loading="lazy" />
+    <!-- Mismo nombre que la portada de la ficha: al navegar, la imagen
+         crece de la tarjeta a la página en vez de cortar a negro. -->
+    <img
+      src={withBase(data.cover)}
+      alt={data.coverAlt}
+      width="1280"
+      height="800"
+      loading="lazy"
+      transition:name={`cover-${data.slug}`}
+    />
   </a>
 
   <p class="card-excerpt">{data.excerpt}</p>
