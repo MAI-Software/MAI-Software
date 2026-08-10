@@ -183,17 +183,23 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
     color: var(--text-muted);
     text-decoration: none;
     padding: var(--space-2) var(--space-3);
-    border: 1px solid var(--line);
+    border: 1px solid var(--glass-line);
     border-radius: var(--radius-sm);
+    background: var(--glass-btn);
+    box-shadow: var(--glass-sheen);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
     line-height: 1;
     transition:
       color var(--duration-base) var(--ease-standard),
+      background-color var(--duration-base) var(--ease-standard),
       border-color var(--duration-base) var(--ease-standard);
   }
 
   .lang-switch:hover {
     color: var(--text);
-    border-color: var(--line-strong);
+    background: var(--glass-btn-hover);
+    border-color: var(--glass-line-hover);
   }
 
   .header-cta {

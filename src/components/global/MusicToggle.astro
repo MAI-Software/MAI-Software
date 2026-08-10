@@ -144,9 +144,12 @@ const t = useTranslations(locale);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: transparent;
-    border: 1px solid var(--line);
+    background: var(--glass-btn);
+    border: 1px solid var(--glass-line);
     border-radius: var(--radius-sm);
+    box-shadow: var(--glass-sheen);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
     color: var(--text-muted);
     cursor: pointer;
     transition:
@@ -163,7 +166,8 @@ const t = useTranslations(locale);
 
   .music-toggle:hover {
     color: var(--text);
-    border-color: var(--line-strong);
+    background: var(--glass-btn-hover);
+    border-color: var(--glass-line-hover);
   }
 
   .music-toggle:active {
@@ -213,10 +217,10 @@ const t = useTranslations(locale);
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: rgba(7, 9, 18, 0.82);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    box-shadow: var(--shadow-md);
+    /* Sobre contenido en movimiento hace falta más cuerpo que en la cabecera */
+    background: linear-gradient(rgba(7, 9, 18, 0.72), rgba(7, 9, 18, 0.72)),
+      var(--glass-btn);
+    box-shadow: var(--shadow-md), var(--glass-sheen);
   }
 
   .music-bubble svg {

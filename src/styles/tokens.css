@@ -26,6 +26,18 @@
   --glass: rgba(255, 255, 255, 0.045);
   --glass-strong: rgba(255, 255, 255, 0.075);
 
+  /* Cristal para controles: solo en piezas pequeñas (botones, píldoras,
+     cabecera). En tarjetas grandes el fondo se transparentaba y los halos
+     del escenario parecían pegados a la caja. */
+  --glass-btn: rgba(255, 255, 255, 0.07);
+  --glass-btn-hover: rgba(255, 255, 255, 0.12);
+  --glass-line: rgba(255, 255, 255, 0.16);
+  --glass-line-hover: rgba(255, 255, 255, 0.3);
+  --glass-blur: blur(14px) saturate(1.4);
+  /* La luz que entra por el borde superior es lo que lo hace parecer vidrio */
+  --glass-sheen:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18), inset 0 -1px 0 rgba(0, 0, 0, 0.25);
+
   /* Texto */
   --text: #eef1f8;
   --text-muted: #9aa4bd;

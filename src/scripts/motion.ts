@@ -140,8 +140,14 @@ if (!reduced && finePointer) {
   glow?.classList.add('is-on');
 }
 
-/* --- Onda al pulsar botones, desde el punto exacto del clic --- */
-document.querySelectorAll<HTMLElement>('.btn').forEach((btn) => {
+/* --- Onda al pulsar, desde el punto exacto del clic ---
+   Cubre botones y también los controles pequeños: sin esto, las píldoras de
+   filtro y el selector de idioma se quedaban sin respuesta al tacto. */
+const rippleTargets = '.btn, .filter-pill, .lang-switch, .music-toggle, .yn-btn';
+
+document.querySelectorAll<HTMLElement>(rippleTargets).forEach((btn) => {
+  btn.classList.add('rippling');
+
   btn.addEventListener(
     'pointerdown',
     (ev) => {
@@ -156,7 +162,10 @@ document.querySelectorAll<HTMLElement>('.btn').forEach((btn) => {
     { passive: true },
   );
 
-  btn.addEventListener('animationend', () => btn.classList.remove('is-rippling'));
+  // Son dos capas: se limpia con la que dura más, o se cortaría el aro
+  btn.addEventListener('animationend', (ev) => {
+    if (ev.animationName === 'ripple-ring') btn.classList.remove('is-rippling');
+  });
 });
 
 /* --- Foco de luz que sigue al puntero dentro de las tarjetas ---

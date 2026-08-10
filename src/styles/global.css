@@ -474,6 +474,7 @@ button {
     transform var(--duration-base) var(--ease-spring),
     box-shadow var(--duration-base) var(--ease-standard),
     background-color var(--duration-base) var(--ease-standard),
+    background-position 620ms var(--ease-standard),
     border-color var(--duration-base) var(--ease-standard);
 }
 
@@ -481,28 +482,53 @@ button {
   transform: scale(0.97);
 }
 
-/* Onda que nace en el punto exacto de la pulsación */
-.btn::after {
+/* --- Onda al pulsar ---
+   Dos capas desde el punto exacto del clic: una mancha de luz que se abre y
+   un aro que corre por delante. Solo escala y opacidad, nada de layout.
+   La clase la pone motion.ts sobre botones, píldoras y controles. */
+.rippling {
+  position: relative;
+  overflow: hidden;
+}
+
+.rippling::after,
+.rippling::before {
   content: '';
   position: absolute;
   top: var(--ripple-y, 50%);
   left: var(--ripple-x, 50%);
-  width: 12px;
-  height: 12px;
-  margin: -6px 0 0 -6px;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.5);
   opacity: 0;
   pointer-events: none;
 }
 
-.btn.is-rippling::after {
-  animation: ripple 620ms var(--ease-standard);
+.rippling::after {
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.55),
+    rgba(255, 255, 255, 0.16) 55%,
+    transparent 72%
+  );
 }
 
-@keyframes ripple {
+.rippling::before {
+  border: 2px solid rgba(255, 255, 255, 0.45);
+}
+
+.rippling.is-rippling::after {
+  animation: ripple-fill 640ms cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+}
+
+.rippling.is-rippling::before {
+  animation: ripple-ring 720ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes ripple-fill {
   from {
-    opacity: 0.5;
+    opacity: 0.55;
     scale: 1;
   }
   to {
@@ -511,8 +537,23 @@ button {
   }
 }
 
+@keyframes ripple-ring {
+  from {
+    opacity: 0.6;
+    scale: 1;
+  }
+  60% {
+    opacity: 0.22;
+  }
+  to {
+    opacity: 0;
+    scale: 30;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .btn.is-rippling::after {
+  .rippling.is-rippling::after,
+  .rippling.is-rippling::before {
     animation: none;
   }
 }
@@ -524,25 +565,68 @@ button {
 
 .btn-primary {
   color: var(--color-white);
-  background: var(--gradient-brand-soft);
-  box-shadow: var(--glow-violet);
+  /* Reflejo que cruza el cristal al pasar por encima, sobre el degradado */
+  background-image:
+    linear-gradient(
+      100deg,
+      transparent 22%,
+      rgba(255, 255, 255, 0.24) 38%,
+      transparent 56%
+    ),
+    var(--gradient-brand-soft);
+  background-size:
+    220% 100%,
+    100% 100%;
+  background-position:
+    135% 0,
+    0 0;
+  /* Vidrio teñido: el degradado se ve, pero con luz en el canto superior */
+  box-shadow: var(--glow-violet), var(--glass-sheen);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-color: rgba(255, 255, 255, 0.14);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: var(--glow-blue);
+  box-shadow: var(--glow-blue), var(--glass-sheen);
+  border-color: rgba(255, 255, 255, 0.22);
+  background-position:
+    -35% 0,
+    0 0;
 }
 
-.btn-ghost {
-  background: var(--card);
-  border-color: var(--line);
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary {
+    transition-property: box-shadow, background-color, border-color;
+  }
+}
+
+/* Cristal esmerilado: deja pasar el escenario del fondo, difuminado */
+.btn-ghost,
+.btn-secondary {
+  background: var(--glass-btn);
+  border-color: var(--glass-line);
   color: var(--text);
+  box-shadow: var(--glass-sheen);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
 }
 
-.btn-ghost:hover {
-  background: var(--card-hover);
-  border-color: var(--line-strong);
+.btn-ghost:hover,
+.btn-secondary:hover {
+  background: var(--glass-btn-hover);
+  border-color: var(--glass-line-hover);
   transform: translateY(-2px);
+}
+
+/* Sin backdrop-filter el botón quedaría casi invisible sobre el fondo */
+@supports not (backdrop-filter: blur(1px)) {
+  .btn-ghost,
+  .btn-secondary {
+    background: var(--card);
+    border-color: var(--line-strong);
+  }
 }
 
 /* Enlace editorial con flecha */
