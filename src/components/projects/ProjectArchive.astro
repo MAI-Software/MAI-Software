@@ -2,8 +2,8 @@
 import type { CollectionEntry } from 'astro:content';
 import type { Locale } from '../../data/company';
 import type { CategoryId } from '../../data/categories';
-import { categories } from '../../data/categories';
 import { useTranslations, projectsPath } from '../../i18n/utils';
+import { getActiveCategories } from '../../lib/projects';
 import ProjectPreview from './ProjectPreview.astro';
 
 interface Props {
@@ -17,6 +17,9 @@ interface Props {
 
 const { locale, title, intro, projects, activeCategory } = Astro.props;
 const t = useTranslations(locale);
+
+// Solo se ofrecen filtros que devuelven resultados
+const categories = await getActiveCategories(locale);
 
 const filters = [
   { label: t('projects.filter.all'), href: projectsPath(locale), active: !activeCategory },

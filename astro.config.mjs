@@ -32,6 +32,9 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
+      // /webs y /en/webs existen pero hoy no tienen proyectos: se mantienen
+      // como ruta y se dejan fuera del sitemap para no indexar páginas vacías.
+      filter: (page) => !/\/(en\/)?webs\/?$/.test(new URL(page).pathname),
       i18n: {
         defaultLocale: 'es',
         locales: { es: 'es', en: 'en' },

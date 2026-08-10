@@ -1,10 +1,18 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import type { Locale } from '../data/company';
-import type { CategoryId } from '../data/categories';
+import { categories, type CategoryId } from '../data/categories';
 
 export type Project = CollectionEntry<'projects'>;
 
-/** Proyectos publicados de un idioma, más recientes primero. */
+/** Orden de las disciplinas tal y como se declaran en categories.ts. */
+const categoryOrder = new Map(categories.map((c, i) => [c.id, i]));
+
+/**
+ * Proyectos publicados de un idioma.
+ * Se ordenan por disciplina (el orden de categories.ts manda), después por
+ * año descendente y por título. Así el listado sigue el mismo recorrido que
+ * la home y no depende del nombre de archivo.
+ */
 export async function getProjects(
   locale: Locale,
   category?: CategoryId,
@@ -16,7 +24,28 @@ export async function getProjects(
       entry.data.published &&
       (category ? entry.data.category === category : true),
   );
-  return all.sort((a, b) => b.data.year - a.data.year);
+
+  return all.sort((a, b) => {
+    const byCategory =
+      (categoryOrder.get(a.data.category) ?? 99) -
+      (categoryOrder.get(b.data.category) ?? 99);
+    if (byCategory !== 0) return byCategory;
+
+    const byOrder = a.data.order - b.data.order;
+    if (byOrder !== 0) return byOrder;
+
+    const byYear = b.data.year - a.data.year;
+    if (byYear !== 0) return byYear;
+
+    return a.data.title.localeCompare(b.data.title);
+  });
+}
+
+/** Disciplinas con al menos un proyecto publicado. */
+export async function getActiveCategories(locale: Locale) {
+  const projects = await getProjects(locale);
+  const used = new Set(projects.map((p) => p.data.category));
+  return categories.filter((c) => used.has(c.id));
 }
 
 /** Proyecto destacado de portada (primero con featured: true). */

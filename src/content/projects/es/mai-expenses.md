@@ -3,6 +3,7 @@ title: "MAI Expenses"
 slug: "mai-expenses"
 category: "saas"
 excerpt: "App de gastos que lee tus tickets con la cámara: foto, reconocimiento de texto y reparto por categorías. Sin cuentas ni servidores."
+order: 10
 featured: false
 published: true
 year: 2026

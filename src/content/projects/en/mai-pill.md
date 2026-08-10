@@ -3,6 +3,7 @@ title: "Mai-Pill"
 slug: "mai-pill"
 category: "saas"
 excerpt: "Android medication app: what's due now, with its photo, and one tap to confirm. No accounts, and the data never leaves your phone."
+order: 11
 featured: false
 published: true
 year: 2026

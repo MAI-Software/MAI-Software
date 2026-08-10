@@ -1,8 +1,8 @@
 ---
 import type { Locale } from '../../data/company';
-import { categories } from '../../data/categories';
 import { useTranslations } from '../../i18n/utils';
 import type { UIKey } from '../../i18n/ui';
+import { getActiveCategories } from '../../lib/projects';
 
 interface Props {
   locale: Locale;
@@ -10,6 +10,8 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = useTranslations(locale);
+// Solo disciplinas con proyectos: evita enlazar a una categoría vacía
+const categories = await getActiveCategories(locale);
 
 const bulletKeys = (id: string): UIKey[] =>
   [`category.${id}.b1`, `category.${id}.b2`, `category.${id}.b3`] as UIKey[];
