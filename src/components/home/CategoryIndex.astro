@@ -2,7 +2,7 @@
 import type { Locale } from '../../data/company';
 import { useTranslations } from '../../i18n/utils';
 import type { UIKey } from '../../i18n/ui';
-import { getActiveCategories } from '../../lib/projects';
+import { categories } from '../../data/categories';
 
 interface Props {
   locale: Locale;
@@ -10,10 +10,9 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = useTranslations(locale);
-// Solo disciplinas con proyectos: evita enlazar a una categoría vacía
-const categories = await getActiveCategories(locale);
-
-// El titular cuenta las disciplinas que hay de verdad, no un número fijo
+/* Se anuncian todas las disciplinas que ofrece el estudio, tenga o no
+   proyectos publicados cada una: son servicios, no un inventario. */
+// El titular cuenta las disciplinas, así nunca contradice a las tarjetas
 const numberWords: Record<Locale, string[]> = {
   es: ['', '', 'Dos', 'Tres', 'Cuatro', 'Cinco', 'Seis'],
   en: ['', '', 'Two', 'Three', 'Four', 'Five', 'Six'],

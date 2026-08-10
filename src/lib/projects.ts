@@ -41,13 +41,6 @@ export async function getProjects(
   });
 }
 
-/** Disciplinas con al menos un proyecto publicado. */
-export async function getActiveCategories(locale: Locale) {
-  const projects = await getProjects(locale);
-  const used = new Set(projects.map((p) => p.data.category));
-  return categories.filter((c) => used.has(c.id));
-}
-
 /** Proyecto destacado de portada (primero con featured: true). */
 export async function getFeaturedProject(locale: Locale): Promise<Project | null> {
   const projects = await getProjects(locale);

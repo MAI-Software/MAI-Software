@@ -81,7 +81,8 @@ export const ui = {
     'projects.intro':
       'Videojuegos, herramientas SaaS y páginas web que hemos desarrollado. Todos con demo abierta para que los pruebes.',
     'projects.filter.all': 'Todos',
-    'projects.empty': 'Todavía no hay proyectos en esta categoría.',
+    'projects.empty':
+      'Trabajamos en esta disciplina, pero todavía no hay ningún proyecto publicado aquí. Cuéntanos el tuyo y lo construimos.',
     'projects.back': 'Volver a proyectos',
     'projects.year': 'Año',
     'projects.status': 'Estado',
@@ -223,7 +224,8 @@ export const ui = {
     'projects.intro':
       'An archive of everything we build: video games, SaaS tools and web experiences.',
     'projects.filter.all': 'All',
-    'projects.empty': 'No projects in this category yet.',
+    'projects.empty':
+      'We work in this discipline, but nothing is published here yet. Tell us about your project and we will build it.',
     'projects.back': 'Back to projects',
     'projects.year': 'Year',
     'projects.status': 'Status',

@@ -2,8 +2,8 @@
 import type { CollectionEntry } from 'astro:content';
 import type { Locale } from '../../data/company';
 import type { CategoryId } from '../../data/categories';
-import { useTranslations, projectsPath } from '../../i18n/utils';
-import { getActiveCategories } from '../../lib/projects';
+import { useTranslations, projectsPath, contactPath } from '../../i18n/utils';
+import { categories } from '../../data/categories';
 import ProjectPreview from './ProjectPreview.astro';
 
 interface Props {
@@ -17,9 +17,6 @@ interface Props {
 
 const { locale, title, intro, projects, activeCategory } = Astro.props;
 const t = useTranslations(locale);
-
-// Solo se ofrecen filtros que devuelven resultados
-const categories = await getActiveCategories(locale);
 
 const filters = [
   { label: t('projects.filter.all'), href: projectsPath(locale), active: !activeCategory },
@@ -60,7 +57,14 @@ const filters = [
           ))}
         </div>
       ) : (
-        <p class="archive-empty">{t('projects.empty')}</p>
+        /* Sin proyectos publicados la disciplina sigue ofreciéndose:
+           la página remata en una invitación, no en un callejón sin salida. */
+        <div class="archive-empty panel" data-reveal>
+          <p>{t('projects.empty')}</p>
+          <a href={contactPath(locale)} class="btn btn-primary">
+            {t('cta.talk')}
+          </a>
+        </div>
       )
     }
   </div>
@@ -122,6 +126,10 @@ const filters = [
   }
 
   .archive-empty {
+    display: grid;
+    gap: var(--space-5);
+    justify-items: start;
+    max-width: 52ch;
     color: var(--text-muted);
     border: 1px dashed var(--line-strong);
     border-radius: var(--radius-lg);

@@ -1,11 +1,9 @@
 ---
 import { company, type Locale } from '../../data/company';
 import { mainNav } from '../../data/navigation';
-import { categories } from '../../data/categories';
 import MusicToggle from './MusicToggle.astro';
 import { useTranslations, homePath, contactPath } from '../../i18n/utils';
 import { withBase } from '../../lib/base';
-import { getActiveCategories } from '../../lib/projects';
 
 interface Props {
   locale: Locale;
@@ -17,15 +15,6 @@ const t = useTranslations(locale);
 const altLocale: Locale = locale === 'es' ? 'en' : 'es';
 const langHref = alternatePath ? withBase(alternatePath) : homePath(altLocale);
 const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
-
-// Las categorías sin proyectos se caen del menú: no deben llevar a una lista vacía
-const categoryPaths = new Set(categories.map((c) => c.path[locale]));
-const activePaths = new Set(
-  (await getActiveCategories(locale)).map((c) => c.path[locale]),
-);
-const nav = mainNav.filter(
-  (item) => !categoryPaths.has(item.href[locale]) || activePaths.has(item.href[locale]),
-);
 ---
 
 <header class="site-header">
@@ -38,7 +27,7 @@ const nav = mainNav.filter(
     <nav class="nav-desktop" aria-label={t('nav.menu')}>
       <ul>
         {
-          nav.map((item) => {
+          mainNav.map((item) => {
             const href = item.href[locale];
             const active = currentPath === href;
             return (
@@ -76,7 +65,7 @@ const nav = mainNav.filter(
   <nav id="mobile-menu" class="nav-mobile" aria-label={t('nav.menu')} hidden>
     <ul>
       {
-        nav.map((item) => (
+        mainNav.map((item) => (
           <li>
             <a href={item.href[locale]}>{item.label[locale]}</a>
           </li>
