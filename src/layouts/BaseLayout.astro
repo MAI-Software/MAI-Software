@@ -105,7 +105,16 @@ const jsonLd = {
     <ClientRouter />
   </head>
   <body>
-    <div class="bg-scene" aria-hidden="true" transition:persist></div>
+    <!-- El escenario es fijo y persiste entre páginas: los haces acompañan
+         todo el recorrido en vez de quedarse en la portada. -->
+    <div class="bg-scene" aria-hidden="true" transition:persist>
+      <span class="beam beam-1"></span>
+      <span class="beam beam-2"></span>
+      <span class="beam beam-3"></span>
+      <span class="beam beam-4"></span>
+    </div>
+    <!-- Luz guía: baja con el scroll y late muy despacio -->
+    <div class="guide-light" aria-hidden="true" transition:persist></div>
     <div class="cursor-glow" aria-hidden="true" transition:persist></div>
     <div class="grain" aria-hidden="true" transition:persist></div>
     <div class="progress-track" aria-hidden="true"><div class="progress-fill"></div></div>

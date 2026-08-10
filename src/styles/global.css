@@ -94,7 +94,7 @@ button {
     radial-gradient(42rem 32rem at 10% 2%, rgba(98, 66, 252, 0.38), transparent 68%),
     radial-gradient(38rem 30rem at 92% 10%, rgba(16, 200, 252, 0.22), transparent 68%),
     radial-gradient(44rem 36rem at 60% 92%, rgba(56, 130, 251, 0.26), transparent 70%);
-  transform: translate3d(var(--scene-x, 0px), var(--scene-y, 0px), 0);
+  transform: translate3d(0, calc(var(--scene-p, 0) * -20vh), 0);
   will-change: transform;
 }
 
@@ -109,12 +109,111 @@ button {
     linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
   background-size: 72px 72px;
   mask-image: radial-gradient(circle at 50% 30%, black, transparent 78%);
-  transform: translate3d(
-    calc(var(--scene-x, 0px) * -0.5),
-    var(--scene-grid-y, 0px),
-    0
-  );
+  transform: translate3d(0, calc(var(--scene-p, 0) * 9vh), 0);
   will-change: transform;
+}
+
+/* Haces de marca repartidos por el escenario. Viven en la capa fija, así
+   siguen presentes al bajar: antes solo existían dentro del hero y la
+   página se quedaba desnuda a partir del primer scroll. Cada uno se
+   desplaza a distinta velocidad para que el fondo no parezca un cartón. */
+.beam {
+  position: absolute;
+  border-radius: var(--radius-pill);
+  background: var(--gradient-brand);
+  opacity: 0.26;
+  filter: blur(1.5px);
+  box-shadow: 0 0 70px rgba(56, 130, 251, 0.36);
+  rotate: -34deg;
+  will-change: transform;
+}
+
+/* Cada recorrido va en vh y acotado al avance de la página: por mucho que
+   se baje, ninguno se sale de pantalla. */
+.beam-1 {
+  top: 6%;
+  right: 4%;
+  width: 320px;
+  height: 24px;
+  translate: 0 calc(var(--scene-p, 0) * 34vh);
+}
+
+.beam-2 {
+  top: 46%;
+  left: -70px;
+  width: 260px;
+  height: 18px;
+  opacity: 0.2;
+  translate: 0 calc(var(--scene-p, 0) * -26vh);
+}
+
+.beam-3 {
+  top: 78%;
+  right: 12%;
+  width: 400px;
+  height: 20px;
+  opacity: 0.16;
+  translate: 0 calc(var(--scene-p, 0) * -46vh);
+}
+
+.beam-4 {
+  top: 24%;
+  left: 18%;
+  width: 180px;
+  height: 14px;
+  opacity: 0.14;
+  rotate: 34deg;
+  translate: 0 calc(var(--scene-p, 0) * 40vh);
+}
+
+/* --- Luz guía ---
+   Nace bajo el foco de la cabecera y baja según avanza la lectura, como
+   una linterna que acompaña. Pequeña y con un latido muy leve: si fuera
+   grande competiría con el contenido. */
+.guide-light {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 190px;
+  height: 190px;
+  margin: -95px 0 0 -95px;
+  z-index: var(--z-bg);
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    rgba(16, 200, 252, 0.5),
+    rgba(98, 66, 252, 0.22) 40%,
+    transparent 70%
+  );
+  filter: blur(14px);
+  /* La posición la calcula motion.ts a partir del avance del scroll */
+  translate: var(--guide-x, 50vw) var(--guide-y, 16vh);
+  will-change: translate;
+}
+
+/* Sin la guía en movimiento no aporta nada y una luz fija sobre el texto
+   estorba, así que se retira entera. */
+@media (prefers-reduced-motion: reduce) {
+  .guide-light {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .guide-light {
+    animation: guide-pulse 4.5s ease-in-out infinite alternate;
+  }
+
+  @keyframes guide-pulse {
+    from {
+      opacity: 0.62;
+      scale: 0.94;
+    }
+    to {
+      opacity: 1;
+      scale: 1.06;
+    }
+  }
 }
 
 /* Luz que sigue al cursor por toda la página */
@@ -300,30 +399,6 @@ button {
   right: 24%;
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(130, 165, 255, 0.8), transparent);
-}
-
-/* Formas geométricas de marca al fondo */
-.brand-shape {
-  position: absolute;
-  pointer-events: none;
-  z-index: var(--z-base);
-  border-radius: var(--radius-pill);
-  background: var(--gradient-brand);
-  opacity: 0.34;
-  filter: blur(1.5px);
-  box-shadow: 0 0 70px rgba(56, 130, 251, 0.4);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .brand-shape {
-    animation: drift 15s ease-in-out infinite alternate;
-  }
-
-  @keyframes drift {
-    to {
-      translate: 0 -24px;
-    }
-  }
 }
 
 /* Marco de ventana para capturas de producto */

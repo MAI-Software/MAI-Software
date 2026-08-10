@@ -268,20 +268,27 @@ const onScroll = perFrame(() => {
   const doc = document.documentElement;
   const y = window.scrollY;
 
+  const max = doc.scrollHeight - window.innerHeight;
+  const progress = max > 0 ? y / max : 0;
+
   const progressFill = document.querySelector<HTMLElement>('.progress-fill');
-  if (progressFill) {
-    const max = doc.scrollHeight - window.innerHeight;
-    progressFill.style.width = `${max > 0 ? ((y / max) * 100).toFixed(2) : 0}%`;
-  }
+  if (progressFill) progressFill.style.width = `${(progress * 100).toFixed(2)}%`;
 
   document.querySelector<HTMLElement>('.site-header')?.classList.toggle('is-scrolled', y > 12);
 
   if (reduced) return;
 
-  // Dos capas de fondo a velocidades opuestas: da sensación de profundidad
+  /* Luz guía: baja de 14vh a 82vh a lo largo de la página y serpentea de
+     lado. El seno da el vaivén sin necesidad de guardar estado. */
+  doc.style.setProperty('--guide-y', `${(14 + progress * 68).toFixed(2)}vh`);
+  doc.style.setProperty('--guide-x', `${(50 + Math.sin(progress * Math.PI * 2.4) * 22).toFixed(2)}vw`);
+
+  /* El fondo se mueve con el AVANCE (0→1), no con los píxeles recorridos:
+     atado al scroll bruto, en una página larga los haces se iban miles de
+     píxeles arriba y el fondo quedaba vacío justo a mitad de lectura. */
   const scene = document.querySelector<HTMLElement>('.bg-scene');
-  scene?.style.setProperty('--scene-y', `${(-y * 0.12).toFixed(1)}px`);
-  scene?.style.setProperty('--scene-grid-y', `${(y * 0.05).toFixed(1)}px`);
+  scene?.style.setProperty('--scene-p', progress.toFixed(4));
+  document.documentElement.style.setProperty('--scene-p', progress.toFixed(4));
 
   const mid = window.innerHeight / 2;
   for (const el of document.querySelectorAll<HTMLElement>('[data-parallax]')) {
