@@ -115,6 +115,8 @@ const jsonLd = {
     <Footer locale={locale} />
     {!hideContactCta && <ContactCTA locale={locale} />}
     <MusicToggle locale={locale} variant="bubble" />
+    <!-- preload="none": el archivo solo se descarga si encienden la música -->
+    <audio data-music-track src={withBase('/audio/ambient.mp3')} loop preload="none"></audio>
     <script src="../scripts/motion.ts"></script>
   </body>
 </html>

@@ -59,17 +59,51 @@ const t = useTranslations(locale);
   const KEY = 'mai:music';
   const buttons = document.querySelectorAll<HTMLButtonElement>('[data-music-toggle]');
 
+  const AT = 'mai:music-at';
+
   if (buttons.length) {
-    // Todavía no hay pista: el botón guarda la preferencia y, en cuanto exista
-    // un <audio data-music-track>, la aplica sin tocar este archivo.
     const track = document.querySelector<HTMLAudioElement>('[data-music-track]');
     let on = false;
 
-    try {
-      on = localStorage.getItem(KEY) === 'on';
-    } catch {
-      /* almacenamiento bloqueado: se arranca en silencio */
+    const read = (key: string) => {
+      try {
+        return localStorage.getItem(key);
+      } catch {
+        return null; // almacenamiento bloqueado: se arranca en silencio
+      }
+    };
+
+    const write = (key: string, value: string) => {
+      try {
+        localStorage.setItem(key, value);
+      } catch {
+        /* sin persistencia, el estado dura lo que la página */
+      }
+    };
+
+    on = read(KEY) === 'on';
+
+    if (track) {
+      // Música de fondo: presente, no protagonista
+      track.volume = 0.35;
+      // Cada página es un documento nuevo; se retoma donde se quedó
+      const at = Number(read(AT));
+      if (Number.isFinite(at) && at > 0) track.currentTime = at;
     }
+
+    /* El navegador bloquea el audio hasta que la persona interactúa. Si al
+       cargar ya venía encendido, se reintenta en el primer gesto. */
+    let waiting = false;
+    const playOnFirstGesture = () => {
+      if (waiting) return;
+      waiting = true;
+      const retry = () => {
+        waiting = false;
+        if (on) void track?.play().catch(() => {});
+      };
+      addEventListener('pointerdown', retry, { once: true });
+      addEventListener('keydown', retry, { once: true });
+    };
 
     const render = () => {
       buttons.forEach((btn) => {
@@ -82,10 +116,7 @@ const t = useTranslations(locale);
 
       if (!track) return;
       if (on) {
-        track.loop = true;
-        void track.play().catch(() => {
-          /* el navegador puede bloquear la reproducción automática */
-        });
+        void track.play().catch(playOnFirstGesture);
       } else {
         track.pause();
       }
@@ -94,13 +125,14 @@ const t = useTranslations(locale);
     buttons.forEach((btn) => {
       btn.addEventListener('click', () => {
         on = !on;
-        try {
-          localStorage.setItem(KEY, on ? 'on' : 'off');
-        } catch {
-          /* sin persistencia, el estado dura lo que la página */
-        }
+        write(KEY, on ? 'on' : 'off');
         render();
       });
+    });
+
+    // Guardar el punto exacto al salir mantiene la pista continua entre páginas
+    addEventListener('pagehide', () => {
+      if (track) write(AT, String(track.currentTime));
     });
 
     render();
