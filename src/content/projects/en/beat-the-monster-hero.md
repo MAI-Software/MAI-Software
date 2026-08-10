@@ -2,6 +2,7 @@
 title: "Beat the Monster Hero"
 slug: "beat-the-monster-hero"
 category: "game"
+order: 10
 excerpt: "Mobile rhythm JRPG: the camera reads your punches, so combat is played with your body instead of buttons."
 featured: true
 published: true

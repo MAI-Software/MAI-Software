@@ -3,7 +3,7 @@ title: "MAI Expenses"
 slug: "mai-expenses"
 category: "saas"
 excerpt: "Expense app that reads your receipts with the camera: snap, recognise the text, split by category. No accounts, no servers."
-order: 10
+order: 20
 featured: false
 published: true
 year: 2026

@@ -3,7 +3,7 @@ title: "Loreweaver"
 slug: "loreweaver"
 category: "saas"
 excerpt: "Estudio de escritura y worldbuilding que funciona sin conexión: capítulos, wiki de personajes, línea de tiempo y grafo de relaciones, todo en tu navegador."
-order: 20
+order: 90
 featured: false
 published: true
 year: 2026

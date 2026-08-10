@@ -2,6 +2,7 @@
 title: "El Finiquito"
 slug: "elfiniquito"
 category: "calc"
+order: 50
 excerpt: "Calculadora de finiquito e indemnización por despido: comprueba, concepto a concepto, si la cifra que te ofrece la empresa es la que te corresponde."
 featured: false
 published: true

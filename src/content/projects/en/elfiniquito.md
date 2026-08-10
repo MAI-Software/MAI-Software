@@ -2,6 +2,7 @@
 title: "El Finiquito"
 slug: "elfiniquito"
 category: "calc"
+order: 50
 excerpt: "Severance and dismissal compensation calculator: check, item by item, whether the figure your employer offers is the one you are owed."
 featured: false
 published: true

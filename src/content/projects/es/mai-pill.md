@@ -3,7 +3,7 @@ title: "Mai-Pill"
 slug: "mai-pill"
 category: "saas"
 excerpt: "App de medicación para Android: qué toca ahora, con su foto, y un toque para confirmar. Sin cuentas y con los datos solo en tu móvil."
-order: 11
+order: 30
 featured: false
 published: true
 year: 2026

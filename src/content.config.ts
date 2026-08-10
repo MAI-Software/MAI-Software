@@ -21,7 +21,7 @@ const projects = defineCollection({
     category: z.enum(['game', 'saas', 'web', 'calc']),
     excerpt: z.string(),
 
-    /** Orden dentro de su disciplina; menor aparece antes. */
+    /** Orden en los listados; menor aparece antes. Cruza disciplinas. */
     order: z.number().default(50),
 
     featured: z.boolean().default(false),

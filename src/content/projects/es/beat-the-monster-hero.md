@@ -2,6 +2,7 @@
 title: "Beat the Monster Hero"
 slug: "beat-the-monster-hero"
 category: "game"
+order: 10
 excerpt: "JRPG rítmico para móvil: la cámara detecta tus golpes y el combate se juega moviendo el cuerpo, no pulsando botones."
 featured: true
 published: true

@@ -3,7 +3,7 @@ title: "Loreweaver"
 slug: "loreweaver"
 category: "saas"
 excerpt: "Writing and worldbuilding studio that works offline: chapters, character wiki, timeline and relationship graph, all inside your browser."
-order: 20
+order: 90
 featured: false
 published: true
 year: 2026

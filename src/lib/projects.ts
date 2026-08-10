@@ -9,9 +9,9 @@ const categoryOrder = new Map(categories.map((c, i) => [c.id, i]));
 
 /**
  * Proyectos publicados de un idioma.
- * Se ordenan por disciplina (el orden de categories.ts manda), después por
- * año descendente y por título. Así el listado sigue el mismo recorrido que
- * la home y no depende del nombre de archivo.
+ * Manda el campo `order` del frontmatter, que puede cruzar disciplinas; el
+ * resto (disciplina, año descendente, título) solo desempata. Así el listado
+ * no depende del nombre de archivo.
  */
 export async function getProjects(
   locale: Locale,
@@ -26,13 +26,13 @@ export async function getProjects(
   );
 
   return all.sort((a, b) => {
+    const byOrder = a.data.order - b.data.order;
+    if (byOrder !== 0) return byOrder;
+
     const byCategory =
       (categoryOrder.get(a.data.category) ?? 99) -
       (categoryOrder.get(b.data.category) ?? 99);
     if (byCategory !== 0) return byCategory;
-
-    const byOrder = a.data.order - b.data.order;
-    if (byOrder !== 0) return byOrder;
 
     const byYear = b.data.year - a.data.year;
     if (byYear !== 0) return byYear;

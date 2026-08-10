@@ -2,6 +2,7 @@
 title: "CalcuAutónomo"
 slug: "calcuautonomo"
 category: "calc"
+order: 60
 excerpt: "Calculator for the self-employed: from what you invoice to what you can actually spend, separating expenses, contributions, VAT and income tax."
 featured: false
 published: true

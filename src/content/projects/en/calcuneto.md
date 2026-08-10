@@ -2,6 +2,7 @@
 title: "CalcuNeto"
 slug: "calcuneto"
 category: "calc"
+order: 80
 excerpt: "Net salary calculator for Spain: from gross annual pay to the money that actually lands each month, with the tax and social security breakdown."
 featured: false
 published: true

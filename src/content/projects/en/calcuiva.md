@@ -2,6 +2,7 @@
 title: "CalcuIVA"
 slug: "calcuiva"
 category: "calc"
+order: 70
 excerpt: "VAT calculator: add or remove 21%, 10% or 4% from any amount and see which part is yours and which part you're holding for the tax office."
 featured: false
 published: true
