@@ -12,8 +12,11 @@
   margin: 0;
 }
 
+/* El color de fondo vive solo aquí. Si además lo pinta <body>, ese fondo
+   tapa a los hijos con z-index negativo y el escenario (aurora, rejilla,
+   haces, luz guía) deja de verse por completo. */
 html {
-  background: var(--ink-1000);
+  background: var(--surface);
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   /* La cinta y las capas fijas no deben generar scroll lateral */
@@ -27,7 +30,6 @@ body {
   font-size: var(--font-size-base);
   line-height: 1.65;
   color: var(--text);
-  background: var(--surface);
   /* clip, no hidden: `hidden` haría del body un contenedor de scroll y la
      cabecera sticky dejaría de pegarse al hacer scroll. */
   overflow-x: clip;
