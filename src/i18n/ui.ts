@@ -15,29 +15,30 @@ export const ui = {
     'hero.eyebrow': 'VIDEOJUEGOS · SAAS · CALCULADORAS · WEBS',
     'hero.title': 'Transformamos ideas en productos inolvidables',
     'hero.text':
-      'Estudio de producto digital: diseñamos y desarrollamos videojuegos, herramientas SaaS y webs que se lanzan y crecen.',
+      'Diseñamos, desarrollamos y mantenemos productos digitales propios: videojuegos, calculadoras, herramientas SaaS y webs. Todo lo que ves está publicado y en uso.',
     'cta.explore': 'Explorar proyectos',
     'cta.talk': 'Hablemos de tu proyecto',
     'cta.contact': 'Hablemos',
     'cta.viewProject': 'Ver proyecto',
     'cta.openDemo': 'Abrir demo',
 
-    'facts.projects': 'Proyectos',
-    'facts.live': 'Webs en producción',
+    'facts.projects': 'Proyectos publicados',
+    'facts.disciplines': 'Disciplinas',
+    'facts.live': 'Con demo abierta',
 
     'categories.eyebrow': 'Qué hacemos',
     'categories.title': 'Cuatro disciplinas. Una misma forma de construir.',
     'categories.cta': 'Ver proyectos',
     'category.game.b1': 'Desarrollo de videojuegos para móvil y web',
     'category.game.b2': 'Prototipo jugable desde la primera semana',
-    'category.game.b3': 'Mecánicas propias, no plantillas',
+    'category.game.b3': 'Mecánicas pensadas para cada juego',
     'category.saas.b1': 'Aplicaciones y herramientas a medida',
     'category.saas.b2': 'Automatizamos el trabajo repetitivo',
     'category.saas.b3': 'Preparadas para crecer contigo',
     'category.calc.b1': 'Sueldo, finiquito, autónomos, IVA e inversiones',
     'category.calc.b2': 'Cálculo en tu navegador, sin registro',
     'category.calc.b3': 'Con los datos vigentes en España',
-    'category.web.b1': 'Páginas web a medida, sin plantillas',
+    'category.web.b1': 'Webs rápidas, cuidadas y adaptadas a cada proyecto',
     'category.web.b2': 'Rápidas y posicionadas en Google',
     'category.web.b3': 'Las actualizas tú, sin depender de nadie',
 
@@ -69,7 +70,7 @@ export const ui = {
 
     'studio.title': 'Construimos producto, no solo pantallas.',
     'studio.text':
-      'MAI Softwares combina desarrollo, diseño y pensamiento de producto para convertir ideas en experiencias digitales reales.',
+      'MAI Software combina desarrollo, diseño y pensamiento de producto para convertir ideas en experiencias digitales reales.',
     'studio.link': 'Conocer el estudio',
 
     'final.title': 'Tu próximo producto puede empezar con una conversación.',
@@ -92,7 +93,7 @@ export const ui = {
 
     'studio.page.title': 'Estudio',
     'studio.page.intro':
-      'MAI Softwares es un estudio de producto digital que trabaja entre software, diseño y experiencias interactivas.',
+      'MAI Software es un estudio de producto digital que trabaja entre software, diseño y experiencias interactivas.',
     'studio.principles.title': 'Principios',
     'studio.principle.1': 'Claridad antes que ruido.',
     'studio.principle.2': 'Producto antes que decoración.',
@@ -128,10 +129,16 @@ export const ui = {
 
     'legal.title': 'Aviso legal',
     'legal.pending':
-      'MAI Softwares se encuentra en fase de constitución. Los datos societarios se publicarán en esta página cuando el proceso esté completado.',
+      'MAI Software se encuentra en fase de constitución. Los datos societarios se publicarán en esta página cuando el proceso esté completado.',
     'privacy.title': 'Privacidad',
     'privacy.text':
-      'Esta web es un sitio estático: no utiliza cookies, no incluye herramientas de analítica y no recoge datos personales de sus visitantes.',
+      'Esta web es un sitio estático: no utiliza cookies ni herramientas de analítica, y navegar por ella no requiere facilitar ningún dato.',
+    /* TODO (revisión humana): falta el responsable del tratamiento, la base
+       jurídica y el plazo de conservación. No se rellenan aquí para no
+       inventar datos legales; añadirlos cuando la empresa esté constituida. */
+    'privacy.form.title': 'Formulario de contacto',
+    'privacy.form.text':
+      'El único punto donde se recogen datos es el formulario de contacto. Al enviarlo, el nombre, el email y el mensaje se transmiten a Web3Forms, el servicio que los hace llegar por correo electrónico. Se usan solo para responderte y no se ceden con fines publicitarios.',
 
     'notfound.title': 'Página no encontrada',
     'notfound.text': 'La página que buscas no existe o ha cambiado de dirección.',
@@ -150,15 +157,16 @@ export const ui = {
     'hero.eyebrow': 'GAMES · SAAS · CALCULATORS · WEBS',
     'hero.title': 'We turn ideas into unforgettable products',
     'hero.text':
-      'A digital product studio: we design and build video games, SaaS tools and websites that ship and grow.',
+      'We design, build and maintain our own digital products: games, calculators, SaaS tools and websites. Everything here is published and in use.',
     'cta.explore': 'Explore projects',
     'cta.talk': "Let's talk about your project",
     'cta.contact': "Let's talk",
     'cta.viewProject': 'View project',
     'cta.openDemo': 'Open demo',
 
-    'facts.projects': 'Projects',
-    'facts.live': 'Live websites',
+    'facts.projects': 'Published projects',
+    'facts.disciplines': 'Disciplines',
+    'facts.live': 'With open demo',
 
     'categories.eyebrow': 'What we do',
     'categories.title': 'Four disciplines. One way of building.',
@@ -204,7 +212,7 @@ export const ui = {
 
     'studio.title': 'We build product, not just screens.',
     'studio.text':
-      'MAI Softwares combines development, design and product thinking to turn ideas into real digital experiences.',
+      'MAI Software combines development, design and product thinking to turn ideas into real digital experiences.',
     'studio.link': 'About the studio',
 
     'final.title': 'Your next product can start with a conversation.',
@@ -227,7 +235,7 @@ export const ui = {
 
     'studio.page.title': 'Studio',
     'studio.page.intro':
-      'MAI Softwares is a digital product studio working across software, design and interactive experiences.',
+      'MAI Software is a digital product studio working across software, design and interactive experiences.',
     'studio.principles.title': 'Principles',
     'studio.principle.1': 'Clarity over noise.',
     'studio.principle.2': 'Product over decoration.',
@@ -263,10 +271,13 @@ export const ui = {
 
     'legal.title': 'Legal notice',
     'legal.pending':
-      'MAI Softwares is currently being incorporated. Company details will be published on this page once the process is complete.',
+      'MAI Software is currently being incorporated. Company details will be published on this page once the process is complete.',
     'privacy.title': 'Privacy',
     'privacy.text':
-      'This is a static website: it uses no cookies, includes no analytics tools and collects no personal data from visitors.',
+      'This is a static website: it uses no cookies and no analytics tools, and browsing it requires no personal data.',
+    'privacy.form.title': 'Contact form',
+    'privacy.form.text':
+      'The contact form is the only place where data is collected. On submit, your name, email and message are sent to Web3Forms, the service that delivers them by email. They are used only to reply to you and are never shared for advertising.',
 
     'notfound.title': 'Page not found',
     'notfound.text': "The page you're looking for doesn't exist or has moved.",

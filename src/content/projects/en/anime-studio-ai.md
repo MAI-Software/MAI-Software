@@ -17,7 +17,7 @@ technologies:
 services:
   - Art direction
   - Web development
-seoTitle: "Anime Studio AI — Anime illustration website | MAI Softwares"
+seoTitle: "Anime Studio AI — Anime illustration website | MAI Software"
 seoDescription: "Design and development of an anime illustration studio's website: full-bleed gallery, fast loading and links ordered to win commissions."
 layoutVariant: "split-right"
 ---

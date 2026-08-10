@@ -17,7 +17,7 @@ technologies:
 services:
   - UI/UX design
   - PWA development
-seoTitle: "MAI Expenses — Expense app with receipt scanning | MAI Softwares"
+seoTitle: "MAI Expenses — Expense app with receipt scanning | MAI Software"
 seoDescription: "Development of an expense tracker that scans receipts with the camera. Text recognition runs on the phone itself, with no sign-up and no servers."
 layoutVariant: "split-left"
 ---

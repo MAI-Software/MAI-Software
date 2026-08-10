@@ -20,7 +20,7 @@ services:
   - UI/UX design
   - Web development
   - Content and SEO
-seoTitle: "Calcu-Inversiones — Compound interest and portfolio simulator | MAI Softwares"
+seoTitle: "Calcu-Inversiones — Compound interest and portfolio simulator | MAI Software"
 seoDescription: "Development of an investment simulator: compound interest, inflation and allocation across bonds, equities, gold and bitcoin. Free, no sign-up, open source."
 layoutVariant: "split-right"
 ---

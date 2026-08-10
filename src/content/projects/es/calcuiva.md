@@ -19,7 +19,7 @@ services:
   - Diseño UI/UX
   - Desarrollo web
   - Contenido y SEO
-seoTitle: "CalcuIVA — Calculadora de IVA al 21 %, 10 % y 4 % | MAI Softwares"
+seoTitle: "CalcuIVA — Calculadora de IVA al 21 %, 10 % y 4 % | MAI Software"
 seoDescription: "Desarrollo de CalcuIVA: añade o quita el IVA de cualquier importe con los tipos vigentes en España, con el desglose de base imponible y cuota."
 layoutVariant: "split-left"
 ---

@@ -19,7 +19,7 @@ services:
   - Diseño UI/UX
   - Desarrollo web
   - Contenido y SEO
-seoTitle: "CalcuAutónomo — Calculadora de neto para autónomos | MAI Softwares"
+seoTitle: "CalcuAutónomo — Calculadora de neto para autónomos | MAI Software"
 seoDescription: "Desarrollo de CalcuAutónomo: calcula lo que te queda como autónomo separando gastos, cuota, IVA e IRPF, con los tramos de cotización de 2026."
 layoutVariant: "split-left"
 ---

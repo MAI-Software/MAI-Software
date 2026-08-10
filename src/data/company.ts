@@ -1,10 +1,10 @@
 /**
- * Datos corporativos de MAI Softwares.
+ * Datos corporativos de MAI Software.
  * Regla (spec §19): no publicar campos legales vacíos ni inventar datos.
  * Los campos vacíos son PENDIENTES y no deben renderizarse en la web.
  */
 export const company = {
-  name: 'MAI Softwares',
+  name: 'MAI Software',
   shortName: 'MAI',
 
   tagline: {
@@ -36,16 +36,8 @@ export const company = {
     youtube: '', // PENDIENTE
   },
 
-  /**
-   * Cifras verificables que se muestran en el hero.
-   * `projects` = 14 repositorios de github.com/MAI-Software (públicos y
-   * privados) + 4 webs del socio + Mai-Pill. No puede leerse de la API
-   * sin token, así que se actualiza a mano. Las webs en producción sí se
-   * cuentan solas a partir de los proyectos con demo pública.
-   */
-  stats: {
-    projects: 19,
-  },
+  // Las cifras del hero se calculan en src/lib/stats.ts a partir de la
+  // colección de proyectos. No añadir aquí totales a mano: se desactualizan.
 
   legal: {
     legalName: '', // PENDIENTE de constitución

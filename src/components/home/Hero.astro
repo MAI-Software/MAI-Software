@@ -1,9 +1,10 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import { company, type Locale } from '../../data/company';
+import type { Locale } from '../../data/company';
 import { getCategory } from '../../data/categories';
-import { useTranslations, projectsPath, contactPath, projectPath } from '../../i18n/utils';
+import { useTranslations, projectsPath, projectPath } from '../../i18n/utils';
 import { withBase } from '../../lib/base';
+import { getStats } from '../../lib/stats';
 
 interface Props {
   locale: Locale;
@@ -21,7 +22,7 @@ const titleEnd = title.slice(cut + 1);
 
 // Pila de vistas previas reales: el hero enseña producto, no adornos
 const previews = projects.slice(0, 3);
-const live = projects.filter((p) => p.data.demoUrl).length;
+const stats = await getStats(locale);
 ---
 
 <section class="hero" data-mouse-parallax>
@@ -48,11 +49,15 @@ const live = projects.filter((p) => p.data.demoUrl).length;
       <dl class="hero-facts" data-reveal>
         <div>
           <dt>{t('facts.projects')}</dt>
-          <dd>{company.stats.projects}</dd>
+          <dd>{stats.total}</dd>
+        </div>
+        <div>
+          <dt>{t('facts.disciplines')}</dt>
+          <dd>{stats.disciplines}</dd>
         </div>
         <div>
           <dt>{t('facts.live')}</dt>
-          <dd>{live}</dd>
+          <dd>{stats.live}</dd>
         </div>
       </dl>
     </div>

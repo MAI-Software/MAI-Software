@@ -19,7 +19,7 @@ services:
   - Diseño UI/UX
   - Desarrollo web
   - Contenido y SEO
-seoTitle: "El Finiquito — Calculadora de finiquito e indemnización | MAI Softwares"
+seoTitle: "El Finiquito — Calculadora de finiquito e indemnización | MAI Software"
 seoDescription: "Desarrollo de El Finiquito, calculadora de finiquito e indemnización por despido en España: desglose por conceptos, contratos anteriores a 2012 y exención de IRPF."
 layoutVariant: "split-right"
 ---

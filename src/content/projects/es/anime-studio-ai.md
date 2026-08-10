@@ -17,7 +17,7 @@ technologies:
 services:
   - Dirección de arte
   - Desarrollo web
-seoTitle: "Anime Studio AI — Web de ilustración anime | MAI Softwares"
+seoTitle: "Anime Studio AI — Web de ilustración anime | MAI Software"
 seoDescription: "Diseño y desarrollo de la web de un estudio de ilustración anime: galería a pantalla completa, carga rápida y enlaces ordenados para captar encargos."
 layoutVariant: "split-right"
 ---

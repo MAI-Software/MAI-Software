@@ -19,7 +19,7 @@ technologies:
 services:
   - Game design
   - Mobile development
-seoTitle: "Beat the Monster Hero — Camera-driven rhythm game | MAI Softwares"
+seoTitle: "Beat the Monster Hero — Camera-driven rhythm game | MAI Software"
 seoDescription: "Development of a mobile rhythm JRPG that turns the camera into the controller: real-time motion tracking with TypeScript and MediaPipe."
 layoutVariant: "featured"
 ---
