@@ -12,6 +12,7 @@ cover: "/projects/mai-pill/cover.webp"
 coverAlt: "Portada de Mai-Pill con la próxima toma de medicación en pantalla"
 gallery:
   - "/projects/mai-pill/screen-01.webp"
+upcoming: "Estamos construyendo el acceso con Google: copia de seguridad del tratamiento y el mismo historial en cualquier móvil."
 demoUrl: "https://mai-pill.pages.dev/"
 technologies:
   - TypeScript
@@ -45,3 +46,9 @@ Todo vive en el dispositivo: medicación, horarios y fotos. No hay cuenta, ni nu
 ## Resultado
 
 Publicada para Android con descarga directa. Versión para iOS en camino.
+
+## Lo que viene
+
+Estamos desarrollando el **acceso con Google**. Cambiar de móvil hoy significa volver a meter todo el tratamiento; con la copia de seguridad, la medicación, los horarios y el historial estarán ahí desde el primer arranque. También permitirá consultar el mismo historial desde otro dispositivo, útil cuando alguien de la familia echa una mano con las tomas.
+
+Será la forma recomendada de usarla, pero **el modo sin cuenta se queda**: quien quiera sus datos médicos solo en su móvil podrá seguir exactamente igual.

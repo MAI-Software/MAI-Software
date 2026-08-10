@@ -25,6 +25,7 @@ const Heading = headingLevel;
       <span class="card-category">{category.label[locale]}</span>
       <span class="meta">{data.year}</span>
       {data.demoUrl && <span class="badge badge-live">{t('projects.live')}</span>}
+      {data.upcoming && <span class="badge badge-soon">{t('projects.soon')}</span>}
       {data.example && <span class="badge badge-example">{t('projects.example')}</span>}
     </p>
 

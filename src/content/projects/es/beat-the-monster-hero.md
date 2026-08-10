@@ -12,6 +12,7 @@ cover: "/projects/beat-the-monster-hero/cover.webp"
 coverAlt: "Logotipo de Beat the Monster Hero sobre un fondo morado con ondas concéntricas"
 gallery:
   - "/projects/beat-the-monster-hero/screen-01.webp"
+upcoming: "Estamos construyendo el acceso con Google: tu partida guardada en la nube y recuperable en cualquier móvil."
 demoUrl: "https://beatthemonsterhero.pages.dev/"
 technologies:
   - TypeScript
@@ -41,4 +42,10 @@ Todo corre en el propio dispositivo: nada de vídeo sale del móvil.
 
 ## Estado
 
-En desarrollo activo. Hay versión web jugable y el APK de Android está en preparación.
+En desarrollo activo. Hay versión web jugable y el APK de Android está en preparación. **La partida se guarda ahora mismo en el propio dispositivo.**
+
+## Lo que viene
+
+Estamos desarrollando el **acceso con Google**. Con él, el progreso, el equipo y las rachas dejan de depender de un móvil concreto: se recuperan al cambiar de teléfono y se siguen en cualquier otro.
+
+Nada de esto toca la cámara: el vídeo seguirá sin salir del dispositivo, pase lo que pase.

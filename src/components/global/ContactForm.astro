@@ -36,7 +36,8 @@ const accessKey = company.contact.web3formsKey;
       name="message"
       rows="5"
       required
-      placeholder={t('form.messagePlaceholder')}></textarea>
+      placeholder={t('form.messagePlaceholder')}
+      data-prefill={t('upcoming.prefill')}></textarea>
   </div>
 
   <button type="submit" class="btn btn-primary form-submit">{t('form.send')}</button>
@@ -47,6 +48,18 @@ const accessKey = company.contact.web3formsKey;
 
 <script>
   const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+
+  /* Quien llega desde "Avísame cuando esté" encuentra el mensaje escrito:
+     el parámetro solo lleva el nombre del proyecto. */
+  const app = new URLSearchParams(location.search).get('aviso');
+  if (form && app) {
+    const message = form.querySelector<HTMLTextAreaElement>('[data-prefill]');
+    if (message && !message.value) {
+      message.value = (message.dataset.prefill ?? '').replace('{app}', app);
+      form.scrollIntoView({ block: 'center' });
+      form.querySelector<HTMLInputElement>('#cf-name')?.focus();
+    }
+  }
 
   form?.addEventListener('submit', async (ev) => {
     ev.preventDefault();

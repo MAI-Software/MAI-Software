@@ -12,6 +12,7 @@ cover: "/projects/mai-pill/cover.webp"
 coverAlt: "Mai-Pill landing showing the next medication dose on screen"
 gallery:
   - "/projects/mai-pill/screen-01.webp"
+upcoming: "We are building Google sign-in: a backup of the treatment and the same history on any phone."
 demoUrl: "https://mai-pill.pages.dev/"
 technologies:
   - TypeScript
@@ -45,3 +46,9 @@ Everything lives on the device: medication, schedules and photos. No account, no
 ## Outcome
 
 Published for Android as a direct download. An iOS version is on the way.
+
+## What's coming
+
+**Google sign-in** is in development. Changing phones today means entering the whole treatment again; with a backup, the medication, the schedules and the history are there from the first launch. It will also let you open the same history on another device, which helps when a relative shares the job of keeping track of doses.
+
+It will be the recommended way to use it, but **the no-account mode stays**: anyone who wants their medical data on their phone alone can carry on exactly as before.

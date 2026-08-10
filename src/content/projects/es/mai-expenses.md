@@ -10,6 +10,7 @@ year: 2026
 status: "Lanzado"
 cover: "/projects/mai-expenses/cover.webp"
 coverAlt: "Pantalla principal de MAI Expenses con el resumen mensual de gastos"
+upcoming: "Estamos construyendo el acceso con Google: copia de seguridad y los mismos gastos en todos tus dispositivos."
 demoUrl: "https://maiexpenses.pages.dev/"
 technologies:
   - TypeScript
@@ -37,4 +38,10 @@ Todo ocurre en local. El reconocimiento de texto corre en el navegador, los dato
 
 ## Resultado
 
-Publicada y en uso. Se instala como app desde el navegador y también existe APK para Android.
+Publicada y en uso. Se instala como app desde el navegador y también existe APK para Android. **Hoy los datos se guardan solo en tu dispositivo.**
+
+## Lo que viene
+
+Estamos desarrollando el **acceso con Google**. Con él, tus gastos tendrán copia de seguridad y estarán al día en el móvil, la tablet y el siguiente teléfono que compres, sin exportar nada a mano.
+
+Será la forma recomendada de usar la app, y quien prefiera seguir sin cuenta podrá hacerlo: el modo local no desaparece.

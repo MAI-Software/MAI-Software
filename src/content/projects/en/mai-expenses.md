@@ -10,6 +10,7 @@ year: 2026
 status: "Lanzado"
 cover: "/projects/mai-expenses/cover.webp"
 coverAlt: "MAI Expenses main screen showing the monthly expense summary"
+upcoming: "We are building Google sign-in: cloud backup and the same expenses on every device you own."
 demoUrl: "https://maiexpenses.pages.dev/"
 technologies:
   - TypeScript
@@ -37,4 +38,10 @@ Everything happens locally. Text recognition runs in the browser, data never lea
 
 ## Outcome
 
-Published and in use. It installs as an app straight from the browser, and an Android APK is available too.
+Published and in use. It installs as an app straight from the browser, and an Android APK is available too. **Today your data is stored on your device only.**
+
+## What's coming
+
+**Google sign-in** is in development. With it, your expenses get a cloud backup and stay up to date on your phone, your tablet and the next handset you buy, with nothing to export by hand.
+
+It will be the recommended way to use the app, and anyone who prefers no account can carry on: local mode is not going away.

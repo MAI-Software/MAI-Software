@@ -12,6 +12,7 @@ cover: "/projects/beat-the-monster-hero/cover.webp"
 coverAlt: "Beat the Monster Hero logo on a purple background with concentric waves"
 gallery:
   - "/projects/beat-the-monster-hero/screen-01.webp"
+upcoming: "We are building Google sign-in: your save in the cloud, back on any phone you pick up."
 demoUrl: "https://beatthemonsterhero.pages.dev/"
 technologies:
   - TypeScript
@@ -41,4 +42,10 @@ Everything runs on the device: no video ever leaves the phone.
 
 ## Status
 
-In active development. A playable web build is live and the Android APK is in preparation.
+In active development. A playable web build is live and the Android APK is in preparation. **Right now the save lives on the device itself.**
+
+## What's coming
+
+**Google sign-in** is in development. With it, progress, gear and streaks stop depending on one particular phone: they come back when you switch handsets and carry on anywhere else.
+
+None of this touches the camera: video will keep never leaving the device, whatever happens.

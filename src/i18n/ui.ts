@@ -94,6 +94,7 @@ export const ui = {
     'projects.next': 'Proyecto siguiente',
     'projects.example': 'Proyecto de ejemplo',
     'projects.live': 'En vivo',
+    'projects.soon': 'Próximamente',
 
     'studio.page.title': 'Estudio',
     'studio.page.intro':
@@ -125,6 +126,10 @@ export const ui = {
     'form.ok': 'Mensaje enviado. Te respondemos en breve.',
     'form.error': 'No se ha podido enviar. Inténtalo de nuevo o escríbenos por GitHub.',
     'form.required': 'Obligatorio',
+
+    'upcoming.title': 'Lo próximo: acceso con Google',
+    'upcoming.cta': 'Avísame cuando esté',
+    'upcoming.prefill': 'Quiero que me aviséis cuando el acceso con Google esté disponible en {app}.',
 
     'links.title': 'Proyectos en vivo',
     'links.text': 'Todo lo que publicamos está abierto para que lo pruebes.',
@@ -238,6 +243,7 @@ export const ui = {
     'projects.next': 'Next project',
     'projects.example': 'Example project',
     'projects.live': 'Live',
+    'projects.soon': 'Coming soon',
 
     'studio.page.title': 'Studio',
     'studio.page.intro':
@@ -269,6 +275,10 @@ export const ui = {
     'form.ok': "Message sent. We'll get back to you shortly.",
     'form.error': "Couldn't send it. Try again or reach us on GitHub.",
     'form.required': 'Required',
+
+    'upcoming.title': 'Up next: Google sign-in',
+    'upcoming.cta': 'Tell me when it lands',
+    'upcoming.prefill': 'Please let me know when Google sign-in is available in {app}.',
 
     'links.title': 'Live projects',
     'links.text': 'Everything we ship is open for you to try.',

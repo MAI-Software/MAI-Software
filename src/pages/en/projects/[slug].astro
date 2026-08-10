@@ -3,6 +3,7 @@ import { render } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import ProjectMeta from '../../../components/projects/ProjectMeta.astro';
 import ProjectGallery from '../../../components/projects/ProjectGallery.astro';
+import UpcomingNote from '../../../components/projects/UpcomingNote.astro';
 import ProjectNavigation from '../../../components/projects/ProjectNavigation.astro';
 import { company } from '../../../data/company';
 import { getCategory } from '../../../data/categories';
@@ -53,6 +54,8 @@ const { prev, next } = await getProjectNeighbors(locale, data.slug);
         height="800"
         class="project-cover"
       />
+
+      {data.upcoming && <UpcomingNote locale={locale} text={data.upcoming} project={data.title} />}
 
       <div class="project-layout">
         <div class="project-content">

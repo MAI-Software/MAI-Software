@@ -43,6 +43,10 @@ const projects = defineCollection({
     coverAlt: z.string(),
     gallery: z.array(z.string()).default([]),
 
+    /** Una frase sobre lo que ya se está construyendo. Activa el aviso
+        "Próximamente" en la tarjeta y el bloque de la ficha. */
+    upcoming: z.string().optional(),
+
     demoUrl: z.string().optional(),
     repositoryUrl: z.string().optional(),
 

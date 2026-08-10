@@ -613,6 +613,39 @@ button {
   color: var(--warning);
 }
 
+/* Lo que está por llegar: cian de marca, con el punto latiendo */
+.badge-soon {
+  border-color: rgba(16, 200, 252, 0.4);
+  color: var(--cyan);
+}
+
+.badge-soon::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: badge-pulse 2.4s var(--ease-standard) infinite;
+}
+
+@keyframes badge-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 currentColor;
+  }
+  50% {
+    opacity: 0.55;
+    box-shadow: 0 0 8px 0 currentColor;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .badge-soon::before {
+    animation: none;
+  }
+}
+
 .tag-list {
   list-style: none;
   margin: 0;
