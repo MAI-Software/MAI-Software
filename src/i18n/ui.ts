@@ -26,7 +26,10 @@ export const ui = {
     'cta.openDemo': 'Abrir demo',
 
     'categories.eyebrow': 'Qué hacemos',
-    'categories.title': 'Cuatro disciplinas. Una misma forma de construir.',
+    /* El número lo pone el componente a partir de las disciplinas con
+       proyectos publicados; no se escribe a mano. */
+    'categories.title': '{n} disciplinas. Una misma forma de construir.',
+    'categories.title.one': 'Una disciplina. Una misma forma de construir.',
     'categories.cta': 'Ver proyectos',
     'category.game.b1': 'Desarrollo de videojuegos para móvil y web',
     'category.game.b2': 'Prototipo jugable desde la primera semana',
@@ -167,7 +170,8 @@ export const ui = {
     'cta.openDemo': 'Open demo',
 
     'categories.eyebrow': 'What we do',
-    'categories.title': 'Four disciplines. One way of building.',
+    'categories.title': '{n} disciplines. One way of building.',
+    'categories.title.one': 'One discipline. One way of building.',
     'categories.cta': 'View projects',
     'category.game.b1': 'Playable prototypes from day one',
     'category.game.b2': 'Mechanics at the core of the design',

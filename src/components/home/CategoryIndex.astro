@@ -13,6 +13,17 @@ const t = useTranslations(locale);
 // Solo disciplinas con proyectos: evita enlazar a una categoría vacía
 const categories = await getActiveCategories(locale);
 
+// El titular cuenta las disciplinas que hay de verdad, no un número fijo
+const numberWords: Record<Locale, string[]> = {
+  es: ['', '', 'Dos', 'Tres', 'Cuatro', 'Cinco', 'Seis'],
+  en: ['', '', 'Two', 'Three', 'Four', 'Five', 'Six'],
+};
+const count = categories.length;
+const title =
+  count === 1
+    ? t('categories.title.one')
+    : t('categories.title').replace('{n}', numberWords[locale][count] ?? String(count));
+
 const bulletKeys = (id: string): UIKey[] =>
   [`category.${id}.b1`, `category.${id}.b2`, `category.${id}.b3`] as UIKey[];
 ---
@@ -21,10 +32,10 @@ const bulletKeys = (id: string): UIKey[] =>
   <div class="container">
     <header class="section-head" data-reveal>
       <p class="eyebrow">{t('categories.eyebrow')}</p>
-      <h2>{t('categories.title')}</h2>
+      <h2>{title}</h2>
     </header>
 
-    <ol class="category-grid" data-reveal-group>
+    <ol class="category-grid" data-reveal-group style={`--cols:${Math.min(count, 4)}`}>
       {
         categories.map((cat) => (
           <li class="card category-card" data-reveal>
@@ -78,8 +89,9 @@ const bulletKeys = (id: string): UIKey[] =>
   }
 
   @media (min-width: 1080px) {
+    /* Tantas columnas como disciplinas haya: sin huecos si alguna se cae */
     .category-grid {
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(var(--cols, 4), 1fr);
     }
   }
 </style>
