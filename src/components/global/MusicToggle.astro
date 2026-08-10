@@ -1,0 +1,212 @@
+---
+import type { Locale } from '../../data/company';
+import { useTranslations } from '../../i18n/utils';
+
+interface Props {
+  locale: Locale;
+  /**
+   * `header` se muestra en escritorio junto al selector de idioma;
+   * `bubble` es la versión móvil, anclada abajo a la izquierda para no
+   * cruzarse con el pulgar derecho. El reparto lo hace el CSS de más abajo.
+   */
+  variant: 'header' | 'bubble';
+}
+
+const { locale, variant } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<button
+  type="button"
+  class:list={['music-toggle', `music-${variant}`]}
+  data-music-toggle
+  aria-pressed="false"
+  aria-label={t('music.play')}
+  data-label-play={t('music.play')}
+  data-label-pause={t('music.pause')}
+  title={t('music.play')}
+>
+  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+    <path
+      class="icon-speaker"
+      d="M4 9.5h3.2L12 5.5v13l-4.8-4H4a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1Z"
+      stroke="currentColor"
+      stroke-width="1.6"
+      stroke-linejoin="round"
+    ></path>
+    <path
+      class="icon-wave icon-wave-1"
+      d="M15.5 9.4a3.6 3.6 0 0 1 0 5.2"
+      stroke="currentColor"
+      stroke-width="1.6"
+      stroke-linecap="round"></path>
+    <path
+      class="icon-wave icon-wave-2"
+      d="M18 7.2a7 7 0 0 1 0 9.6"
+      stroke="currentColor"
+      stroke-width="1.6"
+      stroke-linecap="round"></path>
+    <path
+      class="icon-cross"
+      d="m16.5 9.8 4.4 4.4m0-4.4-4.4 4.4"
+      stroke="currentColor"
+      stroke-width="1.6"
+      stroke-linecap="round"></path>
+  </svg>
+</button>
+
+<script>
+  const KEY = 'mai:music';
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-music-toggle]');
+
+  if (buttons.length) {
+    // Todavía no hay pista: el botón guarda la preferencia y, en cuanto exista
+    // un <audio data-music-track>, la aplica sin tocar este archivo.
+    const track = document.querySelector<HTMLAudioElement>('[data-music-track]');
+    let on = false;
+
+    try {
+      on = localStorage.getItem(KEY) === 'on';
+    } catch {
+      /* almacenamiento bloqueado: se arranca en silencio */
+    }
+
+    const render = () => {
+      buttons.forEach((btn) => {
+        const label = on ? btn.dataset.labelPause! : btn.dataset.labelPlay!;
+        btn.setAttribute('aria-pressed', String(on));
+        btn.setAttribute('aria-label', label);
+        btn.title = label;
+        btn.classList.toggle('is-on', on);
+      });
+
+      if (!track) return;
+      if (on) {
+        track.loop = true;
+        void track.play().catch(() => {
+          /* el navegador puede bloquear la reproducción automática */
+        });
+      } else {
+        track.pause();
+      }
+    };
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        on = !on;
+        try {
+          localStorage.setItem(KEY, on ? 'on' : 'off');
+        } catch {
+          /* sin persistencia, el estado dura lo que la página */
+        }
+        render();
+      });
+    });
+
+    render();
+  }
+</script>
+
+<style>
+  .music-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition:
+      color var(--duration-base) var(--ease-standard),
+      border-color var(--duration-base) var(--ease-standard),
+      background-color var(--duration-base) var(--ease-standard),
+      transform var(--duration-base) var(--ease-standard);
+  }
+
+  .music-toggle svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .music-toggle:hover {
+    color: var(--text);
+    border-color: var(--line-strong);
+  }
+
+  .music-toggle:active {
+    transform: scale(0.94);
+  }
+
+  .music-toggle.is-on {
+    color: var(--text);
+    border-color: var(--cyan);
+  }
+
+  /* Silencio: sin ondas y con la cruz; sonando: al revés */
+  .icon-cross {
+    opacity: 1;
+  }
+
+  .icon-wave {
+    opacity: 0;
+  }
+
+  .music-toggle.is-on .icon-cross {
+    opacity: 0;
+  }
+
+  .music-toggle.is-on .icon-wave {
+    opacity: 1;
+  }
+
+  .icon-cross,
+  .icon-wave {
+    transition: opacity var(--duration-base) var(--ease-standard);
+  }
+
+  /* --- Escritorio: junto al idioma --- */
+  .music-header {
+    width: 34px;
+    height: 30px;
+    padding: 0;
+  }
+
+  /* --- Móvil: burbuja abajo a la izquierda, lejos del pulgar derecho --- */
+  .music-bubble {
+    position: fixed;
+    left: max(var(--space-4), env(safe-area-inset-left));
+    bottom: max(var(--space-4), env(safe-area-inset-bottom));
+    z-index: var(--z-sticky);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(7, 9, 18, 0.82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .music-bubble svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  /* Reparto por dispositivo: burbuja solo en móvil, botón solo en escritorio */
+  @media (max-width: 899px) {
+    .music-header {
+      display: none;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .music-bubble {
+      display: none;
+    }
+  }
+
+  /* El menú móvil abierto tapa la burbuja */
+  :global(body.menu-open) .music-bubble {
+    display: none;
+  }
+</style>

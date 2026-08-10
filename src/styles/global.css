@@ -28,7 +28,9 @@ body {
   line-height: 1.65;
   color: var(--text);
   background: var(--surface);
-  overflow-x: hidden;
+  /* clip, no hidden: `hidden` haría del body un contenedor de scroll y la
+     cabecera sticky dejaría de pegarse al hacer scroll. */
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }

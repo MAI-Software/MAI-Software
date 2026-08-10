@@ -12,6 +12,9 @@ export const ui = {
     'lang.switch': 'English version',
     'lang.label': 'EN',
 
+    'music.play': 'Activar música',
+    'music.pause': 'Silenciar música',
+
     'hero.eyebrow': 'VIDEOJUEGOS · SAAS · CALCULADORAS · WEBS',
     'hero.title': 'Transformamos ideas en productos inolvidables',
     'hero.text':
@@ -153,6 +156,9 @@ export const ui = {
     'nav.home': 'Home',
     'lang.switch': 'Versión en español',
     'lang.label': 'ES',
+
+    'music.play': 'Turn music on',
+    'music.pause': 'Mute music',
 
     'hero.eyebrow': 'GAMES · SAAS · CALCULATORS · WEBS',
     'hero.title': 'We turn ideas into unforgettable products',
