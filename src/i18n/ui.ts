@@ -25,10 +25,6 @@ export const ui = {
     'cta.viewProject': 'Ver proyecto',
     'cta.openDemo': 'Abrir demo',
 
-    'facts.projects': 'Proyectos publicados',
-    'facts.disciplines': 'Disciplinas',
-    'facts.live': 'Con demo abierta',
-
     'categories.eyebrow': 'Qué hacemos',
     'categories.title': 'Cuatro disciplinas. Una misma forma de construir.',
     'categories.cta': 'Ver proyectos',
@@ -169,10 +165,6 @@ export const ui = {
     'cta.contact': "Let's talk",
     'cta.viewProject': 'View project',
     'cta.openDemo': 'Open demo',
-
-    'facts.projects': 'Published projects',
-    'facts.disciplines': 'Disciplines',
-    'facts.live': 'With open demo',
 
     'categories.eyebrow': 'What we do',
     'categories.title': 'Four disciplines. One way of building.',

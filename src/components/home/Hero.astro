@@ -4,7 +4,6 @@ import type { Locale } from '../../data/company';
 import { getCategory } from '../../data/categories';
 import { useTranslations, projectsPath, projectPath } from '../../i18n/utils';
 import { withBase } from '../../lib/base';
-import { getStats } from '../../lib/stats';
 
 interface Props {
   locale: Locale;
@@ -22,7 +21,6 @@ const titleEnd = title.slice(cut + 1);
 
 // Pila de vistas previas reales: el hero enseña producto, no adornos
 const previews = projects.slice(0, 3);
-const stats = await getStats(locale);
 ---
 
 <section class="hero" data-mouse-parallax>
@@ -45,21 +43,6 @@ const stats = await getStats(locale);
         <!-- Baja al formulario de la propia home: sin cambiar de página -->
         <a href="#contacto" class="btn btn-ghost">{t('cta.talk')}</a>
       </div>
-
-      <dl class="hero-facts" data-reveal>
-        <div>
-          <dt>{t('facts.projects')}</dt>
-          <dd>{stats.total}</dd>
-        </div>
-        <div>
-          <dt>{t('facts.disciplines')}</dt>
-          <dd>{stats.disciplines}</dd>
-        </div>
-        <div>
-          <dt>{t('facts.live')}</dt>
-          <dd>{stats.live}</dd>
-        </div>
-      </dl>
     </div>
 
     <div class="hero-stack" data-reveal data-scroll-tilt>
@@ -199,34 +182,6 @@ const stats = await getStats(locale);
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-3);
-  }
-
-  /* Datos verificables, no promesas */
-  .hero-facts {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-6);
-    margin: var(--space-3) 0 0;
-    padding-top: var(--space-5);
-    border-top: 1px solid var(--line);
-    width: 100%;
-    max-width: 34rem;
-  }
-
-  .hero-facts dt {
-    font-size: var(--font-size-xs);
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-soft);
-  }
-
-  .hero-facts dd {
-    margin: var(--space-1) 0 0;
-    font-family: var(--font-display);
-    font-size: var(--font-size-xl);
-    font-weight: 700;
-    color: var(--text);
   }
 
   /* --- Pila de proyectos --- */

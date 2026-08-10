@@ -36,9 +36,6 @@ export const company = {
     youtube: '', // PENDIENTE
   },
 
-  // Las cifras del hero se calculan en src/lib/stats.ts a partir de la
-  // colección de proyectos. No añadir aquí totales a mano: se desactualizan.
-
   legal: {
     legalName: '', // PENDIENTE de constitución
     taxId: '', // PENDIENTE de constitución
