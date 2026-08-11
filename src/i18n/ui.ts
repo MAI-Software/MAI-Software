@@ -71,6 +71,11 @@ export const ui = {
     'process.3.b2': 'Mejora tras el lanzamiento',
     'process.3.b3': 'Base lista para crecer',
 
+    'clients.eyebrow': 'Clientes',
+    'clients.title': 'Algunas webs de nuestros clientes',
+    'clients.text':
+      'Proyectos que hemos diseñado y desarrollado para otros. Cada uno está en producción y se puede visitar.',
+
     'studio.title': 'Construimos producto, no solo pantallas.',
     'studio.text':
       'MAI Software combina desarrollo, diseño y pensamiento de producto para convertir ideas en experiencias digitales reales.',
@@ -220,6 +225,11 @@ export const ui = {
     'process.3.b1': 'Ship and measure',
     'process.3.b2': 'Improve after launch',
     'process.3.b3': 'A base ready to grow',
+
+    'clients.eyebrow': 'Clients',
+    'clients.title': 'A few websites we built for clients',
+    'clients.text':
+      'Projects we designed and developed for others. Every one is live and can be visited.',
 
     'studio.title': 'We build product, not just screens.',
     'studio.text':

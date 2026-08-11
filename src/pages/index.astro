@@ -4,6 +4,7 @@ import Hero from '../components/home/Hero.astro';
 import CategoryIndex from '../components/home/CategoryIndex.astro';
 import ProjectFeed from '../components/home/ProjectFeed.astro';
 import Process from '../components/home/Process.astro';
+import ClientSites from '../components/home/ClientSites.astro';
 import StudioIntro from '../components/home/StudioIntro.astro';
 import ContactSection from '../components/home/ContactSection.astro';
 import { company } from '../data/company';
@@ -28,6 +29,7 @@ const projects = featured
   <CategoryIndex locale={locale} />
   {projects.length > 0 && <ProjectFeed projects={projects} locale={locale} />}
   <Process locale={locale} />
+  <ClientSites locale={locale} />
   <StudioIntro locale={locale} />
   <ContactSection locale={locale} />
 </BaseLayout>

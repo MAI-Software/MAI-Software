@@ -1,0 +1,184 @@
+---
+import type { Locale } from '../../data/company';
+import { clientSites } from '../../data/clients';
+import { useTranslations } from '../../i18n/utils';
+import { withBase } from '../../lib/base';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+{
+  clientSites.length > 0 && (
+    <section class="section section-line">
+      <div class="container">
+        <header class="section-head" data-reveal>
+          <p class="eyebrow">{t('clients.eyebrow')}</p>
+          <h2>{t('clients.title')}</h2>
+          <p class="lead">{t('clients.text')}</p>
+        </header>
+
+        <ul
+          class="client-grid"
+          data-reveal-group
+          style={`--cols:${Math.min(clientSites.length, 3)}`}
+        >
+          {clientSites.map((site) => (
+            <li class="card client-card" data-reveal>
+              <a href={site.url} target="_blank" rel="noopener noreferrer" class="client-link">
+                <h3 class="client-name">{site.name}</h3>
+
+                {site.image ? (
+                  <img
+                    class="client-shot"
+                    src={withBase(site.image)}
+                    alt={site.imageAlt?.[locale] ?? site.name}
+                    width="1280"
+                    height="800"
+                    loading="lazy"
+                  />
+                ) : (
+                  /* Sin captura, la inicial hace de marca provisional */
+                  <span class="client-mark" aria-hidden="true">
+                    {site.name.charAt(0)}
+                  </span>
+                )}
+
+                <p class="client-tagline">{site.tagline[locale]}</p>
+                <span class="client-host">
+                  {new URL(site.url).host.replace(/^www\./, '')}
+                  <span aria-hidden="true"> ↗</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .client-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .client-card {
+    padding: 0;
+    gap: 0;
+    overflow: hidden;
+  }
+
+  .client-link {
+    display: grid;
+    gap: var(--space-3);
+    padding: clamp(var(--space-4), 3vw, var(--space-5));
+    text-decoration: none;
+    color: inherit;
+    height: 100%;
+    align-content: start;
+  }
+
+  .client-name {
+    font-size: var(--font-size-lg);
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  .client-shot,
+  .client-mark {
+    width: 100%;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--line);
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: top center;
+  }
+
+  .client-mark {
+    display: grid;
+    place-items: center;
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--text);
+    background: var(--gradient-brand-soft);
+  }
+
+  .client-tagline {
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  .client-host {
+    margin-top: auto;
+    font-family: var(--font-display);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--cyan);
+  }
+
+  /* Tantas columnas como webs haya, hasta tres: con una sola, una tarjeta
+     estrecha perdida a la izquierda parece un hueco sin rellenar. */
+  @media (min-width: 700px) {
+    .client-grid {
+      grid-template-columns: repeat(min(var(--cols, 3), 2), 1fr);
+    }
+  }
+
+  @media (min-width: 1080px) {
+    .client-grid {
+      grid-template-columns: repeat(var(--cols, 3), 1fr);
+    }
+  }
+
+  /* Una sola web: se muestra en grande, con la captura al lado del texto */
+  @media (min-width: 900px) {
+    .client-grid:has(> :only-child) .client-link {
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      column-gap: clamp(var(--space-5), 4vw, var(--space-7));
+      /* Las tres líneas de texto se agrupan en el centro en vez de
+         repartirse por todo el alto de la captura. */
+      grid-template-rows: 1fr auto auto 1fr;
+      align-items: start;
+    }
+
+    .client-grid:has(> :only-child) .client-shot,
+    .client-grid:has(> :only-child) .client-mark {
+      align-self: center;
+    }
+
+    .client-grid:has(> :only-child) .client-shot,
+    .client-grid:has(> :only-child) .client-mark {
+      grid-row: 1 / span 4;
+      grid-column: 1;
+    }
+
+    .client-grid:has(> :only-child) .client-name {
+      grid-column: 2;
+      grid-row: 2;
+      font-size: var(--font-size-2xl);
+    }
+
+    .client-grid:has(> :only-child) .client-tagline {
+      grid-column: 2;
+      grid-row: 3;
+    }
+
+    .client-grid:has(> :only-child) .client-host {
+      grid-column: 2;
+      grid-row: 4;
+      margin-top: var(--space-2);
+      align-self: start;
+    }
+  }
+</style>
