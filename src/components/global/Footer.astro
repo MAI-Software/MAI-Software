@@ -74,12 +74,15 @@ const socialLinks = [
 </footer>
 
 <style>
+  /* Fondo opaco y más oscuro que el resto: corta las luces del escenario,
+     que llegaban hasta aquí y se comían el contraste de los enlaces. */
   .site-footer {
     position: relative;
+    z-index: var(--z-base);
     margin-top: clamp(var(--space-8), 8vw, var(--space-10));
     padding-block: var(--space-9) var(--space-6);
     border-top: 1px solid var(--line);
-    background: linear-gradient(180deg, transparent, rgba(98, 66, 252, 0.06));
+    background: var(--ink-1000);
   }
 
   .footer-top {

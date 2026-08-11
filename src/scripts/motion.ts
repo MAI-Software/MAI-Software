@@ -301,7 +301,121 @@ const onScroll = perFrame(() => {
   }
 });
 
+/* --- Campo de partículas ---
+   Polvo de marca a la deriva. Vive en un canvas dentro del escenario fijo,
+   así persiste entre páginas y no se repinta con cada navegación. */
+function setupParticles() {
+  const canvas = document.querySelector<HTMLCanvasElement>('.particles');
+  const ctx = canvas?.getContext('2d');
+  if (!canvas || !ctx) return;
+
+  const COLORS = ['98, 66, 252', '56, 130, 251', '16, 200, 252'];
+  type Dot = {
+    x: number;
+    y: number;
+    r: number;
+    vx: number;
+    vy: number;
+    a: number;
+    phase: number;
+    color: string;
+  };
+
+  let dots: Dot[] = [];
+  let w = 0;
+  let h = 0;
+  let dpr = 1;
+
+  const build = () => {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = canvas.clientWidth;
+    h = canvas.clientHeight;
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    // Densidad por área: en un móvil sobran las mismas partículas que en 27"
+    const count = Math.min(90, Math.round((w * h) / 24000));
+    dots = Array.from({ length: count }, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: 0.6 + Math.random() * 1.6,
+      vx: (Math.random() - 0.5) * 0.08,
+      vy: -0.05 - Math.random() * 0.14, // suben despacio, como polvo en un haz
+      a: 0.18 + Math.random() * 0.42,
+      phase: Math.random() * Math.PI * 2,
+      color: COLORS[Math.floor(Math.random() * COLORS.length)]!,
+    }));
+  };
+
+  const draw = (time: number) => {
+    ctx.clearRect(0, 0, w, h);
+    for (const d of dots) {
+      // Parpadeo lento y desfasado: sin él parece una textura pegada
+      const twinkle = 0.65 + 0.35 * Math.sin(time / 1400 + d.phase);
+      ctx.globalAlpha = d.a * twinkle;
+      ctx.fillStyle = `rgb(${d.color})`;
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  };
+
+  const step = (time: number) => {
+    for (const d of dots) {
+      d.x += d.vx;
+      d.y += d.vy;
+      // Al salir por un borde reaparece por el contrario: campo infinito
+      if (d.y < -4) d.y = h + 4;
+      if (d.x < -4) d.x = w + 4;
+      else if (d.x > w + 4) d.x = -4;
+    }
+    draw(time);
+  };
+
+  let raf = 0;
+  const loop = (time: number) => {
+    step(time);
+    raf = requestAnimationFrame(loop);
+  };
+
+  const start = () => {
+    if (raf || reduced) return;
+    raf = requestAnimationFrame(loop);
+  };
+
+  const stop = () => {
+    cancelAnimationFrame(raf);
+    raf = 0;
+  };
+
+  build();
+  if (reduced) {
+    draw(0); // campo quieto: se ve el polvo, no se mueve
+  } else {
+    start();
+  }
+
+  // En segundo plano no hay nada que animar
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stop();
+    else start();
+  });
+
+  let resizeTimer = 0;
+  window.addEventListener('resize', () => {
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(() => {
+      build();
+      if (reduced) draw(0);
+    }, 200);
+  });
+}
+
 function setupGlobal() {
+  setupParticles();
+
   window.addEventListener('scroll', () => onScroll(null), { passive: true });
   window.addEventListener('resize', () => onScroll(null), { passive: true });
 
