@@ -4,6 +4,7 @@ import type { Locale } from '../../data/company';
 import { getCategory } from '../../data/categories';
 import { useTranslations, projectsPath, projectPath } from '../../i18n/utils';
 import { withBase } from '../../lib/base';
+import { highlightTitle } from '../../lib/highlight';
 
 interface Props {
   locale: Locale;
@@ -13,11 +14,8 @@ interface Props {
 const { locale, projects } = Astro.props;
 const t = useTranslations(locale);
 
-// Última palabra del H1 con gradiente de marca
-const title = t('hero.title');
-const cut = title.lastIndexOf(' ');
-const titleStart = title.slice(0, cut);
-const titleEnd = title.slice(cut + 1);
+// La palabra fuerte del H1 va marcada con asteriscos en el texto
+const title = highlightTitle(t('hero.title'), true);
 
 // Pila de vistas previas reales: el hero enseña producto, no adornos
 const previews = projects.slice(0, 3);
@@ -29,9 +27,7 @@ const previews = projects.slice(0, 3);
   <div class="container hero-inner">
     <div class="hero-copy" data-reveal-group>
       <p class="eyebrow" data-reveal>{t('hero.eyebrow')}</p>
-      <h1 data-reveal>
-        {titleStart}{' '}<span class="grad-text">{titleEnd}</span>
-      </h1>
+      <h1 data-reveal set:html={title} />
       <p class="lead hero-lead" data-reveal>{t('hero.text')}</p>
 
       <div class="hero-actions" data-reveal>

@@ -3,6 +3,7 @@ import type { Locale } from '../../data/company';
 import { useTranslations } from '../../i18n/utils';
 import type { UIKey } from '../../i18n/ui';
 import { categories } from '../../data/categories';
+import { highlightTitle } from '../../lib/highlight';
 
 interface Props {
   locale: Locale;
@@ -31,7 +32,7 @@ const bulletKeys = (id: string): UIKey[] =>
   <div class="container">
     <header class="section-head" data-reveal>
       <p class="eyebrow">{t('categories.eyebrow')}</p>
-      <h2>{title}</h2>
+      <h2 set:html={highlightTitle(title)} />
     </header>
 
     <ol class="category-grid" data-reveal-group style={`--cols:${Math.min(count, 4)}`}>

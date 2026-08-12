@@ -880,12 +880,17 @@ button {
 /* ============================================
    Texto con gradiente animado
    ============================================ */
+/* Palabra fuerte del titular: degradado de marca y cursiva.
+   El padding evita que la inclinación corte el trazo de la última letra
+   contra el borde de la caja de texto. */
 .grad-text {
   background: linear-gradient(100deg, #6242fc, #3882fb, #10c8fc, #3882fb, #6242fc);
   background-size: 260% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  font-style: italic;
+  padding-inline-end: 0.06em;
 }
 
 @media (prefers-reduced-motion: no-preference) {

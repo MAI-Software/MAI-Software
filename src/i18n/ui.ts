@@ -16,7 +16,7 @@ export const ui = {
     'music.pause': 'Silenciar música',
 
     'hero.eyebrow': 'VIDEOJUEGOS · SAAS · CALCULADORAS · WEBS',
-    'hero.title': 'De la idea a tus manos',
+    'hero.title': 'De la idea a tus *manos*',
     'hero.text':
       'Creamos webs, herramientas, SaaS y videojuegos para que una idea deje de quedarse en la cabeza y empiece a existir.',
     'cta.explore': 'Ver proyectos',
@@ -29,8 +29,8 @@ export const ui = {
     'categories.eyebrow': 'Qué hacemos',
     /* El titular ya no cuenta disciplinas; se conservan las dos claves
        porque el componente sigue eligiendo entre ambas. */
-    'categories.title': 'Distintas formas de dar vida a una idea.',
-    'categories.title.one': 'Distintas formas de dar vida a una idea.',
+    'categories.title': 'Distintas formas de *crear*.',
+    'categories.title.one': 'Distintas formas de *crear*.',
     'categories.cta': 'Ver proyectos',
     'category.game.b1': 'Ideas hechas para jugar',
     'category.game.b2': 'Diseñamos mecánicas, mundos y experiencias interactivas',
