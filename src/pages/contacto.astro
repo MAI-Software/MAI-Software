@@ -12,8 +12,8 @@ const hasForm = company.contact.web3formsKey !== '';
 
 <BaseLayout
   locale={locale}
-  title={`Contacto — ${company.name}`}
-  description="Cuéntanos qué quieres construir: videojuegos, herramientas SaaS o páginas web a medida."
+  title="Contacto | Cuéntanos tu idea | MAI Software"
+  description="¿Tienes una idea entre manos? Cuéntanos qué quieres crear y descubre cómo MAI Software puede ayudarte a convertirla en una experiencia digital real."
   alternatePath="/en/contact"
   hideContactCta
 >
@@ -22,7 +22,10 @@ const hasForm = company.contact.web3formsKey !== '';
       <header class="contact-head" data-reveal>
         <span class="brand-rule" aria-hidden="true"></span>
         <h1>{t('contact.title')}</h1>
-        <p class="lead">{t('contact.text')}</p>
+        <p class="lead">
+          No hace falta que esté perfectamente definida. Cuéntanos qué tienes en mente, qué
+          quieres mejorar o qué te gustaría crear.
+        </p>
       </header>
 
       <div class="contact-grid">

@@ -12,14 +12,14 @@ const projects = await getProjects(locale, 'saas');
 
 <BaseLayout
   locale={locale}
-  title={`${category.label.es} — ${company.name}`}
-  description={category.intro.es}
+  title="Desarrollo SaaS y herramientas digitales | MAI Software"
+  description="Explora herramientas SaaS y aplicaciones web creadas por MAI Software para simplificar procesos y resolver problemas reales."
   alternatePath="/en/saas"
 >
   <ProjectArchive
     locale={locale}
-    title={category.label.es}
-    intro={category.intro.es}
+    title="Ideas que trabajan contigo."
+    intro="Herramientas digitales creadas para resolver tareas reales, simplificar procesos y convertir problemas cotidianos en experiencias mucho más fáciles."
     projects={projects}
     activeCategory="saas"
   />

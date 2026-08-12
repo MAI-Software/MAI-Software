@@ -12,7 +12,7 @@ export const company = {
     en: 'We turn digital ideas into products you can see, use and remember.',
   },
   description: {
-    es: 'Diseñamos y desarrollamos videojuegos, herramientas SaaS y experiencias web.',
+    es: 'Webs, herramientas, SaaS y videojuegos que alguna vez fueron solo una idea.',
     en: 'We design and build video games, SaaS tools and web experiences.',
   },
 

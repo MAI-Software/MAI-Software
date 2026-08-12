@@ -12,14 +12,14 @@ const projects = await getProjects(locale, 'game');
 
 <BaseLayout
   locale={locale}
-  title={`${category.label.es} — ${company.name}`}
-  description={category.intro.es}
+  title="Desarrollo de videojuegos | MAI Software"
+  description="Descubre videojuegos y experiencias interactivas desarrolladas por MAI Software para web, móvil y otros formatos digitales."
   alternatePath="/en/games"
 >
   <ProjectArchive
     locale={locale}
-    title={category.label.es}
-    intro={category.intro.es}
+    title="Ideas hechas para jugar."
+    intro="Proyectos donde diseño, código e interacción se encuentran para crear experiencias que solo tienen sentido cuando alguien empieza a jugar."
     projects={projects}
     activeCategory="game"
   />
