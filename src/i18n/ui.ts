@@ -47,7 +47,7 @@ export const ui = {
 
     'featured.label': 'Proyecto destacado',
     'feed.eyebrow': 'Trabajo reciente',
-    'feed.title': 'Ideas que ya están en marcha.',
+    'feed.title': 'Últimos proyectos',
     'feed.all': 'Ver todos los proyectos',
 
     'process.eyebrow': 'Cómo trabajamos',
