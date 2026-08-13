@@ -22,14 +22,20 @@ const studioHref = withBase(locale === 'es' ? '/estudio' : '/en/studio');
 </section>
 
 <style>
+  /* Sin max-width aquí: el contenedor se centraba más estrecho que el del
+     resto de secciones y este bloque quedaba metido hacia dentro. El ancho
+     de lectura se limita en el texto, no en la caja. */
   .studio-inner {
     display: grid;
     gap: var(--space-5);
     justify-items: start;
-    max-width: 56rem;
   }
 
   .studio-inner h2 {
     max-width: 18ch;
+  }
+
+  .studio-inner .lead {
+    max-width: 58ch;
   }
 </style>
