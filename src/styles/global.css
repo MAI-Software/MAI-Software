@@ -92,10 +92,12 @@ button {
   content: '';
   position: absolute;
   inset: -25%;
+  /* Manchas grandes y de caída larga. Con la parada en el 68 % el borde del
+     degradado se notaba como un disco en pantallas anchas. */
   background:
-    radial-gradient(42rem 32rem at 10% 2%, rgba(98, 66, 252, 0.38), transparent 68%),
-    radial-gradient(38rem 30rem at 92% 10%, rgba(16, 200, 252, 0.22), transparent 68%),
-    radial-gradient(44rem 36rem at 60% 92%, rgba(56, 130, 251, 0.26), transparent 70%);
+    radial-gradient(58rem 44rem at 8% 0%, rgba(98, 66, 252, 0.3), transparent 82%),
+    radial-gradient(52rem 40rem at 94% 8%, rgba(16, 200, 252, 0.17), transparent 84%),
+    radial-gradient(60rem 48rem at 62% 96%, rgba(56, 130, 251, 0.2), transparent 84%);
   transform: translate3d(0, calc(var(--scene-p, 0) * -20vh), 0);
   will-change: transform;
 }
@@ -110,7 +112,9 @@ button {
     linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
   background-size: 72px 72px;
-  mask-image: radial-gradient(circle at 50% 30%, black, transparent 78%);
+  /* Elipse ancha y de caída larga: el círculo anterior recortaba la rejilla
+     con un canto visible en pantallas grandes. */
+  mask-image: radial-gradient(125% 105% at 50% 22%, black 25%, transparent 92%);
   transform: translate3d(0, calc(var(--scene-p, 0) * 9vh), 0);
   will-change: transform;
 }
@@ -186,18 +190,21 @@ button {
   position: fixed;
   top: 0;
   left: 0;
-  width: 190px;
-  height: 190px;
-  margin: -95px 0 0 -95px;
+  width: 320px;
+  height: 320px;
+  margin: -160px 0 0 -160px;
   z-index: var(--z-bg);
   pointer-events: none;
+  /* Caída larga y muy tenue: con el degradado corto y opaco de antes se
+     leía como una bola con borde puesta encima del texto. */
   background: radial-gradient(
     circle,
-    rgba(16, 200, 252, 0.5),
-    rgba(98, 66, 252, 0.22) 40%,
-    transparent 70%
+    rgba(16, 200, 252, 0.16),
+    rgba(56, 130, 251, 0.09) 32%,
+    rgba(98, 66, 252, 0.04) 58%,
+    transparent 78%
   );
-  filter: blur(14px);
+  filter: blur(46px);
   /* La posición la calcula motion.ts a partir del avance del scroll */
   translate: var(--guide-x, 50vw) var(--guide-y, 16vh);
   will-change: translate;
