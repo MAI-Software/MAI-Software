@@ -335,14 +335,14 @@ function setupParticles() {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     // Densidad por área: en un móvil sobran las mismas partículas que en 27"
-    const count = Math.min(90, Math.round((w * h) / 24000));
+    const count = Math.min(70, Math.round((w * h) / 32000));
     dots = Array.from({ length: count }, () => ({
       x: Math.random() * w,
       y: Math.random() * h,
-      r: 0.6 + Math.random() * 1.6,
-      vx: (Math.random() - 0.5) * 0.08,
-      vy: -0.05 - Math.random() * 0.14, // suben despacio, como polvo en un haz
-      a: 0.18 + Math.random() * 0.42,
+      r: 0.6 + Math.random() * 1.4,
+      vx: (Math.random() - 0.5) * 0.035,
+      vy: -0.02 - Math.random() * 0.06, // suben despacio, como polvo en un haz
+      a: 0.16 + Math.random() * 0.3,
       phase: Math.random() * Math.PI * 2,
       color: COLORS[Math.floor(Math.random() * COLORS.length)]!,
     }));
@@ -351,8 +351,8 @@ function setupParticles() {
   const draw = (time: number) => {
     ctx.clearRect(0, 0, w, h);
     for (const d of dots) {
-      // Parpadeo lento y desfasado: sin él parece una textura pegada
-      const twinkle = 0.65 + 0.35 * Math.sin(time / 1400 + d.phase);
+      // Parpadeo lento y desfasado: se nota que respira, no que parpadea
+      const twinkle = 0.85 + 0.15 * Math.sin(time / 3200 + d.phase);
       ctx.globalAlpha = d.a * twinkle;
       ctx.fillStyle = `rgb(${d.color})`;
       ctx.beginPath();
