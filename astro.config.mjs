@@ -11,11 +11,14 @@ import sitemap from '@astrojs/sitemap';
  */
 const isCloudflare = Boolean(process.env.CF_PAGES);
 
+// Host de produccion en Cloudflare. NO usar CF_PAGES_URL: en cada build
+// apunta al deploy concreto (https://<hash>.mai-software.pages.dev) y eso
+// contaminaba canonicals y sitemap. Al comprar dominio, cambiar aqui o
+// definir SITE_URL en las variables del proyecto de Cloudflare.
+const CF_PROD_URL = 'https://mai-software.pages.dev';
+
 const SITE_URL =
-  process.env.SITE_URL ??
-  (isCloudflare
-    ? process.env.CF_PAGES_URL || 'https://mai-softwares.pages.dev'
-    : 'https://mai-software.github.io');
+  process.env.SITE_URL ?? (isCloudflare ? CF_PROD_URL : 'https://mai-software.github.io');
 
 const BASE = process.env.BASE_PATH ?? (isCloudflare ? '/' : '/MAI-Software');
 
