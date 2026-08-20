@@ -18,7 +18,7 @@ technologies:
 services:
   - UI/UX design
   - Web development
-seoTitle: "Loreweaver — Writing and worldbuilding studio | MAI Software"
+seoTitle: "Loreweaver — Writing and worldbuilding studio | MAI Softwares"
 seoDescription: "A fully local writing and worldbuilding tool: chapter editor, character wiki, timeline and relationship graph. No accounts, no servers."
 layoutVariant: "split-left"
 ---

@@ -20,7 +20,7 @@ technologies:
 services:
   - UI/UX design
   - Mobile development
-seoTitle: "Mai-Pill — Medication reminder app | MAI Software"
+seoTitle: "Mai-Pill — Medication reminder app | MAI Softwares"
 seoDescription: "Development of Mai-Pill: an Android app for medication reminders and logging blood sugar and blood pressure. No accounts, no cloud, and alerts that work offline."
 layoutVariant: "split-right"
 ---

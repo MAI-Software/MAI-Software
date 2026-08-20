@@ -1,10 +1,10 @@
 /**
- * Datos corporativos de MAI Software.
+ * Datos corporativos de MAI Softwares.
  * Regla (spec §19): no publicar campos legales vacíos ni inventar datos.
  * Los campos vacíos son PENDIENTES y no deben renderizarse en la web.
  */
 export const company = {
-  name: 'MAI Software',
+  name: 'MAI Softwares',
   shortName: 'MAI',
 
   tagline: {

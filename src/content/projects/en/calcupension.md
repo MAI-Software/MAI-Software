@@ -18,7 +18,7 @@ services:
   - UI/UX design
   - Web development
   - Content and SEO
-seoTitle: "CalcuPensión — Spanish retirement pension calculator | MAI Software"
+seoTitle: "CalcuPensión — Spanish retirement pension calculator | MAI Softwares"
 seoDescription: "Development of CalcuPensión: estimated monthly pension, retirement age and delay scenarios, using the official percentage scale and current caps."
 layoutVariant: "split-left"
 ---

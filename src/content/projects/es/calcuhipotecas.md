@@ -18,7 +18,7 @@ services:
   - Diseño UI/UX
   - Desarrollo web
   - Contenido y SEO
-seoTitle: "CalcuHipotecas — Calculadora de hipoteca | MAI Software"
+seoTitle: "CalcuHipotecas — Calculadora de hipoteca | MAI Softwares"
 seoDescription: "Desarrollo de CalcuHipotecas: cuota mensual, intereses, gastos de compra y cuadro de amortización por el sistema francés, con impuestos por comunidad autónoma."
 layoutVariant: "split-right"
 ---

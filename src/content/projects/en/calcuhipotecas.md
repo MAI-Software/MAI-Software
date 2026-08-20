@@ -18,7 +18,7 @@ services:
   - UI/UX design
   - Web development
   - Content and SEO
-seoTitle: "CalcuHipotecas — Spanish mortgage calculator | MAI Software"
+seoTitle: "CalcuHipotecas — Spanish mortgage calculator | MAI Softwares"
 seoDescription: "Development of CalcuHipotecas: monthly payment, interest, purchase costs and a French-system amortisation table, with taxes by Spanish region."
 layoutVariant: "split-right"
 ---

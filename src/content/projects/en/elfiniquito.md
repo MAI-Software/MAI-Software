@@ -20,7 +20,7 @@ services:
   - UI/UX design
   - Web development
   - Content and SEO
-seoTitle: "El Finiquito — Spanish severance calculator | MAI Software"
+seoTitle: "El Finiquito — Spanish severance calculator | MAI Softwares"
 seoDescription: "Development of El Finiquito, a severance and dismissal compensation calculator for Spain: item-by-item breakdown, pre-2012 contracts and tax-exempt amounts."
 layoutVariant: "split-right"
 ---

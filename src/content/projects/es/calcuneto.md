@@ -20,7 +20,7 @@ services:
   - Diseño UI/UX
   - Desarrollo web
   - Contenido y SEO
-seoTitle: "CalcuNeto — Calculadora de sueldo neto | MAI Software"
+seoTitle: "CalcuNeto — Calculadora de sueldo neto | MAI Softwares"
 seoDescription: "Desarrollo de CalcuNeto, calculadora de sueldo neto en España: cálculo en el navegador, desglose de IRPF y Seguridad Social y coste real para la empresa."
 layoutVariant: "split-left"
 ---

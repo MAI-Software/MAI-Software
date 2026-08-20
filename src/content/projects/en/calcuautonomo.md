@@ -20,7 +20,7 @@ services:
   - UI/UX design
   - Web development
   - Content and SEO
-seoTitle: "CalcuAutónomo — Net income calculator for freelancers | MAI Software"
+seoTitle: "CalcuAutónomo — Net income calculator for freelancers | MAI Softwares"
 seoDescription: "Development of CalcuAutónomo: work out what a Spanish freelancer really keeps after expenses, contributions, VAT and income tax, using 2026 brackets."
 layoutVariant: "split-left"
 ---

@@ -20,7 +20,7 @@ services:
   - UI/UX design
   - Web development
   - Content and SEO
-seoTitle: "CalcuIVA — Spanish VAT calculator at 21%, 10% and 4% | MAI Software"
+seoTitle: "CalcuIVA — Spanish VAT calculator at 21%, 10% and 4% | MAI Softwares"
 seoDescription: "Development of CalcuIVA: add or remove VAT from any amount using current Spanish rates, with the taxable base and tax due broken out."
 layoutVariant: "split-left"
 ---

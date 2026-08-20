@@ -19,7 +19,7 @@ technologies:
 services:
   - Diseño UI/UX
   - Desarrollo PWA
-seoTitle: "MAI Expenses — App de gastos con lectura de tickets | MAI Software"
+seoTitle: "MAI Expenses — App de gastos con lectura de tickets | MAI Softwares"
 seoDescription: "Desarrollo de una app de control de gastos que escanea tickets con la cámara. Reconocimiento de texto en el propio móvil, sin registro ni servidores."
 layoutVariant: "split-left"
 ---

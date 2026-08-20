@@ -17,7 +17,7 @@ technologies:
 services:
   - UI/UX design
   - Web development
-seoTitle: "MAI Budget — PDF quote generator | MAI Software"
+seoTitle: "MAI Budget — PDF quote generator | MAI Softwares"
 seoDescription: "Development of MAI Budget: build professional PDF quotes with VAT, withholding tax and discounts. All in the browser, free and with no sign-up."
 layoutVariant: "split-right"
 ---

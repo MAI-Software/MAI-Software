@@ -19,7 +19,7 @@ technologies:
 services:
   - UI/UX design
   - PWA development
-seoTitle: "MAI-Background — Remove a video background in the browser | MAI Software"
+seoTitle: "MAI-Background — Remove a video background in the browser | MAI Softwares"
 seoDescription: "Development of MAI-Background: cut people out of video and swap the background for transparency, colour, blur, an image or another video. Local, no uploads, free."
 layoutVariant: "split-left"
 ---

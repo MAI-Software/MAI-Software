@@ -144,7 +144,7 @@ export const ui = {
 
     'legal.title': 'Aviso legal',
     'legal.pending':
-      'MAI Software se encuentra en fase de constitución. Los datos societarios se publicarán en esta página cuando el proceso esté completado.',
+      'MAI Softwares se encuentra en fase de constitución. Los datos societarios se publicarán en esta página cuando el proceso esté completado.',
     'privacy.title': 'Privacidad',
     'privacy.text':
       'Esta web es un sitio estático: no utiliza cookies ni herramientas de analítica, y navegar por ella no requiere facilitar ningún dato.',
@@ -233,7 +233,7 @@ export const ui = {
 
     'studio.title': 'We build product, not just screens.',
     'studio.text':
-      'MAI Software combines development, design and product thinking to turn ideas into real digital experiences.',
+      'MAI Softwares combines development, design and product thinking to turn ideas into real digital experiences.',
     'studio.link': 'About the studio',
 
     'final.title': 'Your next product can start with a conversation.',
@@ -258,7 +258,7 @@ export const ui = {
 
     'studio.page.title': 'Studio',
     'studio.page.intro':
-      'MAI Software is a digital product studio working across software, design and interactive experiences.',
+      'MAI Softwares is a digital product studio working across software, design and interactive experiences.',
     'studio.principles.title': 'Principles',
     'studio.principle.1': 'Clarity over noise.',
     'studio.principle.2': 'Product over decoration.',
@@ -299,7 +299,7 @@ export const ui = {
 
     'legal.title': 'Legal notice',
     'legal.pending':
-      'MAI Software is currently being incorporated. Company details will be published on this page once the process is complete.',
+      'MAI Softwares is currently being incorporated. Company details will be published on this page once the process is complete.',
     'privacy.title': 'Privacy',
     'privacy.text':
       'This is a static website: it uses no cookies and no analytics tools, and browsing it requires no personal data.',

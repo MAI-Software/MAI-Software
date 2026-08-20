@@ -21,7 +21,7 @@ technologies:
 services:
   - Diseño de juego
   - Desarrollo móvil
-seoTitle: "Beat the Monster Hero — Juego rítmico con cámara | MAI Software"
+seoTitle: "Beat the Monster Hero — Juego rítmico con cámara | MAI Softwares"
 seoDescription: "Desarrollo de un JRPG rítmico para móvil que usa la cámara como mando: detección de movimiento en tiempo real con TypeScript y MediaPipe."
 layoutVariant: "featured"
 ---

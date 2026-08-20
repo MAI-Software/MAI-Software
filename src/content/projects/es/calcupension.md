@@ -18,7 +18,7 @@ services:
   - Diseño UI/UX
   - Desarrollo web
   - Contenido y SEO
-seoTitle: "CalcuPensión — Calculadora de pensión de jubilación | MAI Software"
+seoTitle: "CalcuPensión — Calculadora de pensión de jubilación | MAI Softwares"
 seoDescription: "Desarrollo de CalcuPensión: pensión mensual estimada, edad de jubilación y escenarios de retraso, con la escala de porcentajes y los topes vigentes."
 layoutVariant: "split-left"
 ---

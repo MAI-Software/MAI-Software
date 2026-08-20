@@ -17,7 +17,7 @@ technologies:
 services:
   - Diseño UI/UX
   - Desarrollo web
-seoTitle: "MAI Budget — Generador de presupuestos en PDF | MAI Software"
+seoTitle: "MAI Budget — Generador de presupuestos en PDF | MAI Softwares"
 seoDescription: "Desarrollo de MAI Budget: crea presupuestos profesionales en PDF con IVA, IRPF y descuentos. Todo en el navegador, gratis y sin registro."
 layoutVariant: "split-right"
 ---
