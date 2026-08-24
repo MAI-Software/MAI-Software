@@ -25,7 +25,9 @@ const BASE = process.env.BASE_PATH ?? (isCloudflare ? '/' : '/MAI-Software');
 export default defineConfig({
   site: SITE_URL,
   base: BASE,
-  trailingSlash: 'ignore',
+  // Cloudflare Pages redirige 308 de /ruta a /ruta/, asi que la barra final
+  // es la forma canonica y los enlaces deben emitirla ya (ver lib/base.ts).
+  trailingSlash: 'always',
   i18n: {
     defaultLocale: 'es',
     locales: ['es', 'en'],
