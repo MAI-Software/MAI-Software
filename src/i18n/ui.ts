@@ -160,6 +160,10 @@ export const ui = {
     'notfound.back': 'Volver al inicio',
 
     'footer.rights': 'Todos los derechos reservados.',
+    'footer.explore': 'Lo que hacemos',
+    'footer.studio': 'Estudio',
+    'footer.legal': 'Legal',
+    'footer.contactTitle': 'Contacto',
   },
   en: {
     'skip.content': 'Skip to content',
@@ -312,6 +316,10 @@ export const ui = {
     'notfound.back': 'Back to home',
 
     'footer.rights': 'All rights reserved.',
+    'footer.explore': 'What we do',
+    'footer.studio': 'Studio',
+    'footer.legal': 'Legal',
+    'footer.contactTitle': 'Contact',
   },
 } as const satisfies Record<Locale, Record<string, string>>;
 

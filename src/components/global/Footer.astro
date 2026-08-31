@@ -1,6 +1,6 @@
 ---
 import { company, type Locale } from '../../data/company';
-import { footerNav } from '../../data/navigation';
+import { footerGroups } from '../../data/navigation';
 import { useTranslations, homePath } from '../../i18n/utils';
 import { withBase } from '../../lib/base';
 
@@ -19,6 +19,10 @@ const socialLinks = [
   { label: 'Instagram', url: company.social.instagram },
   { label: 'YouTube', url: company.social.youtube },
 ].filter((s) => s.url !== '');
+
+/* Columna 1: marca y contacto. Columna 2: lo que hacemos. Columna 3: el
+   estudio y lo legal, que son listas cortas y comparten columna. */
+const [exploreGroup, ...restGroups] = footerGroups;
 ---
 
 <footer class="site-footer">
@@ -30,12 +34,37 @@ const socialLinks = [
           <span class="visually-hidden">{company.name}</span>
         </a>
         <p>{company.description[locale]}</p>
+
+        {
+          (company.contact.email || socialLinks.length > 0) && (
+            <div class="footer-contact">
+              <h2 class="footer-title">{t('footer.contactTitle')}</h2>
+              {company.contact.email && (
+                <a href={`mailto:${company.contact.email}`} class="footer-email">
+                  {company.contact.email}
+                </a>
+              )}
+              {socialLinks.length > 0 && (
+                <ul class="footer-social">
+                  {socialLinks.map((s) => (
+                    <li>
+                      <a href={s.url} rel="noopener noreferrer" target="_blank">
+                        {s.label} ↗
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )
+        }
       </div>
 
-      <nav class="footer-nav" aria-label={t('nav.menu')}>
+      <nav class="footer-col" aria-labelledby="footer-group-explore">
+        <h2 class="footer-title" id="footer-group-explore">{t(exploreGroup.titleKey)}</h2>
         <ul>
           {
-            footerNav.map((item) => (
+            exploreGroup.items.map((item) => (
               <li>
                 <a href={item.href[locale]}>{item.label[locale]}</a>
               </li>
@@ -44,26 +73,24 @@ const socialLinks = [
         </ul>
       </nav>
 
-      {
-        (socialLinks.length > 0 || company.contact.email) && (
-          <div class="footer-social">
-            {company.contact.email && (
-              <a href={`mailto:${company.contact.email}`} class="footer-email">
-                {company.contact.email}
-              </a>
-            )}
-            <ul>
-              {socialLinks.map((s) => (
-                <li>
-                  <a href={s.url} rel="noopener noreferrer" target="_blank">
-                    {s.label} ↗
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )
-      }
+      <div class="footer-col footer-col--split">
+        {
+          restGroups.map((group, i) => (
+            <nav aria-labelledby={`footer-group-${i}`}>
+              <h2 class="footer-title" id={`footer-group-${i}`}>
+                {t(group.titleKey)}
+              </h2>
+              <ul>
+                {group.items.map((item) => (
+                  <li>
+                    <a href={item.href[locale]}>{item.label[locale]}</a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ))
+        }
+      </div>
     </div>
 
     <div class="footer-bottom">
@@ -97,8 +124,23 @@ const socialLinks = [
     font-size: var(--font-size-sm);
   }
 
-  .footer-nav ul,
-  .footer-social ul {
+  .footer-contact {
+    margin-top: var(--space-6);
+  }
+
+  /* Título de cada bloque: marca de qué va la columna sin gritar. */
+  .footer-title {
+    margin: 0 0 var(--space-4);
+    font-family: var(--font-display);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+
+  .footer-col ul,
+  .footer-social {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -106,7 +148,7 @@ const socialLinks = [
     gap: var(--space-3);
   }
 
-  .footer-nav a,
+  .footer-col a,
   .footer-social a {
     color: var(--text-muted);
     text-decoration: none;
@@ -114,20 +156,31 @@ const socialLinks = [
     transition: color var(--duration-base) var(--ease-standard);
   }
 
-  .footer-nav a:hover,
+  .footer-col a:hover,
   .footer-social a:hover {
     color: var(--cyan);
   }
 
-  .footer-social {
-    display: grid;
-    gap: var(--space-4);
-    align-content: start;
-  }
-
   .footer-email {
+    display: inline-block;
+    margin-bottom: var(--space-4);
     font-family: var(--font-display);
     font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+    transition: color var(--duration-base) var(--ease-standard);
+  }
+
+  .footer-email:hover {
+    color: var(--cyan);
+  }
+
+  /* Estudio y Legal son de dos enlaces cada una: comparten columna en vez
+     de dejar dos huecos casi vacíos. */
+  .footer-col--split {
+    display: grid;
+    gap: var(--space-6);
+    align-content: start;
   }
 
   .footer-bottom {
@@ -140,12 +193,29 @@ const socialLinks = [
 
   .footer-copy {
     font-size: var(--font-size-sm);
-    color: var(--text-soft);
+    /* --text-soft se queda en 4.43:1 sobre este fondo, por debajo del 4.5
+       que pide WCAG AA para texto normal. */
+    color: var(--text-muted);
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 600px) {
     .footer-top {
-      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .footer-brand {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .footer-top {
+      grid-template-columns: 1.6fr 1fr 1fr;
+      gap: var(--space-8);
+    }
+
+    .footer-brand {
+      grid-column: auto;
     }
   }
 </style>

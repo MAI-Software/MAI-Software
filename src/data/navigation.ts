@@ -57,3 +57,28 @@ const applyBase = (list: NavItem[]): NavItem[] =>
 
 export const mainNav = applyBase(items);
 export const footerNav = applyBase([...items, ...legalItems]);
+
+const pick = (...labels: string[]): NavItem[] =>
+  labels
+    .map((l) => items.find((i) => i.label.es === l))
+    .filter((i): i is NavItem => Boolean(i));
+
+/**
+ * Columnas del pie. Antes el pie volcaba los nueve enlaces en una sola lista
+ * y quedaba una columna larguisima al lado de un unico enlace de GitHub.
+ * Se agrupan por intencion: que hacemos / quienes somos / lo legal.
+ */
+export const footerGroups: { titleKey: string; items: NavItem[] }[] = [
+  {
+    titleKey: 'footer.explore',
+    items: applyBase(pick('Proyectos', 'Videojuegos', 'SaaS', 'Calculadoras', 'Webs')),
+  },
+  {
+    titleKey: 'footer.studio',
+    items: applyBase(pick('Estudio', 'Contacto')),
+  },
+  {
+    titleKey: 'footer.legal',
+    items: applyBase(legalItems),
+  },
+];
