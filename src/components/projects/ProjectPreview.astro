@@ -84,17 +84,32 @@ const Heading = headingLevel;
 </article>
 
 <style>
+  /* El texto se lleva el espacio sobrante, así los enlaces quedan siempre
+     abajo y a la misma altura en toda la fila de tarjetas. */
   .project-card {
     padding: 0;
     gap: 0;
-    /* Permite dimensionar el título según el ancho real de la tarjeta */
+    grid-template-rows: auto auto 1fr auto auto;
+    /* Permite dimensionar el título según el ancho real de la tarjeta.
+       Ojo: esto impide usar subgrid aquí, porque el contenedor de consulta
+       se dimensiona por su cuenta. */
     container-type: inline-size;
   }
 
   .card-head {
     display: grid;
     gap: var(--space-2);
+    align-content: start;
     padding: var(--space-5) var(--space-5) var(--space-4);
+  }
+
+  /* En cuanto hay varias tarjetas por fila, la cabecera reserva sitio para
+     dos líneas de título y dos de insignias. Sin esa reserva, la tarjeta
+     con una insignia de más empuja su portada y nada casa entre columnas. */
+  @media (min-width: 700px) {
+    .card-head {
+      min-height: 9.5rem;
+    }
   }
 
   .card-meta {
