@@ -1,6 +1,6 @@
 ---
-title: "Nudo"
-slug: "nudo"
+title: "Knot It Out"
+slug: "knot-it-out"
 category: "game"
 order: 14
 excerpt: "Rope puzzle game: a tangled cable on the table, and you undo it by dragging it and passing it over or under itself without breaking it."
@@ -8,8 +8,8 @@ featured: false
 published: true
 year: 2026
 status: "En desarrollo"
-cover: "/projects/nudo/cover.webp"
-coverAlt: "A knotted rope on a green felt table with a wooden frame and the Nudo title"
+cover: "/projects/knot-it-out/cover.webp"
+coverAlt: "A knotted rope on a green felt table with a wooden frame and the Knot It Out title"
 gallery: []
 demoUrl: "https://knotitout.pages.dev/"
 technologies:
@@ -18,14 +18,14 @@ technologies:
 services:
   - Game design
   - Game development
-seoTitle: "Nudo — Rope untangling puzzle game | MAI Softwares"
-seoDescription: "Building Nudo: a browser puzzle game where you untangle cables by dragging them and crossing them over or under themselves without breaking them."
+seoTitle: "Knot It Out — Rope untangling puzzle game | MAI Softwares"
+seoDescription: "Building Knot It Out: a browser puzzle game where you untangle cables by dragging them and crossing them over or under themselves without breaking them."
 layoutVariant: "split-left"
 ---
 
 ## The idea
 
-Everyone has fought a pair of headphones that came out of a pocket in a knot. Nudo turns that moment into a puzzle: the rope lies tangled on the table, and the challenge is to leave it straight.
+Everyone has fought a pair of headphones that came out of a pocket in a knot. Knot It Out turns that moment into a puzzle: the rope lies tangled on the table, and the challenge is to leave it straight.
 
 ## How it plays
 

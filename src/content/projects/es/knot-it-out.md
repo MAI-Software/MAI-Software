@@ -1,6 +1,6 @@
 ---
-title: "Nudo"
-slug: "nudo"
+title: "Knot It Out"
+slug: "knot-it-out"
 category: "game"
 order: 14
 excerpt: "Puzle de cuerdas: un cable enredado sobre el tapete y tú lo deshaces arrastrándolo y pasándolo por encima o por debajo, sin romperlo."
@@ -8,8 +8,8 @@ featured: false
 published: true
 year: 2026
 status: "En desarrollo"
-cover: "/projects/nudo/cover.webp"
-coverAlt: "Una cuerda anudada sobre un tapete verde con marco de madera y el título Nudo"
+cover: "/projects/knot-it-out/cover.webp"
+coverAlt: "Una cuerda anudada sobre un tapete verde con marco de madera y el título Knot It Out"
 gallery: []
 demoUrl: "https://knotitout.pages.dev/"
 technologies:
@@ -18,14 +18,14 @@ technologies:
 services:
   - Diseño de juego
   - Desarrollo de videojuegos
-seoTitle: "Nudo — Juego de puzles para desenredar cuerdas | MAI Softwares"
-seoDescription: "Desarrollo de Nudo: juego de puzles en el navegador donde hay que desenredar cables arrastrándolos y cruzándolos por encima o por debajo sin romperlos."
+seoTitle: "Knot It Out — Juego de puzles para desenredar cuerdas | MAI Softwares"
+seoDescription: "Desarrollo de Knot It Out: juego de puzles en el navegador donde hay que desenredar cables arrastrándolos y cruzándolos por encima o por debajo sin romperlos."
 layoutVariant: "split-left"
 ---
 
 ## La idea
 
-Todo el mundo ha peleado alguna vez con unos auriculares hechos un nudo en el bolsillo. Nudo convierte ese momento en un puzle: la cuerda está sobre la mesa, enredada, y el reto es dejarla recta.
+Todo el mundo ha peleado alguna vez con unos auriculares hechos un nudo en el bolsillo. Knot It Out convierte ese momento en un puzle: la cuerda está sobre la mesa, enredada, y el reto es dejarla recta.
 
 ## Cómo se juega
 
