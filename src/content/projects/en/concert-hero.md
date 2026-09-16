@@ -2,7 +2,7 @@
 title: "Concert Hero"
 slug: "concert-hero"
 category: "game"
-order: 15
+order: 13
 excerpt: "PC music game where the keyboard is the piano: a full chromatic octave, falling notes and a melody you actually play."
 featured: false
 published: true

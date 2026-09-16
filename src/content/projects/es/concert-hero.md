@@ -2,7 +2,7 @@
 title: "Concert Hero"
 slug: "concert-hero"
 category: "game"
-order: 15
+order: 13
 excerpt: "Juego musical para PC donde el teclado es el piano: una octava cromática entera, las notas caen y tú tocas la melodía."
 featured: false
 published: true
