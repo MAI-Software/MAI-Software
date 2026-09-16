@@ -2,7 +2,7 @@
 title: "Nudo"
 slug: "nudo"
 category: "game"
-order: 17
+order: 14
 excerpt: "Puzle de cuerdas: un cable enredado sobre el tapete y tú lo deshaces arrastrándolo y pasándolo por encima o por debajo, sin romperlo."
 featured: false
 published: true

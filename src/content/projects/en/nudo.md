@@ -2,7 +2,7 @@
 title: "Nudo"
 slug: "nudo"
 category: "game"
-order: 17
+order: 14
 excerpt: "Rope puzzle game: a tangled cable on the table, and you undo it by dragging it and passing it over or under itself without breaking it."
 featured: false
 published: true
