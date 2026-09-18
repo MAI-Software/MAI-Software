@@ -25,6 +25,7 @@ const { project } = Astro.props;
 const data = project.data;
 const category = getCategory(data.category);
 const { Content } = await render(project);
+const isGame = data.category === 'game';
 const { prev, next } = await getProjectNeighbors(locale, data.slug);
 ---
 
@@ -74,7 +75,12 @@ const { prev, next } = await getProjectNeighbors(locale, data.slug);
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {t('cta.openDemo')} ↗
+                {isGame && (
+                  <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M8 5.2v13.6L19 12z" fill="currentColor" />
+                  </svg>
+                )}
+                {isGame ? t('cta.play') : t('cta.visit')} ↗
               </a>
             )
           }
@@ -165,6 +171,12 @@ const { prev, next } = await getProjectNeighbors(locale, data.slug);
     display: grid;
     gap: var(--space-4);
     align-content: start;
+  }
+
+  .play-icon {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
   }
 
   .demo-btn {

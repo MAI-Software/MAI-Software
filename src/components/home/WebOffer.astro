@@ -1,0 +1,104 @@
+---
+import type { Locale } from '../../data/company';
+import { useTranslations, contactPath } from '../../i18n/utils';
+import { highlightTitle } from '../../lib/highlight';
+import type { UIKey } from '../../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+// El formulario reconoce este parámetro y deja el mensaje empezado
+const href = `${contactPath(locale)}?web=1`;
+
+const pains = [1, 2, 3, 4].map((n) => ({
+  number: String(n).padStart(2, '0'),
+  title: t(`offer.${n}.title` as UIKey),
+  text: t(`offer.${n}.text` as UIKey),
+}));
+---
+
+<section class="section section-line">
+  <div class="container">
+    <header class="section-head offer-head" data-reveal>
+      <p class="eyebrow">{t('offer.eyebrow')}</p>
+      <h2 set:html={highlightTitle(t('offer.title'))} />
+      <p class="lead">{t('offer.text')}</p>
+    </header>
+
+    <ol class="offer-grid" data-reveal-group>
+      {
+        pains.map((pain) => (
+          <li class="card offer-card" data-reveal>
+            <span class="card-chip">{pain.number}</span>
+            <h3>{pain.title}</h3>
+            <p>{pain.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="offer-foot" data-reveal>
+      <a href={href} class="btn btn-primary" data-magnetic>{t('offer.cta')}</a>
+      <p class="offer-note">{t('offer.note')}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .offer-head .lead {
+    max-width: 58ch;
+  }
+
+  .offer-grid {
+    list-style: none;
+    margin: 0 0 var(--space-7);
+    padding: 0;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .offer-card {
+    gap: var(--space-3);
+    align-content: start;
+  }
+
+  .offer-card h3 {
+    font-size: var(--font-size-lg);
+    line-height: 1.25;
+    text-wrap: balance;
+  }
+
+  .offer-card p {
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  .offer-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4) var(--space-5);
+  }
+
+  .offer-note {
+    color: var(--text-soft);
+    font-size: var(--font-size-sm);
+    max-width: 38ch;
+  }
+
+  @media (min-width: 700px) {
+    .offer-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1080px) {
+    .offer-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

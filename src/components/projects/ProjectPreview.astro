@@ -17,6 +17,8 @@ const data = project.data;
 const category = getCategory(data.category);
 const href = projectPath(locale, data.slug);
 const Heading = headingLevel;
+// Un juego se juega; una web, un SaaS o una calculadora se visitan
+const isGame = data.category === 'game';
 ---
 
 <article class="card project-card" data-reveal>
@@ -64,7 +66,12 @@ const Heading = headingLevel;
     {
       data.demoUrl ? (
         <a href={data.demoUrl} class="link-editorial" target="_blank" rel="noopener noreferrer">
-          {t('cta.openDemo')}
+          {isGame && (
+            <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M8 5.2v13.6L19 12z" fill="currentColor" />
+            </svg>
+          )}
+          {isGame ? t('cta.play') : t('cta.visit')}
         </a>
       ) : (
         /* Sin demo pública, la tarjeta lleva al código */
@@ -175,6 +182,12 @@ const Heading = headingLevel;
 
   .project-card .tag-list {
     padding: var(--space-4) var(--space-5) 0;
+  }
+
+  .play-icon {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
   }
 
   .card-actions {

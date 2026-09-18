@@ -23,7 +23,9 @@ export const ui = {
     'cta.talk': 'Cuéntanos tu idea',
     'cta.contact': 'Hablemos',
     'cta.viewProject': 'Ver proyecto',
-    'cta.openDemo': 'Abrir demo',
+    /* El enlace dice lo que va a pasar: un juego se juega, una web se visita. */
+    'cta.play': 'Jugar',
+    'cta.visit': 'Visitar',
     'cta.openRepo': 'Ver código',
 
     'categories.eyebrow': 'Qué hacemos',
@@ -75,6 +77,26 @@ export const ui = {
     'clients.title': 'Ideas de otros que también hicimos realidad.',
     'clients.text':
       'Proyectos que empezaron con alguien contándonos lo que tenía en mente y hoy pueden visitarse, utilizarse y seguir creciendo.',
+
+    'offer.eyebrow': 'Webs para negocios y creadores',
+    'offer.title': '¿Tienes un negocio y sigues sin *web*?',
+    'offer.text':
+      'Tus clientes ya te están buscando. Si no apareces, encuentran a otro. Montamos webs rápidas y claras, a precio de negocio pequeño, sin cuotas eternas ni letra pequeña.',
+    'offer.1.title': 'Te buscan y no estás',
+    'offer.1.text':
+      'Alguien escribe en Google lo que tú haces, en tu ciudad, esta misma semana. Sin web, ese cliente termina llamando a la competencia.',
+    'offer.2.title': 'Tu escaparate es prestado',
+    'offer.2.text':
+      'Una cuenta de Instagram puede caerse, cambiar las reglas o dejar de enseñarte. La web es tuya: nadie decide quién la ve.',
+    'offer.3.title': 'Contestas lo mismo cada día',
+    'offer.3.text':
+      'Horarios, precios, dónde estás, cómo reservar. Una web responde eso sola mientras tú estás trabajando.',
+    'offer.4.title': 'Y la que tienes, si la tienes…',
+    'offer.4.text':
+      'Tarda en cargar, se ve rara en el móvil y se hizo hace años. En ese punto no suma: resta confianza.',
+    'offer.cta': 'Quiero mi web',
+    'offer.note': 'Cuéntanos qué haces y te decimos qué necesitas. Sin compromiso.',
+    'offer.prefill': 'Tengo un negocio y quiero una web. Esto es lo que hago:',
 
     'studio.title': 'Nos gusta imaginar. Más aún, hacerlo realidad.',
     'studio.text':
@@ -184,7 +206,8 @@ export const ui = {
     'cta.talk': "Let's talk about your project",
     'cta.contact': "Let's talk",
     'cta.viewProject': 'View project',
-    'cta.openDemo': 'Open demo',
+    'cta.play': 'Play',
+    'cta.visit': 'Visit',
     'cta.openRepo': 'View code',
 
     'categories.eyebrow': 'What we do',
@@ -234,6 +257,26 @@ export const ui = {
     'clients.title': 'A few websites we built for clients',
     'clients.text':
       'Projects we designed and developed for others. Every one is live and can be visited.',
+
+    'offer.eyebrow': 'Websites for businesses and creators',
+    'offer.title': 'Running a business without a *website*?',
+    'offer.text':
+      'Your customers are already searching. If you are not there, they find someone else. We build fast, clear websites at small-business prices, with no endless fees and no small print.',
+    'offer.1.title': 'They search, you are missing',
+    'offer.1.text':
+      'Someone is typing what you do, in your town, this very week. With no site, that customer ends up calling your competitor.',
+    'offer.2.title': 'Your shop window is borrowed',
+    'offer.2.text':
+      'An Instagram account can go down, change its rules or stop showing you. A website is yours: nobody else decides who sees it.',
+    'offer.3.title': 'You answer the same thing daily',
+    'offer.3.text':
+      'Opening hours, prices, where you are, how to book. A website answers all of that while you get on with the work.',
+    'offer.4.title': 'And the one you have, if any…',
+    'offer.4.text':
+      'Slow to load, odd on a phone, built years ago. At that point it is not helping: it costs you trust.',
+    'offer.cta': 'I want my website',
+    'offer.note': 'Tell us what you do and we will tell you what you need. No strings attached.',
+    'offer.prefill': 'I run a business and I want a website. This is what I do:',
 
     'studio.title': 'We build product, not just screens.',
     'studio.text':
