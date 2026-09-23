@@ -739,6 +739,15 @@ button {
 }
 
 /* Cristal esmerilado: deja pasar el escenario del fondo, difuminado */
+/* Botón compacto para sitios con poco aire, como las tarjetas de proyecto.
+   Mantiene los 40px de alto mínimo para seguir siendo cómodo de pulsar. */
+.btn-sm {
+  min-height: 40px;
+  padding: 0 var(--space-4);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.04em;
+}
+
 .btn-ghost,
 .btn-secondary {
   background: var(--glass-btn);

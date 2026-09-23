@@ -65,7 +65,12 @@ const isGame = data.category === 'game';
     <a href={href} class="link-editorial">{t('cta.viewProject')}</a>
     {
       data.demoUrl ? (
-        <a href={data.demoUrl} class="link-editorial" target="_blank" rel="noopener noreferrer">
+        <a
+          href={data.demoUrl}
+          class="btn btn-ghost btn-sm card-go"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           {isGame && (
             <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <path d="M8 5.2v13.6L19 12z" fill="currentColor" />
@@ -78,7 +83,7 @@ const isGame = data.category === 'game';
         data.repositoryUrl && (
           <a
             href={data.repositoryUrl}
-            class="link-editorial"
+            class="btn btn-ghost btn-sm card-go"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -190,11 +195,19 @@ const isGame = data.category === 'game';
     flex-shrink: 0;
   }
 
+  /* El enlace interno queda en texto y la salida directa en botón: se ve
+     de un vistazo cuál de los dos te saca de la página. */
   .card-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-5);
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3) var(--space-4);
     padding: var(--space-5);
     margin-top: auto;
+  }
+
+  .card-go {
+    flex-shrink: 0;
   }
 </style>
