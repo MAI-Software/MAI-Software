@@ -87,36 +87,95 @@ button {
   overflow: hidden;
 }
 
-/* Aurora: capa lenta, reacciona a scroll y al puntero */
-.bg-scene::before {
-  content: '';
+/* --- Aurora ---
+   Tres manchas independientes que van a la deriva por su cuenta, cada una a
+   su ritmo, y que además se separan un poco al mover el ratón. Antes era
+   una sola capa estática que solo se movía con el scroll. */
+.blob {
   position: absolute;
-  inset: -25%;
-  /* Manchas grandes y de caída larga. Con la parada en el 68 % el borde del
-     degradado se notaba como un disco en pantallas anchas. */
-  background:
-    radial-gradient(58rem 44rem at 8% 0%, rgba(98, 66, 252, 0.3), transparent 82%),
-    radial-gradient(52rem 40rem at 94% 8%, rgba(16, 200, 252, 0.17), transparent 84%),
-    radial-gradient(60rem 48rem at 62% 96%, rgba(56, 130, 251, 0.2), transparent 84%);
-  transform: translate3d(0, calc(var(--scene-p, 0) * -20vh), 0);
-  will-change: transform;
+  border-radius: 50%;
+  filter: blur(70px);
+  will-change: transform, translate;
+  /* Ratón y scroll desplazan; la deriva vive en `transform`, que es una
+     propiedad distinta y se compone con esta sin pisarla. */
+  translate: calc(var(--mx, 0px) * var(--depth, 1)) calc(
+      var(--my, 0px) * var(--depth, 1) + var(--scene-p, 0) * -14vh
+    );
 }
 
-/* Rejilla: capa rápida, en sentido contrario para dar profundidad */
-.bg-scene::after {
-  content: '';
-  position: absolute;
-  inset: -10%;
-  opacity: 0.5;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
-  background-size: 72px 72px;
-  /* Elipse ancha y de caída larga: el círculo anterior recortaba la rejilla
-     con un canto visible en pantallas grandes. */
-  mask-image: radial-gradient(125% 105% at 50% 22%, black 25%, transparent 92%);
-  transform: translate3d(0, calc(var(--scene-p, 0) * 9vh), 0);
-  will-change: transform;
+.blob-1 {
+  top: -14%;
+  left: -8%;
+  width: 62vw;
+  height: 62vw;
+  max-width: 900px;
+  max-height: 900px;
+  --depth: 1.6;
+  background: radial-gradient(circle, rgba(98, 66, 252, 0.34), transparent 68%);
+}
+
+.blob-2 {
+  top: -6%;
+  right: -12%;
+  width: 52vw;
+  height: 52vw;
+  max-width: 780px;
+  max-height: 780px;
+  --depth: -1.1;
+  background: radial-gradient(circle, rgba(16, 200, 252, 0.2), transparent 68%);
+}
+
+.blob-3 {
+  bottom: -22%;
+  left: 28%;
+  width: 66vw;
+  height: 66vw;
+  max-width: 980px;
+  max-height: 980px;
+  --depth: 0.7;
+  background: radial-gradient(circle, rgba(56, 130, 251, 0.22), transparent 70%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .blob-1 {
+    animation: blob-drift-a 34s ease-in-out infinite alternate;
+  }
+
+  .blob-2 {
+    animation: blob-drift-b 46s ease-in-out infinite alternate;
+  }
+
+  .blob-3 {
+    animation: blob-drift-c 58s ease-in-out infinite alternate;
+  }
+
+  /* Recorridos cortos y lentos: se nota que el fondo respira, no que baila */
+  @keyframes blob-drift-a {
+    from {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    to {
+      transform: translate3d(6vw, 5vh, 0) scale(1.12);
+    }
+  }
+
+  @keyframes blob-drift-b {
+    from {
+      transform: translate3d(0, 0, 0) scale(1.08);
+    }
+    to {
+      transform: translate3d(-7vw, 7vh, 0) scale(0.94);
+    }
+  }
+
+  @keyframes blob-drift-c {
+    from {
+      transform: translate3d(0, 0, 0) scale(0.96);
+    }
+    to {
+      transform: translate3d(5vw, -6vh, 0) scale(1.14);
+    }
+  }
 }
 
 /* Polvo de marca: lo pinta motion.ts sobre este lienzo */

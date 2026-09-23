@@ -301,6 +301,12 @@ const onScroll = perFrame(() => {
   }
 });
 
+/* --- Escenario que sigue al puntero ---
+   El objetivo lo fija el puntero y el valor real lo persigue con suavizado
+   dentro del bucle de partículas: así el fondo llega tarde y con inercia,
+   en vez de pegarse al cursor. */
+const scenePointer = { tx: 0, ty: 0, x: 0, y: 0 };
+
 /* --- Campo de partículas ---
    Polvo de marca a la deriva. Vive en un canvas dentro del escenario fijo,
    así persiste entre páginas y no se repinta con cada navegación. */
@@ -362,7 +368,17 @@ function setupParticles() {
     ctx.globalAlpha = 1;
   };
 
+  const scene = document.querySelector<HTMLElement>('.bg-scene');
+
+  const easeScene = () => {
+    scenePointer.x += (scenePointer.tx - scenePointer.x) * 0.045;
+    scenePointer.y += (scenePointer.ty - scenePointer.y) * 0.045;
+    scene?.style.setProperty('--mx', `${scenePointer.x.toFixed(1)}px`);
+    scene?.style.setProperty('--my', `${scenePointer.y.toFixed(1)}px`);
+  };
+
   const step = (time: number) => {
+    easeScene();
     for (const d of dots) {
       d.x += d.vx;
       d.y += d.vy;
@@ -428,6 +444,10 @@ function setupGlobal() {
     const glow = document.querySelector<HTMLElement>('.cursor-glow');
     glow?.style.setProperty('--cursor-x', `${ev.clientX}px`);
     glow?.style.setProperty('--cursor-y', `${ev.clientY}px`);
+
+    // Recorrido corto: las manchas se separan, no persiguen al cursor
+    scenePointer.tx = (ev.clientX / window.innerWidth - 0.5) * 34;
+    scenePointer.ty = (ev.clientY / window.innerHeight - 0.5) * 26;
   });
 
   window.addEventListener('pointermove', onPointer, { passive: true });
