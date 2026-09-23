@@ -17,14 +17,19 @@ const escapeHtml = (value: string) => value.replace(/[&<>"]/g, (c) => ESCAPES[c]
  * esa opción, un texto sin marcar se devuelve tal cual.
  */
 export function highlightTitle(title: string, lastWordFallback = false): string {
+  // Un salto de línea en el texto corta el titular ahí
+  const br = (value: string) => value.replace(/\n/g, '<br />');
+
   if (title.includes('*')) {
-    return escapeHtml(title).replace(
-      /\*([^*]+)\*/g,
-      (_, word: string) => `<span class="grad-text">${word}</span>`,
+    return br(
+      escapeHtml(title).replace(
+        /\*([^*]+)\*/g,
+        (_, word: string) => `<span class="grad-text">${word}</span>`,
+      ),
     );
   }
 
-  if (!lastWordFallback) return escapeHtml(title);
+  if (!lastWordFallback) return br(escapeHtml(title));
 
   const cut = title.lastIndexOf(' ');
   if (cut === -1) return `<span class="grad-text">${escapeHtml(title)}</span>`;

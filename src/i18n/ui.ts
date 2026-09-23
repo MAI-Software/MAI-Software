@@ -98,7 +98,7 @@ export const ui = {
     'offer.note': 'Cuéntanos qué haces y te decimos qué necesitas. Sin compromiso.',
     'offer.prefill': 'Tengo un negocio y quiero una web. Esto es lo que hago:',
 
-    'studio.title': 'Nos gusta imaginar. Más aún, hacerlo realidad.',
+    'studio.title': 'Nos gusta *imaginar*.\nMás aún, hacerlo realidad.',
     'studio.text':
       'Hay proyectos que empiezan por necesidad, otros por curiosidad y algunos simplemente porque queríamos descubrir si podíamos hacerlos. Diseño y tecnología son las herramientas. Crear algo que antes no existía es la parte que nos mueve.',
     'studio.link': 'Conocer MAI',

@@ -2,6 +2,7 @@
 import type { Locale } from '../../data/company';
 import { useTranslations } from '../../i18n/utils';
 import { withBase } from '../../lib/base';
+import { highlightTitle } from '../../lib/highlight';
 
 interface Props {
   locale: Locale;
@@ -15,7 +16,7 @@ const studioHref = withBase(locale === 'es' ? '/estudio' : '/en/studio');
 <section class="section section-line">
   <div class="container studio-inner" data-reveal-group>
     <span class="brand-rule" aria-hidden="true" data-reveal></span>
-    <h2 data-reveal>{t('studio.title')}</h2>
+    <h2 data-reveal set:html={highlightTitle(t('studio.title'))} />
     <p class="lead" data-reveal>{t('studio.text')}</p>
     <a href={studioHref} class="link-editorial" data-reveal>{t('studio.link')}</a>
   </div>
@@ -31,8 +32,10 @@ const studioHref = withBase(locale === 'es' ? '/estudio' : '/en/studio');
     justify-items: start;
   }
 
+  /* Ancho para que cada frase ocupe su línea: el corte lo marca el texto,
+     no el ancho de la caja. */
   .studio-inner h2 {
-    max-width: 18ch;
+    max-width: 30ch;
   }
 
   .studio-inner .lead {
