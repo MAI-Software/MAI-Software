@@ -345,37 +345,61 @@ function setupParticles() {
     const octx = off.getContext('2d');
     if (!octx) return [];
 
-    off.width = Math.max(320, Math.round(w * 0.6));
-    off.height = Math.round(off.width * 0.42);
+    off.width = 900;
+    off.height = 360;
 
-    const size = Math.round(off.height * 0.78);
     octx.fillStyle = '#fff';
     octx.textAlign = 'center';
     octx.textBaseline = 'middle';
-    octx.font = `700 ${size}px 'Space Grotesk Variable', 'Space Grotesk', system-ui, sans-serif`;
+    octx.font = `700 260px 'Space Grotesk Variable', 'Space Grotesk', system-ui, sans-serif`;
     octx.fillText('MAI', off.width / 2, off.height / 2);
 
     const { data } = octx.getImageData(0, 0, off.width, off.height);
-    const hits: { x: number; y: number }[] = [];
-    const step = 3;
-    for (let y = 0; y < off.height; y += step) {
-      for (let x = 0; x < off.width; x += step) {
-        if (data[(y * off.width + x) * 4 + 3]! > 128) hits.push({ x, y });
+    const filled = (x: number, y: number) => data[(y * off.width + x) * 4 + 3]! > 160;
+
+    // Rectángulo real de las letras: el texto no llena el lienzo
+    let minX = off.width;
+    let maxX = 0;
+    let minY = off.height;
+    let maxY = 0;
+    let area = 0;
+    for (let y = 0; y < off.height; y += 2) {
+      for (let x = 0; x < off.width; x += 2) {
+        if (!filled(x, y)) continue;
+        area += 4;
+        if (x < minX) minX = x;
+        if (x > maxX) maxX = x;
+        if (y < minY) minY = y;
+        if (y > maxY) maxY = y;
       }
     }
-    if (hits.length === 0) return [];
+    if (area === 0) return [];
 
-    // Se reparten los puntos disponibles entre los pétalos que haya
-    const scale = Math.min(w * 0.52, 560) / off.width;
-    const left = (w - off.width * scale) / 2;
-    const top = (h - off.height * scale) / 2;
-
-    const picked: { x: number; y: number }[] = [];
-    for (let i = 0; i < count; i++) {
-      const hit = hits[Math.floor((i / count) * hits.length)]!;
-      picked.push({ x: left + hit.x * scale, y: top + hit.y * scale });
+    /* Rejilla regular dentro del trazo. Coger puntos sueltos de la lista
+       dejaba huecos y grumos; así el relleno es parejo, como una trama. */
+    const gridStep = Math.max(2, Math.round(Math.sqrt(area / count)));
+    const points: { x: number; y: number }[] = [];
+    for (let y = minY; y <= maxY; y += gridStep) {
+      for (let x = minX; x <= maxX; x += gridStep) {
+        if (filled(x, y)) points.push({ x, y });
+      }
     }
-    return picked;
+    if (points.length === 0) return [];
+
+    const glyphW = maxX - minX || 1;
+    const glyphH = maxY - minY || 1;
+    const scale = Math.min((w * 0.62) / glyphW, (h * 0.42) / glyphH);
+    const left = (w - glyphW * scale) / 2;
+    const top = (h - glyphH * scale) / 2;
+
+    // Si sobran pétalos, se reparten repitiendo puntos del trazo
+    return Array.from({ length: count }, (_, i) => {
+      const point = points[i % points.length]!;
+      return {
+        x: left + (point.x - minX) * scale,
+        y: top + (point.y - minY) * scale,
+      };
+    });
   }
 
   const build = () => {
@@ -386,14 +410,14 @@ function setupParticles() {
     canvas.height = Math.round(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    // Hacen falta bastantes para que la palabra se lea, pero no tantos
-    // como para que el fondo parezca ruido.
-    const count = Math.min(260, Math.max(120, Math.round((w * h) / 7000)));
+    /* La palabra manda en el número: con pocos pétalos el trazo queda roto.
+       Sueltos se ven pequeños y tenues, así que no saturan el fondo. */
+    const count = Math.min(1100, Math.max(420, Math.round((w * h) / 1200)));
 
     petals = Array.from({ length: count }, () => ({
       x: Math.random() * w,
       y: Math.random() * h,
-      r: 1.1 + Math.random() * 2.2,
+      r: 1 + Math.random() * 1.4,
       vx: (Math.random() - 0.5) * 0.12,
       vy: -0.04 - Math.random() * 0.1,
       a: 0.18 + Math.random() * 0.34,
@@ -406,8 +430,12 @@ function setupParticles() {
       ty: 0,
     }));
 
-    const targets = wordTargets(petals.length);
-    petals.forEach((petal, i) => {
+    /* Emparejar por posición horizontal evita que los pétalos se crucen de
+       lado a lado al juntarse; el trazo se forma sin remolinos. */
+    const targets = wordTargets(petals.length).sort((a, b) => a.x - b.x);
+    const order = petals.map((_, i) => i).sort((a, b) => petals[a]!.x - petals[b]!.x);
+    order.forEach((petalIndex, i) => {
+      const petal = petals[petalIndex]!;
       const target = targets[i];
       petal.tx = target ? target.x : petal.x;
       petal.ty = target ? target.y : petal.y;
@@ -447,17 +475,36 @@ function setupParticles() {
 
   const draw = (time: number, gather: number) => {
     ctx.clearRect(0, 0, w, h);
+
+    /* Formados se suman las luces: los puntos que se solapan encienden el
+       trazo y la palabra se lee como una pieza, no como confeti. */
+    ctx.globalCompositeOperation = gather > 0.2 ? 'lighter' : 'source-over';
+
     for (const p of petals) {
       const twinkle = 0.85 + 0.15 * Math.sin(time / 3200 + p.phase);
-      // Al agruparse suben de brillo: la palabra tiene que leerse
-      ctx.globalAlpha = p.a * twinkle * (1 + gather * 0.9);
+      ctx.globalAlpha = Math.min(1, p.a * twinkle * (1 + gather * 2.6));
       ctx.fillStyle = `rgb(${p.color})`;
       ctx.beginPath();
-      // Pétalo: elipse girada, no un punto redondo
-      ctx.ellipse(p.x, p.y, p.r * 1.9, p.r * 0.85, p.angle, 0, Math.PI * 2);
+
+      /* Suelto es un pétalo alargado y girado; al formar la palabra se
+         redondea y encoge, que es lo que la deja nítida. */
+      const long = p.r * (1.9 - gather * 0.45);
+      const short = p.r * (0.85 + gather * 0.75);
+      ctx.ellipse(p.x, p.y, long, short, p.angle * (1 - gather), 0, Math.PI * 2);
       ctx.fill();
+
+      /* Segundo disco, grande y tenue: da halo sin el coste de shadowBlur
+         multiplicado por mil puntos. */
+      if (gather > 0.5) {
+        ctx.globalAlpha = 0.16 * gather;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, short * 2.6, 0, Math.PI * 2);
+        ctx.fill();
+      }
     }
+
     ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
   };
 
   const step = (time: number) => {
@@ -467,13 +514,13 @@ function setupParticles() {
     for (const p of petals) {
       if (gather > 0.001) {
         // Cuanto más avanza el ciclo, más manda el destino
-        const pull = 0.02 + gather * 0.1;
+        const pull = 0.03 + gather * 0.14;
         p.x += (p.tx - p.x) * pull * gather;
         p.y += (p.ty - p.y) * pull * gather;
       }
 
-      // La deriva nunca se apaga del todo: incluso formados, respiran
-      const free = 1 - gather * 0.85;
+      // Formados casi no derivan: si no, el trazo se emborrona
+      const free = 1 - gather * 0.97;
       p.x += (p.vx + Math.sin(time / 2600 + p.phase) * p.sway * 0.35) * free;
       p.y += p.vy * free;
       p.angle += p.spin * free;
@@ -506,6 +553,13 @@ function setupParticles() {
   };
 
   const boot = () => {
+    /* Si se mide antes de que el lienzo tenga tamaño, todo se calcula sobre
+       cero y la palabra sale minúscula y descolocada. Se espera un frame. */
+    if (canvas.clientWidth === 0 || canvas.clientHeight === 0) {
+      requestAnimationFrame(boot);
+      return;
+    }
+
     build();
     if (reduced) draw(0, 0);
     else start();
