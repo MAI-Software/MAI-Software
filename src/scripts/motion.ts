@@ -307,6 +307,9 @@ const onScroll = perFrame(() => {
    en vez de pegarse al cursor. */
 const scenePointer = { tx: 0, ty: 0, x: 0, y: 0 };
 
+/** Posición del puntero en pantalla, para que las partículas se aparten. */
+const pointer = { x: -9999, y: -9999, active: false };
+
 /* --- Campo de partículas ---
    Polvo de marca a la deriva. Vive en un canvas dentro del escenario fijo,
    así persiste entre páginas y no se repinta con cada navegación. */
@@ -315,7 +318,31 @@ function setupParticles() {
   const ctx = canvas?.getContext('2d');
   if (!canvas || !ctx) return;
 
-  const COLORS = ['98, 66, 252', '56, 130, 251', '16, 200, 252'];
+  type Rgb = [number, number, number];
+
+  // Los tres colores de marca, para los pétalos sueltos
+  const FREE_COLORS: Rgb[] = [
+    [98, 66, 252],
+    [56, 130, 251],
+    [16, 200, 252],
+  ];
+
+  // El degradado del logotipo, de violeta a cian de izquierda a derecha
+  const WORD_STOPS: Rgb[] = [
+    [98, 66, 252],
+    [56, 130, 251],
+    [16, 200, 252],
+  ];
+
+  const gradientAt = (t: number): Rgb => {
+    const clamped = Math.min(1, Math.max(0, t));
+    const span = 1 / (WORD_STOPS.length - 1);
+    const i = Math.min(WORD_STOPS.length - 2, Math.floor(clamped / span));
+    const k = (clamped - i * span) / span;
+    const a = WORD_STOPS[i]!;
+    const b = WORD_STOPS[i + 1]!;
+    return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k, a[2] + (b[2] - a[2]) * k];
+  };
 
   type Petal = {
     x: number;
@@ -328,22 +355,36 @@ function setupParticles() {
     sway: number;
     angle: number;
     spin: number;
-    color: string;
+    free: Rgb;
+    word: Rgb;
     tx: number;
     ty: number;
+    /** Separación por el puntero, suavizada */
+    rx: number;
+    ry: number;
   };
 
   let petals: Petal[] = [];
   let w = 0;
   let h = 0;
+  /* Lado de la celda en píxeles de pantalla. Formados, cada pétalo pinta un
+     cuadrado de este tamaño, así las celdas se tocan y la palabra sale
+     maciza en vez de punteada. */
+  let cellPx = 10;
+  let dpr = 1;
+  /* La palabra nítida, rasterizada una sola vez con la tipografía real.
+     Los pétalos son el polvo que la acompaña; el trazo limpio lo pone esta
+     imagen, no la suma de partículas. */
+  let wordImage: HTMLCanvasElement | null = null;
+  let wordBox = { x: 0, y: 0, w: 0, h: 0 };
 
-  /* Puntos de la palabra: se dibuja "MAI" en un lienzo aparte y se leen los
-     píxeles pintados. Así la forma sale de la tipografía real y no de unas
-     coordenadas escritas a mano. */
-  function wordTargets(count: number): { x: number; y: number }[] {
+  /* La forma sale de la tipografía real: se dibuja "MAI" en un lienzo aparte
+     y se leen los píxeles pintados. */
+  function wordTargets(count: number): { points: { x: number; y: number }[]; cell: number } {
+    const empty = { points: [] as { x: number; y: number }[], cell: 10 };
     const off = document.createElement('canvas');
-    const octx = off.getContext('2d');
-    if (!octx) return [];
+    const octx = off.getContext('2d', { willReadFrequently: true });
+    if (!octx) return empty;
 
     off.width = 900;
     off.height = 360;
@@ -373,46 +414,87 @@ function setupParticles() {
         if (y > maxY) maxY = y;
       }
     }
-    if (area === 0) return [];
+    if (area === 0) return empty;
 
-    /* Rejilla regular dentro del trazo. Coger puntos sueltos de la lista
-       dejaba huecos y grumos; así el relleno es parejo, como una trama. */
     const gridStep = Math.max(2, Math.round(Math.sqrt(area / count)));
-    const points: { x: number; y: number }[] = [];
+    const cells: { x: number; y: number }[] = [];
     for (let y = minY; y <= maxY; y += gridStep) {
       for (let x = minX; x <= maxX; x += gridStep) {
-        if (filled(x, y)) points.push({ x, y });
+        if (filled(x, y)) cells.push({ x, y });
       }
     }
-    if (points.length === 0) return [];
+    if (cells.length === 0) return empty;
 
     const glyphW = maxX - minX || 1;
     const glyphH = maxY - minY || 1;
-    const scale = Math.min((w * 0.62) / glyphW, (h * 0.42) / glyphH);
+    const scale = Math.min((w * 0.54) / glyphW, (h * 0.34) / glyphH);
     const left = (w - glyphW * scale) / 2;
     const top = (h - glyphH * scale) / 2;
 
-    // Si sobran pétalos, se reparten repitiendo puntos del trazo
-    return Array.from({ length: count }, (_, i) => {
-      const point = points[i % points.length]!;
+    const points = Array.from({ length: count }, (_, i) => {
+      const cell = cells[i % cells.length]!;
       return {
-        x: left + (point.x - minX) * scale,
-        y: top + (point.y - minY) * scale,
+        x: left + (cell.x - minX) * scale,
+        y: top + (cell.y - minY) * scale,
       };
     });
+
+    /* Se recorta el trazo a su rectángulo y se guarda a resolución de
+       pantalla: así la palabra sale con el filo de la tipografía. */
+    const box = { x: left, y: top, w: glyphW * scale, h: glyphH * scale };
+    const wc = document.createElement('canvas');
+    wc.width = Math.max(1, Math.round(box.w * dpr));
+    wc.height = Math.max(1, Math.round(box.h * dpr));
+    const wctx = wc.getContext('2d');
+    if (wctx) {
+      wctx.drawImage(
+        off,
+        minX,
+        minY,
+        glyphW,
+        glyphH,
+        0,
+        0,
+        wc.width,
+        wc.height,
+      );
+      // El blanco del muestreo se tiñe con el degradado de marca
+      wctx.globalCompositeOperation = 'source-in';
+      const grad = wctx.createLinearGradient(0, 0, wc.width, 0);
+      grad.addColorStop(0, 'rgb(98, 66, 252)');
+      grad.addColorStop(0.52, 'rgb(56, 130, 251)');
+      grad.addColorStop(1, 'rgb(16, 200, 252)');
+      wctx.fillStyle = grad;
+      wctx.fillRect(0, 0, wc.width, wc.height);
+    }
+    wordImage = wc;
+    wordBox = box;
+
+    return { points, cell: gridStep * scale };
+  }
+
+  /** Cuántos pétalos aguanta el aparato sin despeinarse. */
+  function petalBudget() {
+    const area = w * h;
+    const memory = (navigator as { deviceMemory?: number }).deviceMemory ?? 4;
+    let count = Math.round(area / 1400);
+
+    if (!finePointer) count = Math.round(count * 0.7); // táctil: menos GPU
+    if (memory <= 2) count = Math.round(count * 0.5);
+    else if (memory <= 4) count = Math.round(count * 0.75);
+
+    return Math.min(1000, Math.max(220, count));
   }
 
   const build = () => {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    dpr = Math.min(window.devicePixelRatio || 1, finePointer ? 2 : 1.5);
     w = canvas.clientWidth;
     h = canvas.clientHeight;
     canvas.width = Math.round(w * dpr);
     canvas.height = Math.round(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    /* La palabra manda en el número: con pocos pétalos el trazo queda roto.
-       Sueltos se ven pequeños y tenues, así que no saturan el fondo. */
-    const count = Math.min(1100, Math.max(420, Math.round((w * h) / 1200)));
+    const count = petalBudget();
 
     petals = Array.from({ length: count }, () => ({
       x: Math.random() * w,
@@ -425,20 +507,33 @@ function setupParticles() {
       sway: 0.25 + Math.random() * 0.5,
       angle: Math.random() * Math.PI,
       spin: (Math.random() - 0.5) * 0.004,
-      color: COLORS[Math.floor(Math.random() * COLORS.length)]!,
+      free: FREE_COLORS[Math.floor(Math.random() * FREE_COLORS.length)]!,
+      word: [255, 255, 255] as Rgb,
       tx: 0,
       ty: 0,
+      rx: 0,
+      ry: 0,
     }));
 
     /* Emparejar por posición horizontal evita que los pétalos se crucen de
        lado a lado al juntarse; el trazo se forma sin remolinos. */
-    const targets = wordTargets(petals.length).sort((a, b) => a.x - b.x);
+    const { points, cell } = wordTargets(petals.length);
+    cellPx = cell;
+    const targets = points.sort((a, b) => a.x - b.x);
     const order = petals.map((_, i) => i).sort((a, b) => petals[a]!.x - petals[b]!.x);
+
+    const xs = targets.map((t) => t.x);
+    const minTx = xs.length ? Math.min(...xs) : 0;
+    const maxTx = xs.length ? Math.max(...xs) : 1;
+    const spanTx = maxTx - minTx || 1;
+
     order.forEach((petalIndex, i) => {
       const petal = petals[petalIndex]!;
       const target = targets[i];
       petal.tx = target ? target.x : petal.x;
       petal.ty = target ? target.y : petal.y;
+      // Su color dentro de la palabra depende de dónde cae en el degradado
+      petal.word = gradientAt((petal.tx - minTx) / spanTx);
     });
   };
 
@@ -473,47 +568,52 @@ function setupParticles() {
     scene?.style.setProperty('--my', `${scenePointer.y.toFixed(1)}px`);
   };
 
+  const rounded = typeof ctx.roundRect === 'function';
+
   const draw = (time: number, gather: number) => {
     ctx.clearRect(0, 0, w, h);
 
-    /* Formados se suman las luces: los puntos que se solapan encienden el
-       trazo y la palabra se lee como una pieza, no como confeti. */
-    ctx.globalCompositeOperation = gather > 0.2 ? 'lighter' : 'source-over';
+    /* La palabra aparece cuando los pétalos ya están casi en su sitio, así
+       parece que ellos la componen. Translúcida: es fondo, no contenido. */
+    if (wordImage && gather > 0.5) {
+      const reveal = Math.min(1, (gather - 0.5) / 0.35);
+      ctx.globalAlpha = reveal * 0.26;
+      ctx.drawImage(wordImage, wordBox.x, wordBox.y, wordBox.w, wordBox.h);
+    }
 
     for (const p of petals) {
+      const x = p.x + p.rx;
+      const y = p.y + p.ry;
       const twinkle = 0.85 + 0.15 * Math.sin(time / 3200 + p.phase);
-      ctx.globalAlpha = Math.min(1, p.a * twinkle * (1 + gather * 2.6));
-      ctx.fillStyle = `rgb(${p.color})`;
+
+      const r = p.free[0] + (p.word[0] - p.free[0]) * gather;
+      const g = p.free[1] + (p.word[1] - p.free[1]) * gather;
+      const b = p.free[2] + (p.word[2] - p.free[2]) * gather;
+      ctx.fillStyle = `rgb(${r | 0}, ${g | 0}, ${b | 0})`;
+
+      // Formados bajan de intensidad: el protagonismo es del trazo limpio
+      ctx.globalAlpha = p.a * twinkle * (1 - gather * 0.35);
+
       ctx.beginPath();
-
-      /* Suelto es un pétalo alargado y girado; al formar la palabra se
-         redondea y encoge, que es lo que la deja nítida. */
-      const long = p.r * (1.9 - gather * 0.45);
-      const short = p.r * (0.85 + gather * 0.75);
-      ctx.ellipse(p.x, p.y, long, short, p.angle * (1 - gather), 0, Math.PI * 2);
+      const long = p.r * (1.9 - gather * 0.9);
+      const short = p.r * (0.85 + gather * 0.15);
+      ctx.ellipse(x, y, long, short, p.angle * (1 - gather), 0, Math.PI * 2);
       ctx.fill();
-
-      /* Segundo disco, grande y tenue: da halo sin el coste de shadowBlur
-         multiplicado por mil puntos. */
-      if (gather > 0.5) {
-        ctx.globalAlpha = 0.16 * gather;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, short * 2.6, 0, Math.PI * 2);
-        ctx.fill();
-      }
     }
 
     ctx.globalAlpha = 1;
-    ctx.globalCompositeOperation = 'source-over';
   };
+
+  const REPEL_R = 150;
+  const REPEL_MAX = 34;
 
   const step = (time: number) => {
     easeScene();
     const gather = gatherAt(time);
+    const repelOn = finePointer && gather > 0.35 && pointer.active;
 
     for (const p of petals) {
       if (gather > 0.001) {
-        // Cuanto más avanza el ciclo, más manda el destino
         const pull = 0.03 + gather * 0.14;
         p.x += (p.tx - p.x) * pull * gather;
         p.y += (p.ty - p.y) * pull * gather;
@@ -524,6 +624,23 @@ function setupParticles() {
       p.x += (p.vx + Math.sin(time / 2600 + p.phase) * p.sway * 0.35) * free;
       p.y += p.vy * free;
       p.angle += p.spin * free;
+
+      /* Con la palabra formada, el puntero aparta las celdas cercanas y
+         estas vuelven solas al soltarlas. */
+      let wantX = 0;
+      let wantY = 0;
+      if (repelOn) {
+        const dx = p.x - pointer.x;
+        const dy = p.y - pointer.y;
+        const dist = Math.hypot(dx, dy);
+        if (dist < REPEL_R && dist > 0.01) {
+          const force = (1 - dist / REPEL_R) ** 2 * REPEL_MAX * gather;
+          wantX = (dx / dist) * force;
+          wantY = (dy / dist) * force;
+        }
+      }
+      p.rx += (wantX - p.rx) * 0.16;
+      p.ry += (wantY - p.ry) * 0.16;
 
       if (p.y < -12) {
         p.y = h + 12;
@@ -603,6 +720,10 @@ function setupGlobal() {
     // Recorrido corto: las manchas se separan, no persiguen al cursor
     scenePointer.tx = (ev.clientX / window.innerWidth - 0.5) * 34;
     scenePointer.ty = (ev.clientY / window.innerHeight - 0.5) * 26;
+
+    pointer.x = ev.clientX;
+    pointer.y = ev.clientY;
+    pointer.active = true;
   });
 
   window.addEventListener('pointermove', onPointer, { passive: true });
@@ -622,9 +743,10 @@ function setupGlobal() {
   document.addEventListener('pointerenter', () =>
     document.querySelector('.cursor-glow')?.classList.add('is-on'),
   );
-  document.addEventListener('pointerleave', () =>
-    document.querySelector('.cursor-glow')?.classList.remove('is-on'),
-  );
+  document.addEventListener('pointerleave', () => {
+    document.querySelector('.cursor-glow')?.classList.remove('is-on');
+    pointer.active = false;
+  });
   document.querySelector('.cursor-glow')?.classList.add('is-on');
 }
 
