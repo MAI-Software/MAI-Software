@@ -10,6 +10,7 @@ import { getCategory } from '../../../data/categories';
 import { useTranslations, projectsPath, contactPath } from '../../../i18n/utils';
 import { withBase } from '../../../lib/base';
 import { getProjects, getProjectNeighbors } from '../../../lib/projects';
+import { highlightTitle } from '../../../lib/highlight';
 
 export async function getStaticPaths() {
   const projects = await getProjects('en');
@@ -102,7 +103,7 @@ const { prev, next } = await getProjectNeighbors(locale, data.slug);
       <ProjectNavigation prev={prev} next={next} locale={locale} />
 
       <div class="project-contact">
-        <h2>{t('final.title')}</h2>
+        <h2 set:html={highlightTitle(t('final.title'))} />
         <a href={contactPath(locale)} class="btn btn-primary">{t('cta.contact')}</a>
       </div>
     </div>

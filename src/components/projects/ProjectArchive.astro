@@ -5,6 +5,7 @@ import type { CategoryId } from '../../data/categories';
 import { useTranslations, projectsPath, contactPath } from '../../i18n/utils';
 import { categories } from '../../data/categories';
 import ProjectPreview from './ProjectPreview.astro';
+import { highlightTitle } from '../../lib/highlight';
 
 interface Props {
   locale: Locale;
@@ -31,7 +32,7 @@ const filters = [
 <section class="section archive">
   <div class="container">
     <header class="archive-head" data-reveal>
-      <h1>{title}</h1>
+      <h1 set:html={highlightTitle(title)} />
       <p class="lead">{intro}</p>
 
       <nav class="archive-filters" aria-label={t('projects.filter.all')}>

@@ -4,6 +4,7 @@ import ContactSection from '../components/home/ContactSection.astro';
 import { company } from '../data/company';
 import { categories } from '../data/categories';
 import { useTranslations } from '../i18n/utils';
+import { highlightTitle } from '../lib/highlight';
 
 const locale = 'es';
 const t = useTranslations(locale);
@@ -27,12 +28,12 @@ const principles = [
     <div class="container studio-page">
       <header class="studio-head">
         <span class="brand-rule" aria-hidden="true"></span>
-        <h1>{t('studio.page.title')}</h1>
+        <h1 set:html={highlightTitle(t('studio.page.title'))} />
         <p class="lead">{t('studio.page.intro')}</p>
       </header>
 
       <div class="studio-block">
-        <h2>{t('studio.areas.title')}</h2>
+        <h2 set:html={highlightTitle(t('studio.areas.title'))} />
         <ul class="areas-list">
           {
             categories.map((cat) => (

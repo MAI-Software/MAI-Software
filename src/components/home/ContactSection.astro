@@ -2,6 +2,7 @@
 import { company, type Locale } from '../../data/company';
 import { useTranslations, contactPath } from '../../i18n/utils';
 import ContactForm from '../global/ContactForm.astro';
+import { highlightTitle } from '../../lib/highlight';
 
 interface Props {
   locale: Locale;
@@ -21,7 +22,7 @@ const hasForm = company.contact.web3formsKey !== '';
       <div class="contact-inner">
         <div class="contact-copy" data-reveal-group>
           <p class="eyebrow" data-reveal>{t('cta.contact')}</p>
-          <h2 data-reveal>{t('final.title')}</h2>
+          <h2 data-reveal set:html={highlightTitle(t('final.title'))} />
           <p class="lead" data-reveal>{t('contact.text')}</p>
 
           {

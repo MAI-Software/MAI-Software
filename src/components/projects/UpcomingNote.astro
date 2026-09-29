@@ -1,6 +1,7 @@
 ---
 import type { Locale } from '../../data/company';
 import { useTranslations, contactPath } from '../../i18n/utils';
+import { highlightTitle } from '../../lib/highlight';
 
 interface Props {
   locale: Locale;
@@ -18,7 +19,7 @@ const href = `${contactPath(locale)}?aviso=${encodeURIComponent(project)}`;
 
 <aside class="upcoming" data-reveal>
   <p class="badge badge-soon">{t('projects.soon')}</p>
-  <h2>{t('upcoming.title')}</h2>
+  <h2 set:html={highlightTitle(t('upcoming.title'))} />
   <p class="upcoming-text">{text}</p>
   <a href={href} class="btn btn-primary">{t('upcoming.cta')}</a>
 </aside>

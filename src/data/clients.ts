@@ -33,4 +33,17 @@ export const clientSites: ClientSite[] = [
       en: 'Piccolo Teatro de la Toscana home page with an actress on stage',
     },
   },
+  {
+    name: 'Daniel Calvo Molina',
+    url: 'https://dani-entrenador-personal.pages.dev/',
+    tagline: {
+      es: 'Web de un entrenador personal online: titulación, servicios y contacto directo.',
+      en: 'Site for an online personal trainer: credentials, services and direct contact.',
+    },
+    image: '/clients/dani-entrenador-personal.webp',
+    imageAlt: {
+      es: 'Portada de Daniel Calvo Molina, entrenador personal online',
+      en: 'Daniel Calvo Molina home page, online personal trainer',
+    },
+  },
 ];

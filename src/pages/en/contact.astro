@@ -4,6 +4,7 @@ import ContactForm from '../../components/global/ContactForm.astro';
 import LiveLinks from '../../components/global/LiveLinks.astro';
 import { company } from '../../data/company';
 import { useTranslations } from '../../i18n/utils';
+import { highlightTitle } from '../../lib/highlight';
 
 const locale = 'en';
 const t = useTranslations(locale);
@@ -21,7 +22,7 @@ const hasForm = company.contact.web3formsKey !== '';
     <div class="container">
       <header class="contact-head" data-reveal>
         <span class="brand-rule" aria-hidden="true"></span>
-        <h1>{t('contact.title')}</h1>
+        <h1 set:html={highlightTitle(t('contact.title'))} />
         <p class="lead">{t('contact.text')}</p>
       </header>
 

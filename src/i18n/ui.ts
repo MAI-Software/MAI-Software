@@ -56,7 +56,7 @@ export const ui = {
     'feed.all': 'Ver todos los proyectos',
 
     'process.eyebrow': 'Cómo trabajamos',
-    'process.title': 'Así hacemos que una idea cobre vida.',
+    'process.title': 'Así hacemos que una idea cobre *vida*.',
     'process.1.title': 'Entender',
     'process.1.text':
       'Primero escuchamos. Entendemos la idea, qué problema intenta resolver y qué tendría que pasar para que merezca la pena construirla.',
@@ -76,8 +76,8 @@ export const ui = {
     'process.3.b2': 'Se ajusta con lo aprendido',
     'process.3.b3': 'Preparado para seguir creciendo',
 
-    'clients.eyebrow': 'También construimos para otros',
-    'clients.title': 'Ideas de otros que también hicimos realidad.',
+    'clients.eyebrow': 'Construimos para otros',
+    'clients.title': 'Ideas de otros que hicimos *realidad*.',
     'clients.text':
       'Proyectos que empezaron con alguien contándonos lo que tenía en mente y hoy pueden visitarse, utilizarse y seguir creciendo.',
 
@@ -106,9 +106,9 @@ export const ui = {
       'Hay proyectos que empiezan por necesidad, otros por curiosidad y algunos simplemente porque queríamos descubrir si podíamos hacerlos. Diseño y tecnología son las herramientas. Crear algo que antes no existía es la parte que nos mueve.',
     'studio.link': 'Conocer MAI',
 
-    'final.title': '¿Qué idea tienes entre manos?',
+    'final.title': '¿Qué idea tienes entre *manos*?',
 
-    'projects.title': 'Ideas que ya existen.',
+    'projects.title': 'Ideas que ya *existen*.',
     'projects.intro':
       'Webs, videojuegos, herramientas y productos digitales que alguna vez fueron solo una idea y que hoy puedes abrir, probar, utilizar o jugar.',
     'projects.filter.all': 'Todos',
@@ -126,7 +126,7 @@ export const ui = {
     'projects.live': 'En vivo',
     'projects.soon': 'Próximamente',
 
-    'studio.page.title': 'Hay ideas que merecen salir de la cabeza.',
+    'studio.page.title': 'Hay ideas que merecen salir de la *cabeza*.',
     'studio.page.intro':
       'MAI nació de las ganas de crear cosas, aprender construyendo y convertir ideas en proyectos que otras personas pudieran usar, probar o jugar.',
     'studio.principles.title': 'Cómo pensamos',
@@ -135,12 +135,12 @@ export const ui = {
     'studio.principle.3': 'Curiosidad. Muchas ideas buenas empiezan preguntándonos qué pasaría si probáramos algo distinto.',
     'studio.principle.4': 'Evolución. Publicar no es terminar: es empezar a descubrir qué puede llegar a ser un proyecto.',
     'studio.principle.5': 'La tecnología es el medio, nunca el punto de partida.',
-    'studio.areas.title': 'Una idea puede tomar muchas formas.',
+    'studio.areas.title': 'Una idea puede tomar muchas *formas*.',
     'studio.tech.title': 'Con qué lo hacemos',
     'studio.tech.text':
       'No empezamos por la tecnología: empezamos por entender qué queremos conseguir. Después elegimos herramientas ligeras y rápidas, normalmente TypeScript y Astro, según lo que pida cada proyecto.',
 
-    'contact.title': '¿Qué idea tienes entre manos?',
+    'contact.title': '¿Qué idea tienes entre *manos*?',
     'contact.text':
       'Puede ser una web, una herramienta, un juego o algo que todavía no tenga nombre. Cuéntanos qué tienes en mente y vemos cómo hacerlo realidad.',
     'contact.email.pending':
@@ -158,7 +158,7 @@ export const ui = {
     'form.error': 'No se ha podido enviar. Inténtalo de nuevo o escríbenos por GitHub.',
     'form.required': 'Obligatorio',
 
-    'upcoming.title': 'Lo próximo: acceso con Google',
+    'upcoming.title': 'Lo próximo: acceso con *Google*',
     'upcoming.cta': 'Avísame cuando esté',
     'upcoming.prefill': 'Quiero que me aviséis cuando el acceso con Google esté disponible en {app}.',
 
@@ -239,7 +239,7 @@ export const ui = {
     'feed.all': 'View all projects',
 
     'process.eyebrow': 'How we work',
-    'process.title': 'How we work',
+    'process.title': 'How we *work*',
     'process.1.title': 'Idea',
     'process.1.text':
       'We define the problem, the opportunity and the outcome the product must achieve.',
@@ -260,7 +260,7 @@ export const ui = {
     'process.3.b3': 'A base ready to grow',
 
     'clients.eyebrow': 'Clients',
-    'clients.title': 'A few websites we built for clients',
+    'clients.title': 'A few websites we built for *clients*',
     'clients.text':
       'Projects we designed and developed for others. Every one is live and can be visited.',
 
@@ -289,9 +289,9 @@ export const ui = {
       'MAI Softwares combines development, design and product thinking to turn ideas into real digital experiences.',
     'studio.link': 'About the studio',
 
-    'final.title': 'Your next product can start with a conversation.',
+    'final.title': 'Your next product can start with a *conversation*.',
 
-    'projects.title': 'All projects',
+    'projects.title': 'All *projects*',
     'projects.intro':
       'An archive of everything we build: video games, SaaS tools and web experiences.',
     'projects.filter.all': 'All',
@@ -323,7 +323,7 @@ export const ui = {
     'studio.tech.text':
       'We work with modern, performance-oriented web technologies: TypeScript, Astro and lightweight tools chosen per project.',
 
-    'contact.title': 'Tell us what you want to build.',
+    'contact.title': 'Tell us what you want to *build*.',
     'contact.text':
       "An idea, a product that needs improving, or an opportunity that doesn't have a shape yet. Let's start by understanding it.",
     'contact.email.pending':
@@ -341,7 +341,7 @@ export const ui = {
     'form.error': "Couldn't send it. Try again or reach us on GitHub.",
     'form.required': 'Required',
 
-    'upcoming.title': 'Up next: Google sign-in',
+    'upcoming.title': 'Up next: *Google* sign-in',
     'upcoming.cta': 'Tell me when it lands',
     'upcoming.prefill': 'Please let me know when Google sign-in is available in {app}.',
 

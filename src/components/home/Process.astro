@@ -1,6 +1,7 @@
 ---
 import type { Locale } from '../../data/company';
 import { useTranslations } from '../../i18n/utils';
+import { highlightTitle } from '../../lib/highlight';
 
 interface Props {
   locale: Locale;
@@ -32,7 +33,7 @@ const steps = [
   <div class="container">
     <header class="section-head" data-reveal>
       <p class="eyebrow">{t('process.eyebrow')}</p>
-      <h2>{t('process.title')}</h2>
+      <h2 set:html={highlightTitle(t('process.title'))} />
     </header>
 
     <ol class="process-grid" data-reveal-group>
