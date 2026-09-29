@@ -350,6 +350,9 @@ function setupParticles() {
     r: number;
     vx: number;
     vy: number;
+    /** Deriva de reposo: tras el empujón de dispersión se vuelve a ella */
+    bvx: number;
+    bvy: number;
     a: number;
     phase: number;
     sway: number;
@@ -500,8 +503,10 @@ function setupParticles() {
       x: Math.random() * w,
       y: Math.random() * h,
       r: 1 + Math.random() * 1.4,
-      vx: (Math.random() - 0.5) * 0.12,
-      vy: -0.04 - Math.random() * 0.1,
+      vx: 0,
+      vy: 0,
+      bvx: (Math.random() - 0.5) * 0.12,
+      bvy: -0.04 - Math.random() * 0.1,
       a: 0.18 + Math.random() * 0.34,
       phase: Math.random() * Math.PI * 2,
       sway: 0.25 + Math.random() * 0.5,
@@ -513,7 +518,7 @@ function setupParticles() {
       ty: 0,
       rx: 0,
       ry: 0,
-    }));
+    })).map((petal) => ({ ...petal, vx: petal.bvx, vy: petal.bvy }));
 
     /* Emparejar por posición horizontal evita que los pétalos se crucen de
        lado a lado al juntarse; el trazo se forma sin remolinos. */
@@ -604,23 +609,52 @@ function setupParticles() {
     ctx.globalAlpha = 1;
   };
 
+  let lastGather = 0;
+  let releasing = false;
+
+  /* Al soltar la palabra hacen falta ganas de irse: sin empujón se quedaban
+     apelotonadas donde estaba el texto, formando un rectángulo. */
+  const scatter = () => {
+    const cx = wordBox.x + wordBox.w / 2;
+    const cy = wordBox.y + wordBox.h / 2;
+    for (const p of petals) {
+      const dx = p.x - cx;
+      const dy = p.y - cy;
+      const dist = Math.hypot(dx, dy) || 1;
+      const speed = 1.4 + Math.random() * 2.6;
+      p.vx = (dx / dist) * speed + (Math.random() - 0.5) * 0.8;
+      p.vy = (dy / dist) * speed + (Math.random() - 0.5) * 0.8;
+    }
+  };
+
   const REPEL_R = 150;
   const REPEL_MAX = 34;
 
   const step = (time: number) => {
     easeScene();
     const gather = gatherAt(time);
+
+    const wasReleasing = releasing;
+    releasing = gather < lastGather - 0.0001;
+    if (releasing && !wasReleasing) scatter();
+    lastGather = gather;
+
     const repelOn = finePointer && gather > 0.35 && pointer.active;
 
     for (const p of petals) {
-      if (gather > 0.001) {
+      // Al soltar ya no tira el destino: si no, volverían a la palabra
+      if (gather > 0.001 && !releasing) {
         const pull = 0.03 + gather * 0.14;
         p.x += (p.tx - p.x) * pull * gather;
         p.y += (p.ty - p.y) * pull * gather;
       }
 
+      // El impulso se va apagando hasta recuperar la deriva de siempre
+      p.vx += (p.bvx - p.vx) * 0.012;
+      p.vy += (p.bvy - p.vy) * 0.012;
+
       // Formados casi no derivan: si no, el trazo se emborrona
-      const free = 1 - gather * 0.97;
+      const free = releasing ? 1 : 1 - gather * 0.97;
       p.x += (p.vx + Math.sin(time / 2600 + p.phase) * p.sway * 0.35) * free;
       p.y += p.vy * free;
       p.angle += p.spin * free;
