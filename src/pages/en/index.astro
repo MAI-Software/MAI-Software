@@ -10,6 +10,8 @@ import StudioIntro from '../../components/home/StudioIntro.astro';
 import ContactSection from '../../components/home/ContactSection.astro';
 import { company } from '../../data/company';
 import { getProjects, getFeaturedProject } from '../../lib/projects';
+import { getCategory } from '../../data/categories';
+import { useTranslations, projectsPath } from '../../i18n/utils';
 
 const locale = 'en';
 // The featured project leads the hero stack
@@ -18,6 +20,11 @@ const all = await getProjects(locale);
 const projects = featured
   ? [featured, ...all.filter((p) => p.data.slug !== featured.data.slug)]
   : all;
+
+const t = useTranslations(locale);
+// La portada enseña una fila de cada cosa, no el archivo entero
+const games = all.filter((p) => p.data.category === 'game').slice(0, 3);
+const software = all.filter((p) => p.data.category !== 'game').slice(0, 3);
 ---
 
 <BaseLayout
@@ -28,7 +35,30 @@ const projects = featured
 >
   <Hero locale={locale} projects={projects} />
   <CategoryIndex locale={locale} />
-  {projects.length > 0 && <ProjectFeed projects={projects} locale={locale} />}
+  {
+    games.length > 0 && (
+      <ProjectFeed
+        projects={games}
+        locale={locale}
+        eyebrow={t('feed.games.eyebrow')}
+        title={t('feed.games.title')}
+        ctaLabel={t('feed.games.all')}
+        ctaHref={getCategory('game').path[locale]}
+      />
+    )
+  }
+  {
+    software.length > 0 && (
+      <ProjectFeed
+        projects={software}
+        locale={locale}
+        eyebrow={t('feed.software.eyebrow')}
+        title={t('feed.software.title')}
+        ctaLabel={t('feed.all')}
+        ctaHref={projectsPath(locale)}
+      />
+    )
+  }
   <Process locale={locale} />
   <ClientSites locale={locale} />
   <WebOffer locale={locale} />

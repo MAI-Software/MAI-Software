@@ -1,26 +1,30 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import type { Locale } from '../../data/company';
-import { useTranslations, projectsPath } from '../../i18n/utils';
 import ProjectPreview from '../projects/ProjectPreview.astro';
+import { highlightTitle } from '../../lib/highlight';
 
 interface Props {
   projects: CollectionEntry<'projects'>[];
   locale: Locale;
+  eyebrow: string;
+  /** Admite *palabra* para resaltarla */
+  title: string;
+  ctaLabel: string;
+  ctaHref: string;
 }
 
-const { projects, locale } = Astro.props;
-const t = useTranslations(locale);
+const { projects, locale, eyebrow, title, ctaLabel, ctaHref } = Astro.props;
 ---
 
 <section class="section section-line">
   <div class="container">
     <div class="feed-head" data-reveal>
       <div>
-        <p class="eyebrow">{t('feed.eyebrow')}</p>
-        <h2>{t('feed.title')}</h2>
+        <p class="eyebrow">{eyebrow}</p>
+        <h2 set:html={highlightTitle(title)} />
       </div>
-      <a href={projectsPath(locale)} class="link-editorial">{t('feed.all')}</a>
+      <a href={ctaHref} class="link-editorial">{ctaLabel}</a>
     </div>
 
     <div class="feed-grid" data-reveal-group>

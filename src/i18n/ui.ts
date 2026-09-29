@@ -48,8 +48,11 @@ export const ui = {
     'category.web.b3': 'Para presentar proyectos, negocios e ideas con claridad',
 
     'featured.label': 'Proyecto destacado',
-    'feed.eyebrow': 'Trabajo reciente',
-    'feed.title': 'Últimos proyectos',
+    'feed.games.eyebrow': 'Videojuegos',
+    'feed.games.title': 'Tres que ya puedes *jugar*.',
+    'feed.games.all': 'Ver todos los videojuegos',
+    'feed.software.eyebrow': 'Trabajo reciente',
+    'feed.software.title': 'Webs y *software*.',
     'feed.all': 'Ver todos los proyectos',
 
     'process.eyebrow': 'Cómo trabajamos',
@@ -228,8 +231,11 @@ export const ui = {
     'category.web.b3': 'Easy to maintain and extend',
 
     'featured.label': 'Featured project',
-    'feed.eyebrow': 'Recent work',
-    'feed.title': 'Latest projects',
+    'feed.games.eyebrow': 'Games',
+    'feed.games.title': 'Three you can *play* right now.',
+    'feed.games.all': 'View all games',
+    'feed.software.eyebrow': 'Recent work',
+    'feed.software.title': 'Webs and *software*.',
     'feed.all': 'View all projects',
 
     'process.eyebrow': 'How we work',
