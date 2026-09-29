@@ -67,6 +67,25 @@ const previews = projects.slice(0, 6);
           ))
         }
       </ul>
+
+      {
+        /* La pila gira sola, pero quien entra puede querer mandar ya:
+           las flechas dan control sin bajar a la sección de proyectos. */
+        previews.length > 1 && (
+          <Fragment>
+            <button type="button" class="stack-nav stack-prev" data-stack-step="-1" aria-label={t('hero.prev')}>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m14.5 5-7 7 7 7" />
+              </svg>
+            </button>
+            <button type="button" class="stack-nav stack-next" data-stack-step="1" aria-label={t('hero.next')}>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m9.5 5 7 7-7 7" />
+              </svg>
+            </button>
+          </Fragment>
+        )
+      }
     </div>
   </div>
 </section>
@@ -75,12 +94,14 @@ const previews = projects.slice(0, 6);
   /**
    * Rota la pila de proyectos: la tarjeta frontal pasa al fondo y la
    * siguiente toma su sitio. Se pausa al pasar el puntero, al enfocar con
-   * teclado y cuando la pestaña no está visible.
+   * teclado y cuando la pestaña no está visible. Las flechas mueven la pila
+   * a mano y funcionan aunque el giro automático esté desactivado.
    */
   const list = document.querySelector<HTMLElement>('.stack-list[data-autoplay]');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const stack = list?.closest<HTMLElement>('.hero-stack');
 
-  if (list && !reducedMotion) {
+  if (list && stack) {
     const items = Array.from(list.querySelectorAll<HTMLElement>('.stack-item'));
 
     if (items.length > 1) {
@@ -98,13 +119,14 @@ const previews = projects.slice(0, 6);
         });
       };
 
-      const advance = () => {
-        front = (front + 1) % items.length;
+      const advance = (step = 1) => {
+        front = (front + step + items.length) % items.length;
         render();
       };
 
       const start = () => {
-        if (timer === undefined) timer = window.setInterval(advance, delay);
+        // Sin movimiento automático si el sistema pide calma
+        if (!reducedMotion && timer === undefined) timer = window.setInterval(advance, delay);
       };
 
       const stop = () => {
@@ -112,13 +134,25 @@ const previews = projects.slice(0, 6);
         timer = undefined;
       };
 
-      list.addEventListener('pointerenter', stop);
-      list.addEventListener('pointerleave', start);
-      list.addEventListener('focusin', stop);
-      list.addEventListener('focusout', start);
+      /* Los oyentes van en el contenedor, no en la lista: así las flechas
+         también cuentan como "el puntero está encima" y la pila no salta
+         bajo el cursor mientras se pulsa. */
+      stack.addEventListener('pointerenter', stop);
+      stack.addEventListener('pointerleave', start);
+      stack.addEventListener('focusin', stop);
+      stack.addEventListener('focusout', start);
       document.addEventListener('visibilitychange', () => {
         document.hidden ? stop() : start();
       });
+
+      for (const button of stack.querySelectorAll<HTMLButtonElement>('[data-stack-step]')) {
+        button.addEventListener('click', () => {
+          advance(Number(button.dataset.stackStep));
+          // Tras un clic el reloj vuelve a cero: nadie quiere un salto seguido
+          stop();
+          start();
+        });
+      }
 
       render();
       start();
@@ -164,7 +198,66 @@ const previews = projects.slice(0, 6);
   /* --- Pila de proyectos --- */
   .hero-stack {
     display: none;
+    position: relative;
     perspective: 1400px;
+  }
+
+  /* Flechas sobre los bordes de la tarjeta frontal */
+  .stack-nav {
+    position: absolute;
+    top: 50%;
+    translate: 0 -50%;
+    z-index: 20;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 1px solid var(--glass-line);
+    border-radius: var(--radius-pill);
+    /* Base oscura, no solo cristal: las portadas claras se comían la flecha */
+    background: rgba(4, 5, 11, 0.55);
+    box-shadow: var(--glass-sheen);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--color-white);
+    cursor: pointer;
+    opacity: 0.8;
+    transition:
+      opacity var(--duration-base) var(--ease-standard),
+      background-color var(--duration-base) var(--ease-standard),
+      border-color var(--duration-base) var(--ease-standard),
+      scale var(--duration-base) var(--ease-standard);
+  }
+
+  .stack-nav svg {
+    width: 1.3rem;
+    height: 1.3rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .stack-nav:hover,
+  .stack-nav:focus-visible {
+    opacity: 1;
+    background: rgba(4, 5, 11, 0.75);
+    border-color: var(--glass-line-hover);
+    scale: 1.06;
+  }
+
+  .stack-nav:active {
+    scale: 0.94;
+  }
+
+  .stack-prev {
+    left: 0.85rem;
+  }
+
+  .stack-next {
+    right: 0.85rem;
   }
 
   .stack-list {
@@ -248,12 +341,12 @@ const previews = projects.slice(0, 6);
 
   /* Al pasar el puntero la pila se abre en abanico */
   @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-    .stack-list:hover .stack-item {
+    .hero-stack:hover .stack-item {
       translate: calc(var(--d) * 44px) calc(var(--d) * -34px);
       scale: calc(1 - var(--d) * 0.03);
     }
 
-    .stack-list:hover .stack-item:not(.is-front) .stack-card::after {
+    .hero-stack:hover .stack-item:not(.is-front) .stack-card::after {
       background: rgba(4, 5, 11, 0.3);
     }
   }

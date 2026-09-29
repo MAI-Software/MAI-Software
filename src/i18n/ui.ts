@@ -19,6 +19,8 @@ export const ui = {
     'hero.title': 'De la idea a tus *manos*',
     'hero.text':
       'Creamos webs, herramientas, SaaS y videojuegos para que una idea deje de quedarse en la cabeza y empiece a existir.',
+    'hero.prev': 'Proyecto anterior',
+    'hero.next': 'Proyecto siguiente',
     'cta.explore': 'Ver proyectos',
     'cta.talk': 'Cuéntanos tu idea',
     'cta.contact': 'Hablemos',
@@ -205,6 +207,8 @@ export const ui = {
     'hero.title': 'We turn ideas into unforgettable products',
     'hero.text':
       'We design, build and maintain our own digital products: games, calculators, SaaS tools and websites. Everything here is published and in use.',
+    'hero.prev': 'Previous project',
+    'hero.next': 'Next project',
     'cta.explore': 'Explore projects',
     'cta.talk': "Let's talk about your project",
     'cta.contact': "Let's talk",
