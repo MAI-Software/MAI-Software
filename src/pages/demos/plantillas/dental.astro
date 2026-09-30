@@ -1,121 +1,221 @@
 ---
 import DemoLayout from '../../../layouts/DemoLayout.astro';
 
-/* En salud manda la confianza: nombres, titulación, precios claros y una
-   primera visita fácil de pedir. Nada de promesas médicas. */
+/* Plantilla de clínica dental. Aquí lo que vende es la confianza: nombres y
+   números de colegiado, precios y financiación por escrito, y una primera
+   visita fácil de pedir. Ninguna promesa médica. */
+
 const tratamientos = [
   {
     nombre: 'Revisión y limpieza',
     texto: 'Exploración completa, radiografía si hace falta y limpieza con ultrasonidos.',
     desde: '39 €',
+    dura: '45 min',
+    icono: 'diente',
   },
   {
     nombre: 'Ortodoncia invisible',
-    texto: 'Estudio 3D, plan de tratamiento y férulas. Revisiones cada seis semanas.',
+    texto: 'Estudio 3D, plan completo y férulas. Revisión cada seis semanas.',
     desde: '2.400 €',
+    dura: '12-18 meses',
+    icono: 'alineador',
   },
   {
     nombre: 'Implantes',
     texto: 'Implante de titanio, pilar y corona. Garantía por escrito de diez años.',
     desde: '850 €',
+    dura: '2 visitas',
+    icono: 'implante',
   },
   {
     nombre: 'Estética dental',
     texto: 'Blanqueamiento en clínica o carillas, con prueba previa en tu boca.',
     desde: '290 €',
+    dura: '1-3 visitas',
+    icono: 'brillo',
+  },
+  {
+    nombre: 'Odontopediatría',
+    texto: 'Primera visita a los tres años, sin prisa y con la familia dentro.',
+    desde: '35 €',
+    dura: '30 min',
+    icono: 'nino',
+  },
+  {
+    nombre: 'Urgencias',
+    texto: 'Dolor agudo, fractura o flemón. Hueco reservado cada día.',
+    desde: '45 €',
+    dura: 'Mismo día',
+    icono: 'urgencia',
   },
 ];
 
 const equipo = [
-  { nombre: 'Dra. Elena Sarabia', rol: 'Directora clínica · Odontología general', num: 'col. 28001234' },
-  { nombre: 'Dr. Iván Prats', rol: 'Cirugía e implantes', num: 'col. 28005678' },
-  { nombre: 'Marta Liébana', rol: 'Higienista dental', num: 'col. 28009012' },
+  {
+    nombre: 'Dra. Elena Sarabia',
+    rol: 'Directora clínica · Odontología general',
+    num: 'col. 28001234',
+    extra: 'Universidad Complutense · 18 años',
+  },
+  {
+    nombre: 'Dr. Iván Prats',
+    rol: 'Cirugía e implantes',
+    num: 'col. 28005678',
+    extra: 'Máster en implantología · 11 años',
+  },
+  {
+    nombre: 'Marta Liébana',
+    rol: 'Higienista dental',
+    num: 'col. 28009012',
+    extra: 'Especialista en periodoncia · 9 años',
+  },
 ];
 
-const seguros = ['Adeslas', 'Sanitas', 'DKV', 'Asisa', 'Mapfre'];
+const seguros = ['Adeslas', 'Sanitas', 'DKV', 'Asisa', 'Mapfre', 'Caser'];
+
+const pasos = [
+  { t: 'Primera visita gratis', d: 'Exploración, radiografía panorámica y fotos intraorales.' },
+  { t: 'Presupuesto cerrado', d: 'Por escrito, con cada tratamiento y su precio. Te lo llevas a casa.' },
+  { t: 'Decides tú', d: 'Te decimos qué es urgente, qué puede esperar y qué no hace falta.' },
+  { t: 'Tratamiento y revisión', d: 'Con revisión incluida a los seis meses.' },
+];
+
+const resenas = [
+  { t: 'Me dijeron que dos de los tres empastes que me habían mandado en otro sitio no hacían falta. Ahí se ganaron un paciente.', a: 'Rocío T.', f: 'hace 2 semanas' },
+  { t: 'Vine de urgencia un martes a las nueve y a las once estaba resuelto. Trato de diez.', a: 'Andrés M.', f: 'hace 1 mes' },
+  { t: 'Llevo con la ortodoncia ocho meses y me han explicado cada paso. Precio cerrado desde el principio.', a: 'Nuria B.', f: 'hace 3 meses' },
+];
 
 const preguntas = [
-  {
-    q: '¿La primera visita tiene coste?',
-    a: 'No. La primera visita incluye exploración, radiografía panorámica y presupuesto cerrado por escrito.',
-  },
-  {
-    q: '¿Se puede financiar?',
-    a: 'Sí, hasta en 12 meses sin intereses, y a más plazo con financiera. Se firma antes de empezar y sin sorpresas.',
-  },
-  {
-    q: '¿Atendéis urgencias?',
-    a: 'Reservamos huecos cada día para dolor agudo. Llama por la mañana y te damos hora ese mismo día.',
-  },
+  { q: '¿La primera visita tiene coste?', a: 'No. Incluye exploración, radiografía panorámica y presupuesto cerrado por escrito. Sin compromiso de quedarte.' },
+  { q: '¿Se puede financiar?', a: 'Sí: hasta 12 meses sin intereses con la clínica, y a más plazo con financiera. Se firma antes de empezar, con el cuadro de cuotas delante.' },
+  { q: '¿Atendéis urgencias?', a: 'Reservamos huecos cada día para dolor agudo. Llama por la mañana y te damos hora ese mismo día.' },
+  { q: '¿Trabajáis con mi seguro?', a: 'Trabajamos con las principales aseguradoras. Dinos cuál tienes y te confirmamos coberturas antes de la cita.' },
+  { q: '¿Y si me da miedo el dentista?', a: 'Nos lo dices al pedir cita y reservamos más tiempo. Se puede empezar solo con una revisión sin tocar nada.' },
 ];
 ---
 
 <DemoLayout
   title="Clínica Dental Aranda · odontología en Madrid"
-  description="Plantilla de ejemplo: web para clínica dental con tratamientos, equipo, seguros y primera visita."
+  description="Plantilla de ejemplo: web para clínica dental con tratamientos, precios, equipo, seguros, financiación y primera visita."
 >
   <div class="site">
     <header class="top">
       <a class="brand" href="#inicio">
         <span class="mark" aria-hidden="true"></span>
-        Clínica Aranda
+        <span class="brand-text">
+          Clínica Aranda
+          <small>Odontología · Madrid</small>
+        </span>
       </a>
       <nav aria-label="Principal">
         <a href="#tratamientos">Tratamientos</a>
         <a href="#equipo">Equipo</a>
+        <a href="#financiacion">Financiación</a>
         <a href="#preguntas">Preguntas</a>
       </nav>
-      <a class="btn small" href="#cita">Primera visita</a>
+      <div class="top-actions">
+        <a class="tel" href="tel:+34910000000">910 000 000</a>
+        <a class="btn" href="#cita">Primera visita gratis</a>
+      </div>
     </header>
 
     <section class="hero" id="inicio">
-      <div>
-        <p class="eyebrow">Odontología general y estética · Madrid</p>
+      <div class="hero-text">
+        <p class="chip"><span class="dot" aria-hidden="true"></span>Primera visita sin coste</p>
         <h1>Te explicamos qué tienes antes de tocarte nada.</h1>
         <p class="lead">
           Diagnóstico con imagen, presupuesto cerrado por escrito y tú decides. Sin paquetes
           que no has pedido ni tratamientos que puedan esperar.
         </p>
         <div class="hero-actions">
-          <a class="btn" href="#cita">Pedir primera visita</a>
-          <a class="btn ghost" href="#tratamientos">Ver tratamientos</a>
+          <a class="btn big" href="#cita">Pedir primera visita</a>
+          <a class="btn ghost big" href="#tratamientos">Ver tratamientos</a>
         </div>
+        <ul class="pruebas">
+          <li><strong>18 años</strong><span>en el barrio</span></li>
+          <li><strong>4,9/5</strong><span>en 320 reseñas</span></li>
+          <li><strong>10 años</strong><span>garantía en implantes</span></li>
+          <li><strong>12 meses</strong><span>sin intereses</span></li>
+        </ul>
       </div>
-      <ul class="pruebas">
-        <li><strong>18 años</strong><span>en el barrio</span></li>
-        <li><strong>4,9/5</strong><span>en 320 reseñas</span></li>
-        <li><strong>10 años</strong><span>de garantía en implantes</span></li>
-      </ul>
+
+      <div class="hero-art" aria-hidden="true">
+        <div class="sala">
+          <span class="luz"></span>
+          <span class="sillon"></span>
+          <span class="brazo"></span>
+          <span class="mesa"></span>
+        </div>
+        <p class="art-note">Aquí irían tus fotos</p>
+      </div>
     </section>
 
     <section class="tratamientos" id="tratamientos">
-      <h2>Tratamientos</h2>
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Tratamientos</p>
+          <h2>Explicados en cristiano, con su precio de partida</h2>
+        </div>
+        <p class="sec-note">
+          El precio final sale del estudio de tu caso y se entrega por escrito antes de empezar.
+        </p>
+      </header>
+
       <div class="grid">
         {
           tratamientos.map((t) => (
             <article class="card">
+              <span class={`icono icono-${t.icono}`} aria-hidden="true" />
               <h3>{t.nombre}</h3>
-              <p>{t.texto}</p>
-              <p class="desde">
-                desde <strong>{t.desde}</strong>
+              <p class="card-texto">{t.texto}</p>
+              <p class="card-meta">
+                <span class="desde">
+                  desde <strong>{t.desde}</strong>
+                </span>
+                <span class="dura">{t.dura}</span>
               </p>
+              <a class="card-cta" href="#cita">
+                Pedir cita <span aria-hidden="true">→</span>
+              </a>
             </article>
           ))
         }
       </div>
-      <p class="nota">
-        Los precios son orientativos: el definitivo sale del estudio de tu caso y se entrega
-        por escrito antes de empezar.
-      </p>
+    </section>
+
+    <section class="proceso">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Cómo funciona</p>
+          <h2>De la primera visita al alta, sin sorpresas</h2>
+        </div>
+      </header>
+      <ol class="pasos">
+        {
+          pasos.map((p, i) => (
+            <li>
+              <span class="num">{String(i + 1).padStart(2, '0')}</span>
+              <strong>{p.t}</strong>
+              <span>{p.d}</span>
+            </li>
+          ))
+        }
+      </ol>
     </section>
 
     <section class="equipo" id="equipo">
-      <h2>Quién te atiende</h2>
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Equipo</p>
+          <h2>Quién te atiende, con nombre y número de colegiado</h2>
+        </div>
+      </header>
       <div class="personas">
         {
           equipo.map((p) => (
             <div class="persona">
-              <span class="avatar" aria-hidden="true">
+              <span class="retrato" aria-hidden="true">
                 {p.nombre
                   .split(' ')
                   .filter((w) => !w.includes('.'))
@@ -123,29 +223,93 @@ const preguntas = [
                   .map((w) => w[0])
                   .join('')}
               </span>
-              <div>
-                <strong>{p.nombre}</strong>
-                <span>{p.rol}</span>
-                <span class="col">{p.num}</span>
-              </div>
+              <strong>{p.nombre}</strong>
+              <span class="rol">{p.rol}</span>
+              <span class="col">{p.num}</span>
+              <span class="extra">{p.extra}</span>
             </div>
           ))
         }
       </div>
+
       <div class="seguros">
-        <p>Trabajamos con:</p>
+        <p class="seguros-titulo">Trabajamos con tu seguro</p>
         <ul>
           {seguros.map((s) => <li>{s}</li>)}
         </ul>
       </div>
     </section>
 
+    <section class="financiacion" id="financiacion">
+      <div class="fin-grid">
+        <div>
+          <p class="eyebrow claro">Financiación</p>
+          <h2>Que el precio no sea el motivo para no tratarte</h2>
+          <p class="fin-texto">
+            Hasta 12 meses sin intereses con la propia clínica y hasta 60 meses con financiera.
+            Se firma antes de empezar, con el cuadro de cuotas delante y sin comisiones de
+            apertura.
+          </p>
+        </div>
+        <div class="fin-ejemplos">
+          <p class="fin-titulo">Ejemplos reales</p>
+          <ul>
+            <li>
+              <span>Implante 850 €</span>
+              <strong>70,83 €/mes</strong>
+              <small>12 meses sin intereses</small>
+            </li>
+            <li>
+              <span>Ortodoncia 2.400 €</span>
+              <strong>200 €/mes</strong>
+              <small>12 meses sin intereses</small>
+            </li>
+            <li>
+              <span>Carillas 1.740 €</span>
+              <strong>145 €/mes</strong>
+              <small>12 meses sin intereses</small>
+            </li>
+          </ul>
+          <p class="fin-nota">Ejemplos orientativos sujetos a estudio. TAE 0 % en la modalidad de clínica.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="resenas">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Reseñas</p>
+          <h2>4,9 sobre 5 en 320 reseñas</h2>
+        </div>
+      </header>
+      <div class="resenas-grid">
+        {
+          resenas.map((r) => (
+            <blockquote>
+              <p class="estrellas" aria-label="5 sobre 5">
+                ★★★★★
+              </p>
+              <p>{r.t}</p>
+              <footer>
+                {r.a} · {r.f}
+              </footer>
+            </blockquote>
+          ))
+        }
+      </div>
+    </section>
+
     <section class="preguntas" id="preguntas">
-      <h2>Preguntas frecuentes</h2>
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Preguntas frecuentes</p>
+          <h2>Lo que nos preguntáis antes de venir</h2>
+        </div>
+      </header>
       <div class="faq">
         {
-          preguntas.map((p) => (
-            <details>
+          preguntas.map((p, i) => (
+            <details open={i === 0}>
               <summary>{p.q}</summary>
               <p>{p.a}</p>
             </details>
@@ -155,9 +319,22 @@ const preguntas = [
     </section>
 
     <section class="cita" id="cita">
-      <div class="cita-inner">
-        <h2>Primera visita</h2>
-        <p>Rellena y te llamamos para darte hora. También puedes llamar al 910 000 000.</p>
+      <div class="cita-grid">
+        <div>
+          <p class="eyebrow claro">Primera visita</p>
+          <h2>Sin coste y sin compromiso</h2>
+          <p class="cita-texto">
+            Déjanos tus datos y te llamamos para darte hora, normalmente el mismo día. Si
+            prefieres, llama tú directamente.
+          </p>
+          <a class="tel-grande" href="tel:+34910000000">910 000 000</a>
+          <div class="donde">
+            <p><strong>Calle Alcalá 200, Madrid</strong></p>
+            <p>Lunes a viernes 9:00 – 21:00 · Sábados 9:00 – 14:00</p>
+            <p>Metro Ventas (L2 y L5) · Parking concertado</p>
+          </div>
+        </div>
+
         <form>
           <label>
             Nombre
@@ -168,18 +345,47 @@ const preguntas = [
             <input type="tel" placeholder="600 000 000" required />
           </label>
           <label class="ancho">
-            Motivo
-            <textarea rows="3" placeholder="Revisión, dolor, ortodoncia…"></textarea>
+            Motivo de la consulta
+            <select>
+              <option>Revisión y limpieza</option>
+              <option>Dolor o urgencia</option>
+              <option>Ortodoncia</option>
+              <option>Implantes</option>
+              <option>Estética dental</option>
+              <option>Odontopediatría</option>
+            </select>
           </label>
-          <button type="button">Solicitar cita</button>
+          <label class="ancho">
+            Cuándo te viene bien
+            <span class="chips">
+              <span>Mañanas</span>
+              <span>Mediodía</span>
+              <span>Tardes</span>
+              <span>Sábado</span>
+            </span>
+          </label>
+          <label class="ancho">
+            Algo más que debamos saber
+            <textarea rows="3" placeholder="Seguro, miedo al dentista, tratamientos previos…"></textarea>
+          </label>
+          <button type="button">Pedir primera visita</button>
+          <p class="form-nota">Te llamamos para confirmar. Tus datos no se usan para publicidad.</p>
         </form>
       </div>
     </section>
 
     <footer class="foot">
-      <p>Clínica Dental Aranda · Calle Alcalá 200, Madrid · 910 000 000</p>
-      <p class="mini">Plantilla de ejemplo. Los datos, precios y profesionales son ficticios.</p>
+      <div>
+        <p class="foot-brand">Clínica Dental Aranda</p>
+        <p>Calle Alcalá 200, Madrid · 910 000 000 · hola@clinicaaranda.es</p>
+      </div>
+      <p class="mini">Plantilla de ejemplo. Nombres, precios, profesionales y reseñas son ficticios.</p>
     </footer>
+
+    <div class="barra-movil">
+      <a class="btn ghost" href="tel:+34910000000">Llamar</a>
+      <a class="btn" href="#cita">Primera visita</a>
+    </div>
   </div>
 </DemoLayout>
 
@@ -187,54 +393,69 @@ const preguntas = [
   .site {
     --azul: #1b5f9e;
     --azul-claro: #3f8fd6;
+    --azul-suave: #e3eef8;
     --fondo: #f7fafc;
     --fondo-2: #eaf2f8;
     --tinta: #12212e;
-    --suave: #5a6b7a;
+    --suave: #56697a;
+    --linea: rgba(18, 33, 46, 0.1);
 
     background: var(--fondo);
     color: var(--tinta);
     font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
-    padding-bottom: 3rem;
+    padding-bottom: 5.5rem;
   }
 
   .top {
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 20;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1.5rem;
-    padding: 0.9rem clamp(1.1rem, 4vw, 3rem);
-    background: rgba(247, 250, 252, 0.95);
-    border-bottom: 1px solid rgba(18, 33, 46, 0.1);
-    backdrop-filter: blur(8px);
+    padding: 0.85rem clamp(1.1rem, 4vw, 3.5rem);
+    background: rgba(247, 250, 252, 0.96);
+    border-bottom: 1px solid var(--linea);
+    backdrop-filter: blur(10px);
   }
 
   .brand {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
-    font-weight: 700;
-    font-size: 1.08rem;
+    gap: 0.7rem;
     text-decoration: none;
   }
 
   .mark {
-    width: 26px;
-    height: 26px;
-    border-radius: 8px;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
     background: linear-gradient(135deg, var(--azul-claro), var(--azul));
+  }
+
+  .brand-text {
+    display: grid;
+    font-size: 1.06rem;
+    font-weight: 700;
+    line-height: 1.15;
+  }
+
+  .brand-text small {
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--suave);
   }
 
   .top nav {
     display: none;
-    gap: 1.4rem;
+    gap: 1.5rem;
+    font-size: 0.93rem;
   }
 
   .top nav a {
-    font-size: 0.92rem;
     color: var(--suave);
     text-decoration: none;
   }
@@ -243,103 +464,229 @@ const preguntas = [
     color: var(--azul);
   }
 
+  .top-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .tel {
+    display: none;
+    font-size: 0.93rem;
+    color: var(--suave);
+    text-decoration: none;
+  }
+
   .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 48px;
-    padding: 0 1.4rem;
+    min-height: 46px;
+    padding: 0 1.3rem;
     border-radius: 10px;
     background: var(--azul);
     color: #fff;
+    font-size: 0.94rem;
     font-weight: 600;
-    font-size: 0.95rem;
     text-decoration: none;
+    transition: transform 0.15s ease, background-color 0.15s ease;
   }
 
-  .btn.small {
-    min-height: 42px;
-    padding: 0 1.1rem;
-    font-size: 0.88rem;
+  .btn:hover {
+    transform: translateY(-1px);
+    background: #164e83;
   }
 
   .btn.ghost {
     background: #fff;
-    border: 1px solid rgba(18, 33, 46, 0.18);
+    border: 1px solid var(--linea);
     color: var(--tinta);
   }
 
+  .btn.big {
+    min-height: 54px;
+    padding: 0 1.9rem;
+    font-size: 1rem;
+  }
+
   section {
-    padding: clamp(2.4rem, 6vw, 4.5rem) clamp(1.1rem, 4vw, 3rem);
+    padding: clamp(2.6rem, 6vw, 4.5rem) clamp(1.1rem, 4vw, 3.5rem);
   }
 
   .hero {
     display: grid;
-    gap: 2.2rem;
+    gap: 2.5rem;
+    align-items: center;
   }
 
-  .eyebrow {
-    margin: 0 0 0.9rem;
-    font-size: 0.78rem;
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 1.2rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    background: var(--azul-suave);
+    color: var(--azul);
+    font-size: 0.82rem;
     font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--azul-claro);
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--azul-claro);
   }
 
   h1 {
     margin: 0;
-    font-size: clamp(1.9rem, 4.4vw, 3rem);
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-    max-width: 20ch;
+    font-size: clamp(2rem, 4.4vw, 3.2rem);
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+    max-width: 19ch;
   }
 
   .lead {
     max-width: 52ch;
     color: var(--suave);
-    line-height: 1.65;
+    font-size: 1.05rem;
+    line-height: 1.7;
   }
 
   .hero-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 0.8rem;
-    margin-top: 1.6rem;
+    margin-top: 1.8rem;
   }
 
   .pruebas {
     display: grid;
-    gap: 1rem;
-    margin: 0;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+    margin: 2rem 0 0;
     padding: 0;
     list-style: none;
-    align-content: start;
   }
 
   .pruebas li {
     display: grid;
-    gap: 0.15rem;
-    padding: 1rem 1.2rem;
+    gap: 0.1rem;
+    padding: 0.9rem 1.1rem;
     border-radius: 12px;
     background: #fff;
-    border: 1px solid rgba(18, 33, 46, 0.08);
+    border: 1px solid var(--linea);
   }
 
   .pruebas strong {
-    font-size: 1.35rem;
+    font-size: 1.3rem;
     color: var(--azul);
   }
 
   .pruebas span {
     color: var(--suave);
-    font-size: 0.86rem;
+    font-size: 0.84rem;
+  }
+
+  /* Gabinete dibujado en CSS mientras no haya fotos de la clínica */
+  .hero-art {
+    position: relative;
+    aspect-ratio: 4 / 3.4;
+    border-radius: 22px;
+    overflow: hidden;
+    background: linear-gradient(160deg, #dcebf7 0%, #a9cbe8 50%, #6ba3d0 100%);
+  }
+
+  .sala {
+    position: absolute;
+    inset: 0;
+  }
+
+  .luz {
+    position: absolute;
+    top: 12%;
+    left: 56%;
+    width: 26%;
+    aspect-ratio: 1.6;
+    border-radius: 14px;
+    background: radial-gradient(circle at 50% 60%, #fff, #dbe9f4);
+    box-shadow: 0 0 60px rgba(255, 255, 255, 0.8);
+  }
+
+  .brazo {
+    position: absolute;
+    top: 22%;
+    left: 52%;
+    width: 6px;
+    height: 26%;
+    background: rgba(255, 255, 255, 0.7);
+    rotate: 18deg;
+    transform-origin: top;
+  }
+
+  .sillon {
+    position: absolute;
+    left: 12%;
+    bottom: 14%;
+    width: 62%;
+    height: 34%;
+    border-radius: 999px 999px 26px 26px;
+    background: linear-gradient(160deg, #3f8fd6, #1b5f9e);
+    box-shadow: 0 18px 36px rgba(12, 45, 76, 0.35);
+  }
+
+  .mesa {
+    position: absolute;
+    right: 8%;
+    bottom: 16%;
+    width: 22%;
+    height: 16%;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.85);
+  }
+
+  .art-note {
+    position: absolute;
+    right: 0.9rem;
+    bottom: 0.7rem;
+    margin: 0;
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .eyebrow {
+    margin: 0;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--azul-claro);
+  }
+
+  .eyebrow.claro {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .sec-head {
+    display: grid;
+    gap: 0.7rem;
+    margin-bottom: 2.2rem;
   }
 
   h2 {
-    margin: 0 0 1.6rem;
-    font-size: clamp(1.5rem, 3.2vw, 2.1rem);
-    letter-spacing: -0.01em;
+    margin: 0.3rem 0 0;
+    font-size: clamp(1.6rem, 3.3vw, 2.3rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    max-width: 24ch;
+  }
+
+  .sec-note {
+    margin: 0;
+    max-width: 46ch;
+    font-size: 0.92rem;
+    color: var(--suave);
   }
 
   .grid {
@@ -351,42 +698,168 @@ const preguntas = [
     display: grid;
     gap: 0.6rem;
     align-content: start;
-    padding: 1.4rem;
-    border-radius: 14px;
+    padding: 1.5rem;
+    border-radius: 16px;
     background: #fff;
-    border: 1px solid rgba(18, 33, 46, 0.08);
+    border: 1px solid var(--linea);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 34px rgba(18, 33, 46, 0.1);
+  }
+
+  .icono {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--azul-suave);
+  }
+
+  .icono::before,
+  .icono::after {
+    content: '';
+    position: absolute;
+    background: var(--azul);
+  }
+
+  .icono-diente::before {
+    inset: 24% 30% 34% 30%;
+    border-radius: 50% 50% 20% 20%;
+  }
+  .icono-diente::after {
+    inset: 62% 46% 22% 46%;
+    border-radius: 0 0 4px 4px;
+  }
+
+  .icono-alineador::before {
+    inset: 30% 26% 30% 26%;
+    border-radius: 50%;
+  }
+  .icono-alineador::after {
+    inset: 40% 36% 40% 36%;
+    border-radius: 50%;
+    background: var(--azul-suave);
+  }
+
+  .icono-implante::before {
+    inset: 22% 46% 46% 46%;
+    border-radius: 3px;
+  }
+  .icono-implante::after {
+    inset: 56% 34% 22% 34%;
+    border-radius: 4px;
+  }
+
+  .icono-brillo::before {
+    inset: 28% 44% 28% 44%;
+    border-radius: 3px;
+  }
+  .icono-brillo::after {
+    inset: 44% 28% 44% 28%;
+    border-radius: 3px;
+  }
+
+  .icono-nino::before {
+    inset: 22% 34% 48% 34%;
+    border-radius: 50%;
+  }
+  .icono-nino::after {
+    inset: 56% 26% 22% 26%;
+    border-radius: 999px 999px 6px 6px;
+  }
+
+  .icono-urgencia::before {
+    inset: 22% 44% 22% 44%;
+    border-radius: 3px;
+  }
+  .icono-urgencia::after {
+    inset: 44% 22% 44% 22%;
+    border-radius: 3px;
   }
 
   .card h3 {
     margin: 0;
-    font-size: 1.08rem;
+    font-size: 1.1rem;
   }
 
-  .card p {
+  .card-texto {
     margin: 0;
     color: var(--suave);
     line-height: 1.6;
   }
 
-  .desde {
-    color: var(--tinta) !important;
-    font-size: 0.92rem;
+  .card-meta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0.2rem 0 0;
+    font-size: 0.9rem;
+    color: var(--suave);
   }
 
   .desde strong {
+    font-size: 1.15rem;
     color: var(--azul);
-    font-size: 1.1rem;
   }
 
-  .nota {
-    margin: 1.6rem 0 0;
-    max-width: 60ch;
-    color: var(--suave);
-    font-size: 0.88rem;
-  }
-
-  .equipo {
+  .dura {
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
     background: var(--fondo-2);
+    font-size: 0.78rem;
+  }
+
+  .card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 44px;
+    color: var(--azul);
+    font-weight: 600;
+    font-size: 0.92rem;
+    text-decoration: none;
+  }
+
+  .proceso {
+    background: var(--fondo-2);
+  }
+
+  .pasos {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pasos li {
+    display: grid;
+    gap: 0.3rem;
+    padding: 1.3rem;
+    border-radius: 14px;
+    background: #fff;
+    border: 1px solid var(--linea);
+  }
+
+  .num {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: var(--azul-claro);
+  }
+
+  .pasos strong {
+    font-size: 1.02rem;
+  }
+
+  .pasos span:last-child {
+    color: var(--suave);
+    font-size: 0.92rem;
+    line-height: 1.55;
   }
 
   .personas {
@@ -395,48 +868,49 @@ const preguntas = [
   }
 
   .persona {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem 1.2rem;
-    border-radius: 12px;
+    display: grid;
+    gap: 0.28rem;
+    justify-items: start;
+    padding: 1.5rem;
+    border-radius: 16px;
     background: #fff;
-    border: 1px solid rgba(18, 33, 46, 0.08);
+    border: 1px solid var(--linea);
   }
 
-  .avatar {
+  .retrato {
     display: grid;
     place-items: center;
-    width: 50px;
-    height: 50px;
-    flex-shrink: 0;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 0.6rem;
     border-radius: 50%;
     background: linear-gradient(135deg, var(--azul-claro), var(--azul));
     color: #fff;
     font-weight: 700;
+    font-size: 1.1rem;
   }
 
-  .persona div {
-    display: grid;
-  }
-
-  .persona span {
-    color: var(--suave);
+  .rol,
+  .col,
+  .extra {
     font-size: 0.86rem;
+    color: var(--suave);
   }
 
   .col {
-    font-size: 0.78rem !important;
+    font-size: 0.78rem;
   }
 
   .seguros {
-    margin-top: 2rem;
+    margin-top: 2.4rem;
+    padding: 1.5rem;
+    border-radius: 16px;
+    background: var(--azul-suave);
   }
 
-  .seguros p {
-    margin: 0 0 0.7rem;
-    color: var(--suave);
-    font-size: 0.9rem;
+  .seguros-titulo {
+    margin: 0 0 0.9rem;
+    font-weight: 600;
   }
 
   .seguros ul {
@@ -449,28 +923,130 @@ const preguntas = [
   }
 
   .seguros li {
-    padding: 0.45rem 0.9rem;
+    padding: 0.5rem 1rem;
     border-radius: 999px;
     background: #fff;
-    border: 1px solid rgba(18, 33, 46, 0.12);
-    font-size: 0.85rem;
+    font-size: 0.88rem;
+    font-weight: 500;
+  }
+
+  .financiacion {
+    background: var(--azul);
+    color: #fff;
+  }
+
+  .fin-grid {
+    display: grid;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .financiacion h2 {
+    color: #fff;
+  }
+
+  .fin-texto {
+    max-width: 46ch;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.7;
+  }
+
+  .fin-ejemplos {
+    padding: 1.6rem;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .fin-titulo {
+    margin: 0 0 1rem;
+    font-weight: 600;
+  }
+
+  .fin-ejemplos ul {
+    display: grid;
+    gap: 0.9rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .fin-ejemplos li {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.2rem 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  .fin-ejemplos strong {
+    font-size: 1.15rem;
+    text-align: right;
+  }
+
+  .fin-ejemplos small {
+    grid-column: 1 / -1;
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .fin-nota {
+    margin: 1.2rem 0 0;
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .resenas-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  blockquote {
+    margin: 0;
+    padding: 1.5rem;
+    border-radius: 16px;
+    background: #fff;
+    border: 1px solid var(--linea);
+  }
+
+  .estrellas {
+    margin: 0 0 0.6rem;
+    color: #e0a83a;
+    letter-spacing: 0.1em;
+  }
+
+  blockquote p {
+    margin: 0;
+    line-height: 1.65;
+  }
+
+  blockquote footer {
+    margin-top: 0.9rem;
+    font-size: 0.84rem;
+    color: var(--suave);
+  }
+
+  .preguntas {
+    background: var(--fondo-2);
   }
 
   .faq {
     display: grid;
     gap: 0.7rem;
-    max-width: 52rem;
+    max-width: 54rem;
   }
 
   details {
-    border: 1px solid rgba(18, 33, 46, 0.1);
-    border-radius: 12px;
+    border: 1px solid var(--linea);
+    border-radius: 14px;
     background: #fff;
   }
 
   summary {
-    padding: 1rem 1.2rem;
-    min-height: 48px;
+    display: flex;
+    align-items: center;
+    min-height: 52px;
+    padding: 0.9rem 1.2rem;
     font-weight: 600;
     cursor: pointer;
   }
@@ -483,90 +1059,196 @@ const preguntas = [
   }
 
   .cita {
-    background: var(--azul);
+    background: var(--tinta);
     color: #fff;
   }
 
-  .cita-inner {
-    max-width: 46rem;
+  .cita h2 {
+    color: #fff;
   }
 
-  .cita p {
-    color: rgba(255, 255, 255, 0.85);
+  .cita-grid {
+    display: grid;
+    gap: 2.2rem;
+  }
+
+  .cita-texto {
+    max-width: 44ch;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.7;
+  }
+
+  .tel-grande {
+    display: inline-block;
+    margin-top: 1.2rem;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    border-bottom: 2px solid var(--azul-claro);
+  }
+
+  .donde {
+    margin-top: 1.8rem;
+    font-size: 0.92rem;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .donde p {
+    margin: 0.2rem 0;
   }
 
   form {
     display: grid;
     gap: 1rem;
-    margin-top: 1.6rem;
+    padding: clamp(1.3rem, 3vw, 2rem);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.16);
   }
 
   label {
     display: grid;
     gap: 0.4rem;
-    font-size: 0.86rem;
+    font-size: 0.85rem;
   }
 
   input,
-  textarea {
+  textarea,
+  select {
     min-height: 48px;
     padding: 0.8rem 0.9rem;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.28);
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.1);
     color: #fff;
     font: inherit;
   }
 
+  select option {
+    color: #12212e;
+  }
+
   input:focus-visible,
-  textarea:focus-visible {
-    outline: 2px solid #fff;
+  textarea:focus-visible,
+  select:focus-visible {
+    outline: 2px solid var(--azul-claro);
     outline-offset: 2px;
   }
 
-  button {
-    min-height: 52px;
-    border: 0;
-    border-radius: 10px;
-    background: #fff;
-    color: var(--azul);
-    font: inherit;
-    font-weight: 600;
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .chips span {
+    padding: 0.5rem 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 999px;
+    font-size: 0.88rem;
     cursor: pointer;
   }
 
+  button {
+    min-height: 54px;
+    border: 0;
+    border-radius: 10px;
+    background: var(--azul-claro);
+    color: #06243c;
+    font: inherit;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .form-nota {
+    margin: 0;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
   .foot {
-    padding: 2rem clamp(1.1rem, 4vw, 3rem) 3rem;
+    display: grid;
+    gap: 0.8rem;
+    padding: 2.4rem clamp(1.1rem, 4vw, 3.5rem) 2rem;
+    font-size: 0.88rem;
     color: var(--suave);
-    font-size: 0.86rem;
+  }
+
+  .foot p {
+    margin: 0;
+  }
+
+  .foot-brand {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--tinta);
   }
 
   .mini {
     font-size: 0.76rem;
   }
 
-  @media (min-width: 760px) {
-    .top nav {
+  .barra-movil {
+    position: fixed;
+    inset: auto 0 1.9rem 0;
+    z-index: 30;
+    display: flex;
+    gap: 0.6rem;
+    padding: 0.6rem 1rem;
+    background: rgba(247, 250, 252, 0.96);
+    border-top: 1px solid var(--linea);
+    backdrop-filter: blur(10px);
+  }
+
+  .barra-movil .btn {
+    flex: 1;
+  }
+
+  @media (min-width: 860px) {
+    .top nav,
+    .tel {
       display: flex;
     }
 
     .hero {
-      grid-template-columns: 1.3fr 0.7fr;
-      align-items: center;
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+
+    .pruebas {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .sec-head {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 2rem;
     }
 
     .grid {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .pasos {
+      grid-template-columns: repeat(4, 1fr);
     }
 
     .personas {
       grid-template-columns: repeat(3, 1fr);
     }
 
-    .persona {
-      flex-direction: column;
-      align-items: flex-start;
-      text-align: left;
+    .fin-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .resenas-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .cita-grid {
+      grid-template-columns: 0.9fr 1.1fr;
+      align-items: start;
     }
 
     form {
@@ -574,13 +1256,18 @@ const preguntas = [
     }
 
     .ancho,
-    button {
+    button,
+    .form-nota {
       grid-column: span 2;
     }
 
-    button {
-      justify-self: start;
-      padding: 0 2.4rem;
+    .foot {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+    }
+
+    .barra-movil {
+      display: none;
     }
   }
 </style>

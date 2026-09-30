@@ -2,98 +2,187 @@
 import '@fontsource-variable/ibm-plex-sans';
 import DemoLayout from '../../../layouts/DemoLayout.astro';
 
-/* Tarifas a la vista desde el primer pantallazo: en este sector, esconder el
-   precio es el motivo principal por el que la gente cierra la web. */
+/* Plantilla de centro de masaje. En este sector la web se cae por dos
+   motivos: no se ve el precio y no se sabe pedir cita. Aquí las tarifas van
+   completas y el botón de cita acompaña todo el recorrido. */
+
 const tratamientos = [
   {
-    nombre: 'Masaje descontracturante',
+    nombre: 'Descontracturante',
     duracion: '50 min',
     precio: '45 €',
     texto: 'Para la espalda cargada de oficina, entrenamiento o malas posturas.',
+    para: 'Cervicales, trapecios y lumbares',
+    icono: 'espalda',
   },
   {
-    nombre: 'Masaje deportivo',
+    nombre: 'Deportivo',
     duracion: '60 min',
     precio: '55 €',
     texto: 'Antes o después de competir, y en recuperación de sobrecargas.',
+    para: 'Gemelos, isquios y cuádriceps',
+    icono: 'pierna',
   },
   {
     nombre: 'Drenaje linfático',
     duracion: '60 min',
     precio: '50 €',
-    texto: 'Piernas pesadas, retención de líquidos y postoperatorio.',
+    texto: 'Presión suave y rítmica para activar el sistema linfático.',
+    para: 'Piernas pesadas y postoperatorio',
+    icono: 'gota',
   },
   {
-    nombre: 'Relajante de cuerpo entero',
+    nombre: 'Relajante completo',
     duracion: '75 min',
     precio: '60 €',
-    texto: 'Presión suave, luz baja y ningún reloj a la vista.',
+    texto: 'Cuerpo entero, luz baja y ningún reloj a la vista.',
+    para: 'Estrés, insomnio y tensión general',
+    icono: 'luna',
+  },
+  {
+    nombre: 'Craneal y facial',
+    duracion: '40 min',
+    precio: '38 €',
+    texto: 'Cabeza, cuello y mandíbula. Para quien aprieta los dientes.',
+    para: 'Dolor de cabeza y bruxismo',
+    icono: 'cabeza',
+  },
+  {
+    nombre: 'Embarazo',
+    duracion: '50 min',
+    precio: '48 €',
+    texto: 'Postura lateral con cojines, a partir del segundo trimestre.',
+    para: 'Lumbares y piernas',
+    icono: 'corazon',
   },
 ];
 
 const bonos = [
-  { nombre: 'Bono 5 sesiones', precio: '200 €', nota: 'Ahorras 25 €. Sin caducidad.' },
-  { nombre: 'Bono 10 sesiones', precio: '380 €', nota: 'Ahorras 70 €. Compartible.' },
-  { nombre: 'Primera visita', precio: '35 €', nota: 'Valoración incluida, 50 min.' },
+  {
+    nombre: 'Primera visita',
+    precio: '35 €',
+    nota: 'Valoración incluida, 50 minutos',
+    detalle: ['Entrevista y exploración', 'Sesión completa', 'Pautas para casa'],
+  },
+  {
+    nombre: 'Bono 5 sesiones',
+    precio: '200 €',
+    nota: 'Ahorras 25 € · sin caducidad',
+    detalle: ['Cualquier tratamiento', 'Transferible', 'Pago en dos veces'],
+    destacado: true,
+  },
+  {
+    nombre: 'Bono 10 sesiones',
+    precio: '380 €',
+    nota: 'Ahorras 70 € · compartible',
+    detalle: ['Cualquier tratamiento', 'Compartible en pareja', 'Cita preferente'],
+  },
 ];
 
 const pasos = [
-  'Nos cuentas qué te duele y desde cuándo.',
-  'Valoramos la zona y decidimos el tratamiento juntos.',
-  'Sesión y pautas para casa, sin vendernos un bono a la fuerza.',
+  { t: 'Nos cuentas', d: 'Qué te duele, desde cuándo y qué has probado ya.' },
+  { t: 'Valoramos', d: 'Exploramos la zona y decidimos el tratamiento contigo.' },
+  { t: 'Tratamos', d: 'La sesión, a tu ritmo de presión, sin sorpresas.' },
+  { t: 'Te vas con deberes', d: 'Dos o tres ejercicios para casa. Sin venderte un bono.' },
+];
+
+const equipo = [
+  { n: 'Lucía Marín', r: 'Fisioterapeuta · col. 12345', e: '12 años · deportivo y terapéutico' },
+  { n: 'Diego Ruiz', r: 'Fisioterapeuta · col. 12346', e: '8 años · drenaje y embarazo' },
+  { n: 'Ana Belén Costa', r: 'Masajista · dipl. 4417', e: '6 años · relajante y craneal' },
+];
+
+const resenas = [
+  { t: 'Llevaba meses con la cervical y en tres sesiones estaba nueva. Y me dijeron que no hacía falta una cuarta.', a: 'Carmen P.' },
+  { t: 'Voy cada quince días desde hace dos años. Nunca me han vendido nada que no necesitara.', a: 'Fran M.' },
+  { t: 'El trato es de otra época, en el buen sentido. Salgo del centro como nueva.', a: 'Isabel R.' },
+];
+
+const preguntas = [
+  { q: '¿Cuántas sesiones voy a necesitar?', a: 'Depende de lo que traigas, pero en la primera visita te damos una estimación honesta. Muchas contracturas se resuelven en dos o tres sesiones.' },
+  { q: '¿Tengo que llevar algo?', a: 'Nada. Ponemos toallas, sábanas y todo lo necesario. Si vienes de entrenar, hay ducha.' },
+  { q: '¿Duele el masaje descontracturante?', a: 'Puede molestar en el punto exacto de la contractura, pero se trabaja a tu tolerancia. Si duele de más, se baja la presión.' },
+  { q: '¿Se puede pagar con tarjeta?', a: 'Sí, tarjeta, Bizum y efectivo. Los bonos se pueden fraccionar en dos pagos.' },
 ];
 ---
 
 <DemoLayout
-  title="Centro Sereno · masaje y fisioterapia"
-  description="Plantilla de ejemplo: web para clínica de masajes con tratamientos, precios, bonos y cita."
+  title="Centro Sereno · masaje y fisioterapia en Granada"
+  description="Plantilla de ejemplo: web para centro de masajes con tratamientos, precios, bonos, equipo y cita."
 >
   <div class="site">
     <header class="top">
       <a class="brand" href="#inicio">
-        <span class="dot" aria-hidden="true"></span>
-        Centro Sereno
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-text">
+          Centro Sereno
+          <small>Masaje y fisioterapia · Granada</small>
+        </span>
       </a>
       <nav aria-label="Principal">
         <a href="#tratamientos">Tratamientos</a>
         <a href="#precios">Precios</a>
         <a href="#equipo">Equipo</a>
+        <a href="#preguntas">Preguntas</a>
       </nav>
-      <a class="btn small" href="#cita">Pedir cita</a>
+      <a class="btn" href="#cita">Pedir cita</a>
     </header>
 
     <section class="hero" id="inicio">
-      <p class="eyebrow">Masaje terapéutico · Granada</p>
-      <h1>Media hora para ti. El resto del día lo notas.</h1>
-      <p class="lead">
-        Tratamientos de una en una persona, sin prisa y sin música de ascensor. Te decimos
-        cuántas sesiones necesitas de verdad, aunque sean menos de las que esperabas.
-      </p>
-      <div class="hero-actions">
-        <a class="btn" href="#cita">Pedir cita</a>
-        <a class="btn ghost" href="#precios">Ver precios</a>
+      <div class="hero-text">
+        <p class="chip"><span class="dot" aria-hidden="true"></span>Hay hueco esta semana</p>
+        <h1>Media hora para ti. El resto del día lo notas.</h1>
+        <p class="lead">
+          Sesiones de uno en uno, sin prisa y sin música de ascensor. Te decimos cuántas
+          sesiones necesitas de verdad, aunque sean menos de las que esperabas.
+        </p>
+        <div class="hero-actions">
+          <a class="btn big" href="#cita">Pedir cita</a>
+          <a class="btn ghost big" href="#precios">Ver precios</a>
+        </div>
+        <ul class="badges">
+          <li>Fisioterapeutas colegiados</li>
+          <li>Sábados por la mañana</li>
+          <li>Parking en la puerta</li>
+          <li>Primera visita 35 €</li>
+        </ul>
       </div>
-      <ul class="badges">
-        <li>Fisioterapeutas colegiados</li>
-        <li>Abierto sábados por la mañana</li>
-        <li>Parking en la puerta</li>
-      </ul>
+      <div class="hero-art" aria-hidden="true">
+        <span class="onda onda-1"></span>
+        <span class="onda onda-2"></span>
+        <span class="onda onda-3"></span>
+        <span class="piedra piedra-1"></span>
+        <span class="piedra piedra-2"></span>
+        <span class="piedra piedra-3"></span>
+        <p class="art-note">Aquí irían tus fotos</p>
+      </div>
     </section>
 
     <section class="tratamientos" id="tratamientos">
-      <h2>Tratamientos</h2>
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Tratamientos</p>
+          <h2>Cada uno con su duración y su precio</h2>
+        </div>
+        <p class="sec-note">Precios finales con IVA. Sin cuotas, sin permanencia y sin letra pequeña.</p>
+      </header>
+
       <div class="grid">
         {
           tratamientos.map((t) => (
             <article class="card">
-              <header>
+              <span class={`icono icono-${t.icono}`} aria-hidden="true" />
+              <div class="card-head">
                 <h3>{t.nombre}</h3>
-                <p class="meta">
-                  {t.duracion} · <strong>{t.precio}</strong>
+                <p class="precio">
+                  {t.precio} <span>{t.duracion}</span>
                 </p>
-              </header>
-              <p>{t.texto}</p>
-              <a href="#cita">Reservar esta sesión</a>
+              </div>
+              <p class="card-texto">{t.texto}</p>
+              <p class="card-para">{t.para}</p>
+              <a class="card-cta" href="#cita">
+                Reservar <span aria-hidden="true">→</span>
+              </a>
             </article>
           ))
         }
@@ -101,50 +190,138 @@ const pasos = [
     </section>
 
     <section class="precios" id="precios">
-      <h2>Bonos y primera visita</h2>
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Bonos</p>
+          <h2>Sale más barato si vienes seguido</h2>
+        </div>
+        <p class="sec-note">Los bonos valen para cualquier tratamiento y no caducan.</p>
+      </header>
+
       <div class="bonos">
         {
           bonos.map((b) => (
-            <div class="bono">
+            <div class:list={['bono', { destacado: b.destacado }]}>
+              {b.destacado && <span class="etiqueta">El más elegido</span>}
               <p class="bono-nombre">{b.nombre}</p>
               <p class="bono-precio">{b.precio}</p>
               <p class="bono-nota">{b.nota}</p>
+              <ul>
+                {b.detalle.map((d) => (
+                  <li>{d}</li>
+                ))}
+              </ul>
+              <a class="btn ghost" href="#cita">
+                Quiero este
+              </a>
             </div>
           ))
         }
       </div>
-      <p class="aviso">Precios finales, IVA incluido. Sin cuotas ni permanencia.</p>
     </section>
 
-    <section class="proceso" id="equipo">
-      <div>
-        <h2>Cómo trabajamos</h2>
-        <ol>
-          {pasos.map((paso) => <li>{paso}</li>)}
-        </ol>
+    <section class="proceso">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Cómo trabajamos</p>
+          <h2>Cuatro pasos y ninguna sorpresa</h2>
+        </div>
+      </header>
+      <ol class="pasos">
+        {
+          pasos.map((p, i) => (
+            <li>
+              <span class="num">{String(i + 1).padStart(2, '0')}</span>
+              <strong>{p.t}</strong>
+              <span>{p.d}</span>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="equipo" id="equipo">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Equipo</p>
+          <h2>Quién te va a tratar</h2>
+        </div>
+        <p class="sec-note">Todos con número de colegiado, porque en salud eso importa.</p>
+      </header>
+      <div class="personas">
+        {
+          equipo.map((p) => (
+            <div class="persona">
+              <span class="retrato" aria-hidden="true">
+                {p.n
+                  .split(' ')
+                  .slice(0, 2)
+                  .map((w) => w[0])
+                  .join('')}
+              </span>
+              <strong>{p.n}</strong>
+              <span class="rol">{p.r}</span>
+              <span class="exp">{p.e}</span>
+            </div>
+          ))
+        }
       </div>
-      <div class="equipo">
-        <div class="persona">
-          <span class="avatar" aria-hidden="true">LM</span>
-          <div>
-            <strong>Lucía Marín</strong>
-            <span>Fisioterapeuta · col. 12345</span>
-          </div>
+    </section>
+
+    <section class="resenas">
+      <div class="resenas-grid">
+        {
+          resenas.map((r) => (
+            <blockquote>
+              <p class="estrellas" aria-label="5 sobre 5">
+                ★★★★★
+              </p>
+              <p>{r.t}</p>
+              <footer>{r.a}</footer>
+            </blockquote>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="preguntas" id="preguntas">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Preguntas frecuentes</p>
+          <h2>Lo que más nos preguntáis</h2>
         </div>
-        <div class="persona">
-          <span class="avatar" aria-hidden="true">DR</span>
-          <div>
-            <strong>Diego Ruiz</strong>
-            <span>Masaje deportivo · col. 12346</span>
-          </div>
-        </div>
+      </header>
+      <div class="faq">
+        {
+          preguntas.map((p, i) => (
+            <details open={i === 0}>
+              <summary>{p.q}</summary>
+              <p>{p.a}</p>
+            </details>
+          ))
+        }
       </div>
     </section>
 
     <section class="cita" id="cita">
-      <div class="cita-inner">
-        <h2>Pedir cita</h2>
-        <p>Contesta la misma persona que te atiende. Normalmente en el mismo día.</p>
+      <div class="cita-grid">
+        <div>
+          <p class="eyebrow claro">Pedir cita</p>
+          <h2>Contesta la misma persona que te atiende</h2>
+          <p class="cita-texto">
+            Normalmente el mismo día. Si prefieres hablarlo antes, llámanos y te decimos si tu
+            caso es para nosotros o para otro profesional.
+          </p>
+          <div class="contacto-directo">
+            <a href="tel:+34958000000">958 000 000</a>
+            <a href="#cita">WhatsApp 600 000 000</a>
+          </div>
+          <div class="donde">
+            <p><strong>Calle Recogidas 8, Granada</strong></p>
+            <p>Lunes a viernes 9:00 – 21:00 · Sábados 9:00 – 14:00</p>
+          </div>
+        </div>
+
         <form>
           <label>
             Nombre
@@ -155,19 +332,43 @@ const pasos = [
             <input type="tel" placeholder="600 000 000" required />
           </label>
           <label class="ancho">
+            Tratamiento
+            <select>
+              {tratamientos.map((t) => <option>{`${t.nombre} · ${t.duracion} · ${t.precio}`}</option>)}
+              <option>No lo sé, quiero que me asesoréis</option>
+            </select>
+          </label>
+          <label class="ancho">
+            Cuándo te viene bien
+            <span class="chips">
+              <span>Mañanas</span>
+              <span>Mediodía</span>
+              <span>Tardes</span>
+              <span>Sábado</span>
+            </span>
+          </label>
+          <label class="ancho">
             Qué te pasa
             <textarea rows="3" placeholder="Zona, desde cuándo y si viene de algún golpe"></textarea>
           </label>
           <button type="button">Pedir cita</button>
+          <p class="form-nota">Te escribimos para confirmar hora. Sin pago por adelantado.</p>
         </form>
-        <p class="alt">o por WhatsApp al 600 000 000</p>
       </div>
     </section>
 
     <footer class="foot">
-      <p>Centro Sereno · Calle Recogidas 8, Granada · 958 000 000</p>
-      <p class="mini">Plantilla de ejemplo. Los datos son ficticios.</p>
+      <div>
+        <p class="foot-brand">Centro Sereno</p>
+        <p>Calle Recogidas 8, Granada · 958 000 000 · hola@centrosereno.es</p>
+      </div>
+      <p class="mini">Plantilla de ejemplo. Nombres, precios y reseñas son ficticios.</p>
     </footer>
+
+    <div class="barra-movil">
+      <a class="btn ghost" href="tel:+34958000000">Llamar</a>
+      <a class="btn" href="#cita">Pedir cita</a>
+    </div>
   </div>
 </DemoLayout>
 
@@ -175,54 +376,69 @@ const pasos = [
   .site {
     --verde: #2f5d43;
     --verde-claro: #6f9c76;
-    --crema: #f6f4ef;
-    --crema-2: #eae6dc;
+    --verde-suave: #dfe9e0;
+    --crema: #f7f5f0;
+    --crema-2: #ece7dd;
     --tinta: #1d241f;
     --suave: #5d6b60;
+    --linea: rgba(29, 36, 31, 0.12);
 
     background: var(--crema);
     color: var(--tinta);
     font-family: 'IBM Plex Sans Variable', system-ui, sans-serif;
-    padding-bottom: 3rem;
+    padding-bottom: 5.5rem;
   }
 
   .top {
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 20;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1.5rem;
-    padding: 0.9rem clamp(1.1rem, 4vw, 3rem);
-    background: rgba(246, 244, 239, 0.94);
-    border-bottom: 1px solid rgba(29, 36, 31, 0.1);
-    backdrop-filter: blur(8px);
+    padding: 0.85rem clamp(1.1rem, 4vw, 3.5rem);
+    background: rgba(247, 245, 240, 0.95);
+    border-bottom: 1px solid var(--linea);
+    backdrop-filter: blur(10px);
   }
 
   .brand {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
-    font-weight: 600;
-    font-size: 1.1rem;
+    gap: 0.7rem;
     text-decoration: none;
   }
 
-  .dot {
-    width: 12px;
-    height: 12px;
+  .brand-mark {
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
-    background: var(--verde-claro);
+    background: radial-gradient(circle at 35% 30%, #a7c6a9, var(--verde));
+  }
+
+  .brand-text {
+    display: grid;
+    font-size: 1.08rem;
+    font-weight: 600;
+    line-height: 1.15;
+  }
+
+  .brand-text small {
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--suave);
   }
 
   .top nav {
     display: none;
-    gap: 1.4rem;
+    gap: 1.5rem;
+    font-size: 0.93rem;
   }
 
   .top nav a {
-    font-size: 0.92rem;
     color: var(--suave);
     text-decoration: none;
   }
@@ -235,63 +451,84 @@ const pasos = [
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 48px;
-    padding: 0 1.4rem;
+    min-height: 46px;
+    padding: 0 1.3rem;
     border-radius: 999px;
     background: var(--verde);
     color: var(--crema);
+    font-size: 0.94rem;
     font-weight: 600;
-    font-size: 0.95rem;
     text-decoration: none;
+    transition: transform 0.15s ease, background-color 0.15s ease;
   }
 
-  .btn.small {
-    min-height: 42px;
-    padding: 0 1.1rem;
-    font-size: 0.88rem;
+  .btn:hover {
+    transform: translateY(-1px);
+    background: #244b35;
   }
 
   .btn.ghost {
     background: transparent;
-    border: 1px solid rgba(29, 36, 31, 0.25);
+    border: 1px solid var(--linea);
     color: var(--tinta);
   }
 
+  .btn.big {
+    min-height: 54px;
+    padding: 0 1.9rem;
+    font-size: 1rem;
+  }
+
   section {
-    padding: clamp(2.4rem, 6vw, 4.5rem) clamp(1.1rem, 4vw, 3rem);
+    padding: clamp(2.6rem, 6vw, 4.5rem) clamp(1.1rem, 4vw, 3.5rem);
   }
 
   .hero {
-    max-width: 52rem;
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
   }
 
-  .eyebrow {
-    margin: 0 0 0.9rem;
-    font-size: 0.78rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--verde-claro);
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 1.2rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    background: var(--verde-suave);
+    color: var(--verde);
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--verde-claro);
   }
 
   h1 {
     margin: 0;
-    font-size: clamp(1.9rem, 4.6vw, 3.1rem);
-    line-height: 1.12;
-    letter-spacing: -0.02em;
-    max-width: 18ch;
+    font-size: clamp(2rem, 4.5vw, 3.3rem);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    max-width: 17ch;
   }
 
   .lead {
     max-width: 50ch;
     color: var(--suave);
-    line-height: 1.65;
+    font-size: 1.05rem;
+    line-height: 1.7;
   }
 
   .hero-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 0.8rem;
-    margin-top: 1.6rem;
+    margin-top: 1.8rem;
   }
 
   .badges {
@@ -304,17 +541,112 @@ const pasos = [
   }
 
   .badges li {
-    padding: 0.4rem 0.85rem;
-    border: 1px solid rgba(29, 36, 31, 0.16);
+    padding: 0.42rem 0.9rem;
+    border: 1px solid var(--linea);
     border-radius: 999px;
     font-size: 0.82rem;
     color: var(--suave);
   }
 
+  .hero-art {
+    position: relative;
+    aspect-ratio: 4 / 3.6;
+    border-radius: 24px;
+    overflow: hidden;
+    background: linear-gradient(160deg, #cfdfd0 0%, #92b193 45%, #4f7a5b 100%);
+  }
+
+  .onda {
+    position: absolute;
+    left: -20%;
+    width: 140%;
+    height: 40%;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  .onda-1 {
+    top: 8%;
+  }
+  .onda-2 {
+    top: 38%;
+    background: rgba(255, 255, 255, 0.12);
+  }
+  .onda-3 {
+    top: 66%;
+    background: rgba(255, 255, 255, 0.09);
+  }
+
+  .piedra {
+    position: absolute;
+    left: 50%;
+    border-radius: 50%;
+    background: linear-gradient(160deg, #6a6f63, #3c4238);
+    box-shadow: 0 10px 22px rgba(20, 28, 20, 0.35);
+  }
+
+  .piedra-1 {
+    width: 26%;
+    aspect-ratio: 2.4;
+    bottom: 26%;
+    translate: -50% 0;
+  }
+
+  .piedra-2 {
+    width: 21%;
+    aspect-ratio: 2.4;
+    bottom: 34%;
+    translate: -50% 0;
+  }
+
+  .piedra-3 {
+    width: 15%;
+    aspect-ratio: 2.4;
+    bottom: 41%;
+    translate: -50% 0;
+  }
+
+  .art-note {
+    position: absolute;
+    right: 0.9rem;
+    bottom: 0.7rem;
+    margin: 0;
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .eyebrow {
+    margin: 0;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--verde-claro);
+  }
+
+  .eyebrow.claro {
+    color: rgba(247, 245, 240, 0.75);
+  }
+
+  .sec-head {
+    display: grid;
+    gap: 0.7rem;
+    margin-bottom: 2.2rem;
+  }
+
   h2 {
-    margin: 0 0 1.6rem;
-    font-size: clamp(1.5rem, 3.2vw, 2.1rem);
-    letter-spacing: -0.01em;
+    margin: 0.3rem 0 0;
+    font-size: clamp(1.6rem, 3.4vw, 2.3rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    max-width: 22ch;
+  }
+
+  .sec-note {
+    margin: 0;
+    max-width: 48ch;
+    font-size: 0.92rem;
+    color: var(--suave);
   }
 
   .grid {
@@ -324,42 +656,152 @@ const pasos = [
 
   .card {
     display: grid;
-    gap: 0.7rem;
+    gap: 0.55rem;
     align-content: start;
-    padding: 1.4rem;
-    border: 1px solid rgba(29, 36, 31, 0.12);
-    border-radius: 16px;
+    padding: 1.5rem;
+    border: 1px solid var(--linea);
+    border-radius: 18px;
     background: #fff;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 34px rgba(29, 36, 31, 0.1);
+  }
+
+  /* Iconos dibujados en CSS: sin librerías ni peticiones extra */
+  .icono {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--verde-suave);
+  }
+
+  .icono::before,
+  .icono::after {
+    content: '';
+    position: absolute;
+    background: var(--verde);
+  }
+
+  .icono-espalda::before {
+    inset: 28% 46% 28% 46%;
+    border-radius: 4px;
+  }
+  .icono-espalda::after {
+    inset: 38% 28% 38% 28%;
+    height: 24%;
+    border-radius: 4px;
+  }
+
+  .icono-pierna::before {
+    inset: 22% 52% 46% 34%;
+    border-radius: 6px;
+  }
+  .icono-pierna::after {
+    inset: 54% 34% 22% 46%;
+    border-radius: 6px;
+  }
+
+  .icono-gota::before {
+    inset: 24% 34% 26% 34%;
+    border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
+  }
+  .icono-gota::after {
+    display: none;
+  }
+
+  .icono-luna::before {
+    inset: 24%;
+    border-radius: 50%;
+  }
+  .icono-luna::after {
+    inset: 18% 22% 30% 38%;
+    border-radius: 50%;
+    background: var(--verde-suave);
+  }
+
+  .icono-cabeza::before {
+    inset: 22% 30% 40% 30%;
+    border-radius: 50% 50% 40% 40%;
+  }
+  .icono-cabeza::after {
+    inset: 62% 38% 22% 38%;
+    border-radius: 3px;
+  }
+
+  .icono-corazon::before,
+  .icono-corazon::after {
+    width: 30%;
+    height: 44%;
+    border-radius: 50% 50% 0 0;
+  }
+  .icono-corazon::before {
+    left: 22%;
+    top: 26%;
+    rotate: -45deg;
+  }
+  .icono-corazon::after {
+    right: 22%;
+    top: 26%;
+    rotate: 45deg;
+  }
+
+  .card-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
   }
 
   .card h3 {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: 1.12rem;
   }
 
-  .meta {
-    margin: 0.2rem 0 0;
-    color: var(--suave);
-    font-size: 0.9rem;
-  }
-
-  .meta strong {
+  .precio {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
     color: var(--verde);
+    white-space: nowrap;
   }
 
-  .card p {
+  .precio span {
+    display: block;
+    font-size: 0.76rem;
+    font-weight: 500;
+    color: var(--suave);
+    text-align: right;
+  }
+
+  .card-texto {
     margin: 0;
     color: var(--suave);
     line-height: 1.6;
   }
 
-  .card a {
+  .card-para {
+    margin: 0;
+    padding: 0.35rem 0.7rem;
+    justify-self: start;
+    border-radius: 999px;
+    background: var(--crema-2);
+    font-size: 0.78rem;
+    color: var(--suave);
+  }
+
+  .card-cta {
     display: inline-flex;
     align-items: center;
+    gap: 0.4rem;
     min-height: 44px;
     color: var(--verde);
     font-weight: 600;
     font-size: 0.92rem;
+    text-decoration: none;
   }
 
   .precios {
@@ -372,10 +814,32 @@ const pasos = [
   }
 
   .bono {
-    padding: 1.4rem;
-    border-radius: 16px;
+    position: relative;
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+    padding: 1.7rem;
+    border-radius: 20px;
     background: #fff;
-    border: 1px solid rgba(29, 36, 31, 0.1);
+    border: 1px solid var(--linea);
+  }
+
+  .bono.destacado {
+    background: var(--verde);
+    color: var(--crema);
+    border-color: var(--verde);
+  }
+
+  .etiqueta {
+    position: absolute;
+    top: -0.7rem;
+    left: 1.7rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    background: var(--verde-claro);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
   }
 
   .bono-nombre {
@@ -384,72 +848,181 @@ const pasos = [
   }
 
   .bono-precio {
-    margin: 0.3rem 0;
-    font-size: 1.8rem;
+    margin: 0.2rem 0 0;
+    font-size: 2.2rem;
+    font-weight: 700;
     color: var(--verde);
+  }
+
+  .bono.destacado .bono-precio {
+    color: #fff;
   }
 
   .bono-nota {
     margin: 0;
+    font-size: 0.86rem;
     color: var(--suave);
-    font-size: 0.88rem;
   }
 
-  .aviso {
-    margin: 1.6rem 0 0;
-    color: var(--suave);
-    font-size: 0.88rem;
+  .bono.destacado .bono-nota {
+    color: rgba(247, 245, 240, 0.8);
   }
 
-  .proceso {
+  .bono ul {
     display: grid;
-    gap: 2.5rem;
-  }
-
-  ol {
-    display: grid;
-    gap: 0.9rem;
-    margin: 0;
-    padding-left: 1.2rem;
+    gap: 0.4rem;
+    margin: 0.8rem 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.9rem;
     color: var(--suave);
-    line-height: 1.6;
-    max-width: 46ch;
   }
 
-  .equipo {
+  .bono.destacado ul {
+    color: rgba(247, 245, 240, 0.9);
+  }
+
+  .bono li::before {
+    content: '✓';
+    margin-right: 0.5rem;
+    color: var(--verde-claro);
+    font-weight: 700;
+  }
+
+  .bono.destacado .btn.ghost {
+    background: var(--crema);
+    border-color: var(--crema);
+    color: var(--verde);
+  }
+
+  .pasos {
     display: grid;
     gap: 1rem;
-    align-content: start;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: paso;
+  }
+
+  .pasos li {
+    display: grid;
+    gap: 0.3rem;
+    padding: 1.3rem;
+    border-radius: 16px;
+    background: #fff;
+    border: 1px solid var(--linea);
+  }
+
+  .num {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: var(--verde-claro);
+  }
+
+  .pasos strong {
+    font-size: 1.05rem;
+  }
+
+  .pasos span:last-child {
+    color: var(--suave);
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+
+  .personas {
+    display: grid;
+    gap: 1rem;
   }
 
   .persona {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem 1.2rem;
-    border-radius: 14px;
+    display: grid;
+    gap: 0.3rem;
+    justify-items: start;
+    padding: 1.5rem;
+    border-radius: 18px;
     background: #fff;
-    border: 1px solid rgba(29, 36, 31, 0.1);
+    border: 1px solid var(--linea);
   }
 
-  .avatar {
+  .retrato {
     display: grid;
     place-items: center;
-    width: 48px;
-    height: 48px;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 0.6rem;
     border-radius: 50%;
-    background: var(--verde-claro);
+    background: linear-gradient(140deg, #a7c6a9, var(--verde));
     color: #fff;
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 1.1rem;
   }
 
-  .persona div {
-    display: grid;
-  }
-
-  .persona span:last-child {
+  .rol,
+  .exp {
+    font-size: 0.86rem;
     color: var(--suave);
+  }
+
+  .resenas {
+    background: var(--verde-suave);
+  }
+
+  .resenas-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  blockquote {
+    margin: 0;
+    padding: 1.5rem;
+    border-radius: 18px;
+    background: #fff;
+  }
+
+  .estrellas {
+    margin: 0 0 0.6rem;
+    color: #d8a13a;
+    letter-spacing: 0.1em;
+  }
+
+  blockquote p {
+    margin: 0;
+    line-height: 1.65;
+  }
+
+  blockquote footer {
+    margin-top: 0.9rem;
     font-size: 0.85rem;
+    color: var(--suave);
+  }
+
+  .faq {
+    display: grid;
+    gap: 0.7rem;
+    max-width: 54rem;
+  }
+
+  details {
+    border: 1px solid var(--linea);
+    border-radius: 14px;
+    background: #fff;
+  }
+
+  summary {
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    padding: 0.9rem 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  details p {
+    margin: 0;
+    padding: 0 1.2rem 1.1rem;
+    color: var(--suave);
+    line-height: 1.6;
   }
 
   .cita {
@@ -457,84 +1030,189 @@ const pasos = [
     color: var(--crema);
   }
 
-  .cita-inner {
-    max-width: 46rem;
+  .cita-grid {
+    display: grid;
+    gap: 2.2rem;
   }
 
-  .cita p {
-    color: rgba(246, 244, 239, 0.8);
+  .cita-texto {
+    max-width: 44ch;
+    color: rgba(247, 245, 240, 0.82);
+    line-height: 1.7;
+  }
+
+  .contacto-directo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 1.4rem;
+  }
+
+  .contacto-directo a {
+    padding: 0.7rem 1.1rem;
+    border: 1px solid rgba(247, 245, 240, 0.35);
+    border-radius: 999px;
+    color: var(--crema);
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+
+  .donde {
+    margin-top: 1.8rem;
+    font-size: 0.92rem;
+    color: rgba(247, 245, 240, 0.8);
+  }
+
+  .donde p {
+    margin: 0.2rem 0;
   }
 
   form {
     display: grid;
     gap: 1rem;
-    margin-top: 1.6rem;
+    padding: clamp(1.3rem, 3vw, 2rem);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(247, 245, 240, 0.16);
   }
 
   label {
     display: grid;
     gap: 0.4rem;
-    font-size: 0.86rem;
+    font-size: 0.85rem;
   }
 
   input,
-  textarea {
-    padding: 0.8rem 0.9rem;
+  textarea,
+  select {
     min-height: 48px;
-    border: 1px solid rgba(246, 244, 239, 0.3);
+    padding: 0.8rem 0.9rem;
+    border: 1px solid rgba(247, 245, 240, 0.3);
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.1);
     color: var(--crema);
     font: inherit;
   }
 
+  select option {
+    color: #1d241f;
+  }
+
   input:focus-visible,
-  textarea:focus-visible {
+  textarea:focus-visible,
+  select:focus-visible {
     outline: 2px solid var(--crema);
     outline-offset: 2px;
   }
 
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .chips span {
+    padding: 0.5rem 0.9rem;
+    border: 1px solid rgba(247, 245, 240, 0.35);
+    border-radius: 999px;
+    font-size: 0.88rem;
+    cursor: pointer;
+  }
+
   button {
-    min-height: 52px;
+    min-height: 54px;
     border: 0;
     border-radius: 999px;
     background: var(--crema);
     color: var(--verde);
     font: inherit;
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 1rem;
     cursor: pointer;
   }
 
-  .alt {
-    margin-top: 1rem;
-    font-size: 0.9rem;
+  .form-nota {
+    margin: 0;
+    font-size: 0.8rem;
+    color: rgba(247, 245, 240, 0.7);
   }
 
   .foot {
-    padding: 2rem clamp(1.1rem, 4vw, 3rem) 3rem;
+    display: grid;
+    gap: 0.8rem;
+    padding: 2.4rem clamp(1.1rem, 4vw, 3.5rem) 2rem;
+    font-size: 0.88rem;
     color: var(--suave);
-    font-size: 0.86rem;
+  }
+
+  .foot p {
+    margin: 0;
+  }
+
+  .foot-brand {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--tinta);
   }
 
   .mini {
     font-size: 0.76rem;
   }
 
-  @media (min-width: 760px) {
+  .barra-movil {
+    position: fixed;
+    inset: auto 0 1.9rem 0;
+    z-index: 30;
+    display: flex;
+    gap: 0.6rem;
+    padding: 0.6rem 1rem;
+    background: rgba(247, 245, 240, 0.96);
+    border-top: 1px solid var(--linea);
+    backdrop-filter: blur(10px);
+  }
+
+  .barra-movil .btn {
+    flex: 1;
+  }
+
+  @media (min-width: 860px) {
     .top nav {
       display: flex;
     }
 
+    .hero {
+      grid-template-columns: 1.05fr 0.95fr;
+    }
+
+    .sec-head {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 2rem;
+    }
+
     .grid {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
     }
 
     .bonos {
       grid-template-columns: repeat(3, 1fr);
     }
 
-    .proceso {
-      grid-template-columns: 1.1fr 0.9fr;
+    .pasos {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .personas {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .resenas-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .cita-grid {
+      grid-template-columns: 0.9fr 1.1fr;
+      align-items: start;
     }
 
     form {
@@ -542,13 +1220,18 @@ const pasos = [
     }
 
     .ancho,
-    button {
+    button,
+    .form-nota {
       grid-column: span 2;
     }
 
-    button {
-      justify-self: start;
-      padding: 0 2.4rem;
+    .foot {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+    }
+
+    .barra-movil {
+      display: none;
     }
   }
 </style>

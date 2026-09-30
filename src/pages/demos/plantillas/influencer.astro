@@ -3,30 +3,51 @@ import '@fontsource-variable/space-grotesk';
 import DemoLayout from '../../../layouts/DemoLayout.astro';
 
 /* Plantilla vertical tipo "enlace en la biografía": se consume entera con el
-   pulgar, así que todo es una columna y cada bloque es un objetivo grande. */
+   pulgar, así que todo va en una columna y cada bloque es un objetivo grande.
+   Lo que la diferencia de un Linktree: kit de prensa, cifras de audiencia y
+   un formulario para marcas dentro de la propia página. */
+
 const links = [
   { label: 'Mi última colaboración', detail: 'Código NOA15 · 15 % de descuento', kind: 'primary' },
-  { label: 'Canal de YouTube', detail: '128 vídeos · nuevo los martes' },
-  { label: 'Twitch', detail: 'Directos lunes, miércoles y viernes' },
-  { label: 'Tienda de merchandising', detail: 'Envíos a toda la península' },
-  { label: 'Lista de reproducción', detail: 'Lo que suena en los directos' },
+  { label: 'Canal de YouTube', detail: '128 vídeos · nuevo los martes', meta: '412 mil subs' },
+  { label: 'Twitch', detail: 'Directos lunes, miércoles y viernes', meta: 'En directo hoy 19:00' },
+  { label: 'Tienda de merchandising', detail: 'Envíos a toda la península', meta: 'Nueva colección' },
+  { label: 'Mi setup', detail: 'Todo lo que uso, con enlaces', meta: '' },
+  { label: 'Lista de reproducción', detail: 'Lo que suena en los directos', meta: '' },
 ];
 
 const videos = [
-  { title: 'Monté mi setup entero por menos de 600 €', views: '412 mil visitas' },
-  { title: 'Una semana entrenando como un profesional', views: '287 mil visitas' },
-  { title: 'Respondo a vuestras preguntas incómodas', views: '156 mil visitas' },
+  { title: 'Monté mi setup entero por menos de 600 €', views: '412 mil visitas', time: '14:22' },
+  { title: 'Una semana entrenando como un profesional', views: '287 mil visitas', time: '18:40' },
+  { title: 'Respondo a vuestras preguntas incómodas', views: '156 mil visitas', time: '22:05' },
 ];
 
-const brands = ['Nordvik', 'Casa Pérez', 'Tebra Fit', 'Lumen Audio'];
+const marcas = ['Nordvik', 'Casa Pérez', 'Tebra Fit', 'Lumen Audio', 'Vantia', 'Kurro'];
+
+const audiencia = [
+  { label: '18-24 años', valor: 38 },
+  { label: '25-34 años', valor: 41 },
+  { label: '35-44 años', valor: 15 },
+  { label: '45 o más', valor: 6 },
+];
+
+const formatos = [
+  { t: 'Vídeo integrado', d: 'Mención de 60-90 s dentro de un vídeo del canal.', p: 'desde 900 €' },
+  { t: 'Vídeo dedicado', d: 'Pieza completa sobre el producto, guion consensuado.', p: 'desde 2.200 €' },
+  { t: 'Pack redes', d: 'Reel + historias con enlace + publicación en X.', p: 'desde 650 €' },
+];
 ---
 
 <DemoLayout
   title="Noa Ferrán · creadora de contenido"
-  description="Plantilla de ejemplo: página vertical para creadores de contenido, con enlaces, vídeos y contacto para marcas."
+  description="Plantilla de ejemplo: página vertical para creadores con enlaces, vídeos, cifras de audiencia, tarifas y contacto para marcas."
 >
   <main class="page">
     <header class="hero">
+      <div class="cover" aria-hidden="true">
+        <span class="glow glow-1"></span>
+        <span class="glow glow-2"></span>
+      </div>
       <div class="avatar" aria-hidden="true">NF</div>
       <h1>Noa Ferrán</h1>
       <p class="handle">@noaferran</p>
@@ -37,17 +58,26 @@ const brands = ['Nordvik', 'Casa Pérez', 'Tebra Fit', 'Lumen Audio'];
       <ul class="stats">
         <li><strong>184 mil</strong><span>seguidores</span></li>
         <li><strong>2,3 M</strong><span>visitas al mes</span></li>
-        <li><strong>4 años</strong><span>creando</span></li>
+        <li><strong>7,4 %</strong><span>interacción</span></li>
       </ul>
+      <div class="hero-actions">
+        <a class="btn" href="#marcas">Trabaja conmigo</a>
+        <a class="btn ghost" href="#kit">Ver el kit</a>
+      </div>
     </header>
 
     <nav class="links" aria-label="Mis enlaces">
       {
         links.map((link) => (
-          <a href="#contacto" class:list={['link', { primary: link.kind === 'primary' }]}>
-            <span class="link-label">{link.label}</span>
-            <span class="link-detail">{link.detail}</span>
-            <span class="link-go" aria-hidden="true">→</span>
+          <a href="#marcas" class:list={['link', { primary: link.kind === 'primary' }]}>
+            <span class="link-text">
+              <span class="link-label">{link.label}</span>
+              <span class="link-detail">{link.detail}</span>
+            </span>
+            {link.meta && <span class="link-meta">{link.meta}</span>}
+            <span class="link-go" aria-hidden="true">
+              →
+            </span>
           </a>
         ))
       }
@@ -57,11 +87,12 @@ const brands = ['Nordvik', 'Casa Pérez', 'Tebra Fit', 'Lumen Audio'];
       <h2>Lo último</h2>
       <ul class="videos">
         {
-          videos.map((video) => (
+          videos.map((video, i) => (
             <li>
-              <a href="#contacto">
-                <span class="thumb" aria-hidden="true">
+              <a href="#marcas">
+                <span class={`thumb thumb-${i + 1}`} aria-hidden="true">
                   <span class="play" />
+                  <span class="time">{video.time}</span>
                 </span>
                 <span class="video-text">
                   <strong>{video.title}</strong>
@@ -72,18 +103,89 @@ const brands = ['Nordvik', 'Casa Pérez', 'Tebra Fit', 'Lumen Audio'];
           ))
         }
       </ul>
+      <a class="ver-todo" href="#marcas">
+        Ver el canal <span aria-hidden="true">→</span>
+      </a>
+    </section>
+
+    <section class="block" id="kit">
+      <h2>Kit de prensa</h2>
+      <div class="kit">
+        <p class="kit-intro">
+          Los números de los últimos 30 días, sacados directamente de las plataformas.
+        </p>
+        <ul class="barras">
+          {
+            audiencia.map((a) => (
+              <li>
+                <span class="barra-label">
+                  {a.label} <strong>{a.valor} %</strong>
+                </span>
+                <span class="barra">
+                  <span class="barra-fill" style={`--v:${a.valor}%`} />
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+        <ul class="kit-datos">
+          <li>
+            <strong>68 %</strong>
+            <span>España</span>
+          </li>
+          <li>
+            <strong>54 %</strong>
+            <span>mujeres</span>
+          </li>
+          <li>
+            <strong>3:42</strong>
+            <span>tiempo medio</span>
+          </li>
+        </ul>
+        <a class="btn ghost full" href="#marcas">Descargar el kit en PDF</a>
+      </div>
     </section>
 
     <section class="block">
       <h2>Marcas con las que he trabajado</h2>
       <ul class="brands">
-        {brands.map((brand) => <li>{brand}</li>)}
+        {marcas.map((brand) => <li>{brand}</li>)}
       </ul>
+      <blockquote class="testi">
+        <p>
+          «Subió las ventas de la campaña un 40 % respecto al mes anterior y entregó todo
+          antes de plazo.»
+        </p>
+        <footer>Marketing de Tebra Fit</footer>
+      </blockquote>
     </section>
 
-    <section class="block contact" id="contacto">
+    <section class="block">
+      <h2>Formatos y tarifas</h2>
+      <ul class="formatos">
+        {
+          formatos.map((f) => (
+            <li>
+              <div>
+                <strong>{f.t}</strong>
+                <span>{f.d}</span>
+              </div>
+              <span class="precio">{f.p}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="nota">
+        Packs a medida para campañas de más de un mes. Facturo como autónoma con IVA.
+      </p>
+    </section>
+
+    <section class="block contact" id="marcas">
       <h2>¿Eres una marca?</h2>
-      <p>Cuéntame qué tienes en mente y te paso el kit con audiencia, tarifas y ejemplos.</p>
+      <p class="contact-intro">
+        Cuéntame qué tienes en mente y te paso disponibilidad, tarifas cerradas y ejemplos de
+        campañas parecidas. Respondo en 48 horas.
+      </p>
       <form>
         <label>
           Marca o empresa
@@ -94,8 +196,15 @@ const brands = ['Nordvik', 'Casa Pérez', 'Tebra Fit', 'Lumen Audio'];
           <input type="email" name="email" placeholder="hola@marca.com" required />
         </label>
         <label>
+          Formato que te interesa
+          <select>
+            {formatos.map((f) => <option>{f.t}</option>)}
+            <option>Aún no lo tengo claro</option>
+          </select>
+        </label>
+        <label>
           Propuesta
-          <textarea name="mensaje" rows="3" placeholder="Qué producto y para cuándo"></textarea>
+          <textarea name="mensaje" rows="3" placeholder="Qué producto, para cuándo y presupuesto aproximado"></textarea>
         </label>
         <button type="button">Enviar propuesta</button>
       </form>
@@ -103,7 +212,15 @@ const brands = ['Nordvik', 'Casa Pérez', 'Tebra Fit', 'Lumen Audio'];
     </section>
 
     <footer class="foot">
+      <ul class="redes">
+        <li>YouTube</li>
+        <li>Twitch</li>
+        <li>Instagram</li>
+        <li>TikTok</li>
+        <li>X</li>
+      </ul>
       <p>© 2026 Noa Ferrán</p>
+      <p class="mini">Plantilla de ejemplo. Nombres, cifras y tarifas son ficticios.</p>
     </footer>
   </main>
 </DemoLayout>
@@ -111,44 +228,82 @@ const brands = ['Nordvik', 'Casa Pérez', 'Tebra Fit', 'Lumen Audio'];
 <style>
   .page {
     --ink: #08080d;
-    --surface: #131320;
+    --surface: #14141f;
+    --surface-2: #1c1c2b;
     --line: rgba(255, 255, 255, 0.1);
     --text: #f4f4fb;
     --muted: #a3a3bb;
     --accent: #ff3d8b;
     --accent-2: #8b5bff;
 
-    max-width: 30rem;
+    position: relative;
+    max-width: 31rem;
     min-height: 100vh;
     margin: 0 auto;
-    padding: 3rem 1.25rem 4.5rem;
-    background: radial-gradient(120% 60% at 50% 0%, #241035 0%, var(--ink) 55%);
+    padding: 0 1.25rem 5rem;
+    background: var(--ink);
     color: var(--text);
     font-family: 'Space Grotesk Variable', system-ui, sans-serif;
   }
 
+  /* --- Cabecera --- */
   .hero {
-    text-align: center;
+    position: relative;
     display: grid;
-    gap: 0.6rem;
+    gap: 0.55rem;
     justify-items: center;
+    text-align: center;
+    padding-top: 9.5rem;
+  }
+
+  .cover {
+    position: absolute;
+    inset: 0 -1.25rem auto -1.25rem;
+    height: 11rem;
+    overflow: hidden;
+    background: linear-gradient(120deg, #2b0f3d 0%, #101028 60%, #081018 100%);
+    border-bottom-left-radius: 28px;
+    border-bottom-right-radius: 28px;
+  }
+
+  .glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(38px);
+  }
+
+  .glow-1 {
+    width: 60%;
+    aspect-ratio: 1;
+    left: -10%;
+    top: -40%;
+    background: rgba(255, 61, 139, 0.55);
+  }
+
+  .glow-2 {
+    width: 55%;
+    aspect-ratio: 1;
+    right: -8%;
+    top: -20%;
+    background: rgba(139, 91, 255, 0.5);
   }
 
   .avatar {
+    position: relative;
     display: grid;
     place-items: center;
-    width: 92px;
-    height: 92px;
+    width: 104px;
+    height: 104px;
     border-radius: 50%;
+    border: 4px solid var(--ink);
     background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    font-size: 2rem;
+    font-size: 2.1rem;
     font-weight: 700;
-    letter-spacing: 0.02em;
   }
 
   h1 {
-    margin: 0.4rem 0 0;
-    font-size: 1.9rem;
+    margin: 0.5rem 0 0;
+    font-size: 2rem;
     letter-spacing: -0.02em;
   }
 
@@ -159,16 +314,16 @@ const brands = ['Nordvik', 'Casa Pérez', 'Tebra Fit', 'Lumen Audio'];
   }
 
   .bio {
-    margin: 0.2rem 0 0;
-    max-width: 26ch;
+    margin: 0.3rem 0 0;
+    max-width: 30ch;
     color: var(--muted);
-    line-height: 1.55;
+    line-height: 1.6;
   }
 
   .stats {
     display: flex;
-    gap: 1.4rem;
-    margin: 1.2rem 0 0;
+    gap: 1.6rem;
+    margin: 1.3rem 0 0;
     padding: 0;
     list-style: none;
   }
@@ -176,15 +331,47 @@ const brands = ['Nordvik', 'Casa Pérez', 'Tebra Fit', 'Lumen Audio'];
   .stats li {
     display: grid;
     gap: 0.1rem;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     color: var(--muted);
   }
 
   .stats strong {
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     color: var(--text);
   }
 
+  .hero-actions {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 1.4rem;
+    width: 100%;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    min-height: 52px;
+    padding: 0 1.2rem;
+    border-radius: 14px;
+    background: linear-gradient(120deg, var(--accent), var(--accent-2));
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .btn.ghost {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    color: var(--text);
+  }
+
+  .btn.full {
+    width: 100%;
+  }
+
+  /* --- Enlaces --- */
   .links {
     display: grid;
     gap: 0.7rem;
@@ -195,12 +382,11 @@ const brands = ['Nordvik', 'Casa Pérez', 'Tebra Fit', 'Lumen Audio'];
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: center;
-    gap: 0.1rem 1rem;
-    /* Altura de sobra para el pulgar: estos enlaces son el producto */
-    min-height: 64px;
-    padding: 0.85rem 1.1rem;
+    gap: 0.2rem 1rem;
+    min-height: 68px;
+    padding: 0.9rem 1.15rem;
     border: 1px solid var(--line);
-    border-radius: 16px;
+    border-radius: 18px;
     background: var(--surface);
     text-decoration: none;
     transition: transform 0.15s ease, border-color 0.15s ease;
@@ -209,7 +395,7 @@ const brands = ['Nordvik', 'Casa Pérez', 'Tebra Fit', 'Lumen Audio'];
   .link:hover,
   .link:focus-visible {
     transform: translateY(-2px);
-    border-color: rgba(255, 255, 255, 0.28);
+    border-color: rgba(255, 255, 255, 0.3);
   }
 
   .link.primary {
@@ -217,33 +403,63 @@ const brands = ['Nordvik', 'Casa Pérez', 'Tebra Fit', 'Lumen Audio'];
     border-color: transparent;
   }
 
+  .link-text {
+    grid-column: 1;
+    grid-row: 1;
+    display: grid;
+    gap: 0.15rem;
+    text-align: left;
+  }
+
   .link-label {
     font-weight: 600;
+    font-size: 1.02rem;
   }
 
   .link-detail {
-    grid-column: 1;
     font-size: 0.82rem;
     color: var(--muted);
   }
 
   .link.primary .link-detail {
-    color: rgba(255, 255, 255, 0.82);
+    color: rgba(255, 255, 255, 0.85);
   }
 
+  .link-meta {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start;
+    margin-top: 0.35rem;
+    padding: 0.22rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+
+  .link.primary .link-meta {
+    background: rgba(0, 0, 0, 0.22);
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  /* La flecha va a la derecha y ocupa las dos filas del enlace */
   .link-go {
+    grid-column: 2;
     grid-row: 1 / span 2;
-    font-size: 1.1rem;
+    justify-self: end;
+    align-self: center;
+    font-size: 1.15rem;
   }
 
+  /* --- Bloques --- */
   .block {
-    margin-top: 2.6rem;
+    margin-top: 2.8rem;
   }
 
   h2 {
-    margin: 0 0 1rem;
+    margin: 0 0 1.1rem;
     font-size: 1.05rem;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--muted);
   }
@@ -258,35 +474,56 @@ const brands = ['Nordvik', 'Casa Pérez', 'Tebra Fit', 'Lumen Audio'];
 
   .videos a {
     display: grid;
-    grid-template-columns: 96px 1fr;
+    grid-template-columns: 116px 1fr;
     gap: 0.9rem;
     align-items: center;
-    padding: 0.5rem;
-    border-radius: 14px;
+    padding: 0.55rem;
+    border-radius: 16px;
     background: var(--surface);
+    border: 1px solid var(--line);
     text-decoration: none;
   }
 
   .thumb {
+    position: relative;
     display: grid;
     place-items: center;
     aspect-ratio: 16 / 10;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #2b2b46, #191927);
+    border-radius: 12px;
+  }
+
+  .thumb-1 {
+    background: linear-gradient(140deg, #3d2b6b, #16172b);
+  }
+  .thumb-2 {
+    background: linear-gradient(140deg, #6b2b4a, #16172b);
+  }
+  .thumb-3 {
+    background: linear-gradient(140deg, #2b4d6b, #16172b);
   }
 
   .play {
     width: 0;
     height: 0;
-    border-left: 12px solid var(--text);
-    border-top: 8px solid transparent;
-    border-bottom: 8px solid transparent;
+    border-left: 14px solid rgba(255, 255, 255, 0.92);
+    border-top: 9px solid transparent;
+    border-bottom: 9px solid transparent;
+  }
+
+  .time {
+    position: absolute;
+    right: 0.35rem;
+    bottom: 0.35rem;
+    padding: 0.1rem 0.35rem;
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.7);
+    font-size: 0.68rem;
   }
 
   .video-text {
     display: grid;
-    gap: 0.2rem;
-    font-size: 0.9rem;
+    gap: 0.25rem;
+    font-size: 0.92rem;
   }
 
   .video-text span {
@@ -294,6 +531,96 @@ const brands = ['Nordvik', 'Casa Pérez', 'Tebra Fit', 'Lumen Audio'];
     font-size: 0.78rem;
   }
 
+  .ver-todo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 44px;
+    margin-top: 0.6rem;
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.92rem;
+    text-decoration: none;
+  }
+
+  /* --- Kit de prensa --- */
+  .kit {
+    padding: 1.4rem;
+    border-radius: 20px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+
+  .kit-intro {
+    margin: 0 0 1.2rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+
+  .barras {
+    display: grid;
+    gap: 0.9rem;
+    margin: 0 0 1.4rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .barra-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .barra-label strong {
+    color: var(--text);
+  }
+
+  .barra {
+    display: block;
+    height: 8px;
+    margin-top: 0.35rem;
+    border-radius: 999px;
+    background: var(--surface-2);
+    overflow: hidden;
+  }
+
+  .barra-fill {
+    display: block;
+    width: var(--v);
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  }
+
+  .kit-datos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
+    margin: 0 0 1.3rem;
+    padding: 0;
+    list-style: none;
+    text-align: center;
+  }
+
+  .kit-datos li {
+    padding: 0.8rem 0.4rem;
+    border-radius: 12px;
+    background: var(--surface-2);
+  }
+
+  .kit-datos strong {
+    display: block;
+    font-size: 1.15rem;
+  }
+
+  .kit-datos span {
+    font-size: 0.76rem;
+    color: var(--muted);
+  }
+
+  /* --- Marcas --- */
   .brands {
     display: flex;
     flex-wrap: wrap;
@@ -304,69 +631,168 @@ const brands = ['Nordvik', 'Casa Pérez', 'Tebra Fit', 'Lumen Audio'];
   }
 
   .brands li {
-    padding: 0.45rem 0.9rem;
+    padding: 0.5rem 0.95rem;
     border: 1px solid var(--line);
     border-radius: 999px;
-    font-size: 0.85rem;
+    font-size: 0.86rem;
     color: var(--muted);
   }
 
-  .contact p {
-    margin: 0 0 1rem;
+  .testi {
+    margin: 1.2rem 0 0;
+    padding: 1.2rem;
+    border-radius: 16px;
+    background: var(--surface);
+    border-left: 3px solid var(--accent);
+  }
+
+  .testi p {
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .testi footer {
+    margin-top: 0.7rem;
+    font-size: 0.82rem;
     color: var(--muted);
-    line-height: 1.55;
+  }
+
+  /* --- Tarifas --- */
+  .formatos {
+    display: grid;
+    gap: 0.7rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .formatos li {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.6rem 1rem;
+    align-items: center;
+    padding: 1.1rem 1.15rem;
+    border-radius: 16px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+
+  .formatos strong {
+    display: block;
+    font-size: 1rem;
+  }
+
+  .formatos div span {
+    font-size: 0.83rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .precio {
+    font-weight: 700;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .nota {
+    margin: 1rem 0 0;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  /* --- Contacto --- */
+  .contact-intro {
+    margin: 0 0 1.2rem;
+    color: var(--muted);
+    line-height: 1.6;
   }
 
   form {
     display: grid;
-    gap: 0.8rem;
+    gap: 0.85rem;
   }
 
   label {
     display: grid;
     gap: 0.35rem;
-    font-size: 0.85rem;
+    font-size: 0.84rem;
     color: var(--muted);
   }
 
   input,
-  textarea {
+  textarea,
+  select {
+    min-height: 50px;
     padding: 0.8rem 0.9rem;
     border: 1px solid var(--line);
-    border-radius: 12px;
+    border-radius: 13px;
     background: var(--surface);
     color: var(--text);
     font: inherit;
     font-size: 0.95rem;
   }
 
+  select option {
+    color: #14141f;
+  }
+
   input:focus-visible,
-  textarea:focus-visible {
+  textarea:focus-visible,
+  select:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
   }
 
   button {
-    min-height: 52px;
+    min-height: 54px;
     border: 0;
-    border-radius: 12px;
+    border-radius: 14px;
     background: linear-gradient(120deg, var(--accent), var(--accent-2));
     color: #fff;
     font: inherit;
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 1rem;
     cursor: pointer;
   }
 
   .mail {
     margin-top: 0.9rem;
     text-align: center;
-    font-size: 0.85rem;
+    font-size: 0.86rem;
+    color: var(--muted);
   }
 
+  /* --- Pie --- */
   .foot {
     margin-top: 3rem;
     text-align: center;
     color: var(--muted);
+    font-size: 0.82rem;
+  }
+
+  .redes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 0 0 1.2rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .redes li {
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--line);
     font-size: 0.8rem;
+  }
+
+  .foot p {
+    margin: 0.3rem 0;
+  }
+
+  .mini {
+    font-size: 0.72rem;
   }
 </style>

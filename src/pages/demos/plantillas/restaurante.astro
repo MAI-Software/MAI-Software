@@ -1,157 +1,427 @@
 ---
 import DemoLayout from '../../../layouts/DemoLayout.astro';
 
-/* Lo que busca alguien con hambre y el móvil en la mano: qué se come, cuánto
-   cuesta, si está abierto y cómo reservar. En ese orden. */
+/* Plantilla de restaurante. El orden no es decorativo: quien entra quiere
+   ver qué se come y cuánto cuesta, saber si está abierto y reservar. Por eso
+   la carta va entera en la página (nada de PDF) y el botón de reservar
+   acompaña todo el recorrido, también en el móvil. */
+
+const menuDia = {
+  precio: '16,50',
+  incluye: 'Primero, segundo, bebida y postre o café',
+  dias: 'De martes a viernes, mediodía',
+};
+
 const carta = [
   {
     seccion: 'Para empezar',
+    nota: 'Pensados para compartir en el centro de la mesa',
     platos: [
-      { nombre: 'Pan de masa madre con tomate y anchoa', precio: '7,50' },
-      { nombre: 'Croquetas de puchero (6 u.)', precio: '9,00' },
-      { nombre: 'Ensaladilla de la casa con langostinos', precio: '11,50' },
-      { nombre: 'Alcachofas confitadas con jamón', precio: '12,00' },
+      {
+        nombre: 'Pan de masa madre con tomate y anchoa',
+        desc: 'Hogaza propia, tomate rallado y anchoa del Cantábrico 00',
+        precio: '7,50',
+        tags: [],
+      },
+      {
+        nombre: 'Croquetas de puchero',
+        desc: 'Seis unidades, bechamel de cocido de la abuela',
+        precio: '9,00',
+        tags: ['La más pedida'],
+      },
+      {
+        nombre: 'Ensaladilla con langostinos',
+        desc: 'Patata de Sanlúcar, mayonesa de la casa y huevas',
+        precio: '11,50',
+        tags: [],
+      },
+      {
+        nombre: 'Alcachofas confitadas',
+        desc: 'Con jamón ibérico y aceite de romero',
+        precio: '12,00',
+        tags: ['De temporada'],
+      },
+      {
+        nombre: 'Berenjenas con miel de caña',
+        desc: 'Fritas al momento, crujientes por fuera',
+        precio: '8,50',
+        tags: ['Vegetariano'],
+      },
     ],
   },
   {
     seccion: 'Del fuego',
+    nota: 'Brasa de encina, a la vista desde la sala',
     platos: [
-      { nombre: 'Arroz meloso de secreto y setas', precio: '18,50' },
-      { nombre: 'Pluma ibérica con puré de manzana', precio: '21,00' },
-      { nombre: 'Lubina a la brasa con verduras de temporada', precio: '23,50' },
-      { nombre: 'Costilla glaseada 12 horas', precio: '19,00' },
+      {
+        nombre: 'Arroz meloso de secreto y setas',
+        desc: 'Mínimo dos personas, 25 minutos de espera',
+        precio: '18,50',
+        tags: ['Para dos'],
+      },
+      {
+        nombre: 'Pluma ibérica a la brasa',
+        desc: 'Con puré de manzana asada y pimienta de Jamaica',
+        precio: '21,00',
+        tags: [],
+      },
+      {
+        nombre: 'Lubina al horno de leña',
+        desc: 'Verduras de temporada y aceite de cebollino',
+        precio: '23,50',
+        tags: ['Sin gluten'],
+      },
+      {
+        nombre: 'Costilla glaseada 12 horas',
+        desc: 'Cocción lenta, glaseado de Pedro Ximénez',
+        precio: '19,00',
+        tags: ['La más pedida'],
+      },
+      {
+        nombre: 'Coliflor a la brasa con tahini',
+        desc: 'Entera, con granada y hierbabuena',
+        precio: '14,00',
+        tags: ['Vegano'],
+      },
     ],
   },
   {
     seccion: 'Dulces',
+    nota: 'Todo hecho aquí, cada mañana',
     platos: [
-      { nombre: 'Tarta de queso al horno', precio: '6,50' },
-      { nombre: 'Torrija caramelizada con helado de vainilla', precio: '7,00' },
+      {
+        nombre: 'Tarta de queso al horno',
+        desc: 'Cremosa por dentro, con mermelada de frutos rojos',
+        precio: '6,50',
+        tags: ['La más pedida'],
+      },
+      {
+        nombre: 'Torrija caramelizada',
+        desc: 'De brioche, con helado de vainilla bourbon',
+        precio: '7,00',
+        tags: [],
+      },
+      {
+        nombre: 'Flan de huevo de corral',
+        desc: 'Receta de la casa, con nata montada al momento',
+        precio: '5,50',
+        tags: [],
+      },
     ],
   },
 ];
 
+const bebidas = [
+  { nombre: 'Vino de la casa (copa)', precio: '3,00' },
+  { nombre: 'Tinto Ribera del Duero (botella)', precio: '19,00' },
+  { nombre: 'Cerveza artesana local', precio: '3,80' },
+  { nombre: 'Vermut de grifo', precio: '3,20' },
+];
+
 const horarios = [
+  { dia: 'Lunes', horas: 'Cerrado', cerrado: true },
   { dia: 'Martes a jueves', horas: '13:00 – 16:00 · 20:00 – 23:30' },
   { dia: 'Viernes y sábado', horas: '13:00 – 16:30 · 20:00 – 00:00' },
   { dia: 'Domingo', horas: '13:00 – 16:30' },
-  { dia: 'Lunes', horas: 'Cerrado' },
 ];
+
+const resenas = [
+  {
+    texto: 'El arroz meloso justifica el viaje. Pedimos mesa un viernes y nos trataron como si fuéramos de la familia.',
+    autor: 'Marta G.',
+    origen: 'Google',
+  },
+  {
+    texto: 'Carta corta y todo bueno, que es justo lo que busco. La tarta de queso es de las mejores de Sevilla.',
+    autor: 'Javier R.',
+    origen: 'TripAdvisor',
+  },
+  {
+    texto: 'Fuimos con dos niños y nos resolvieron la cena sin dramas. Volveremos seguro.',
+    autor: 'Lucía y Dani',
+    origen: 'Google',
+  },
+];
+
+const galeria = ['La sala', 'La brasa', 'La barra', 'El patio'];
 ---
 
 <DemoLayout
-  title="Casa Molinero · cocina de mercado"
-  description="Plantilla de ejemplo: web para restaurante con carta, horarios, cómo llegar y reserva."
+  title="Casa Molinero · cocina de mercado en Sevilla"
+  description="Plantilla de ejemplo: web para restaurante con carta completa, menú del día, horarios, reseñas y reserva de mesa."
 >
   <div class="site">
     <header class="top">
-      <a class="brand" href="#inicio">Casa Molinero</a>
+      <a class="brand" href="#inicio">
+        <span class="brand-mark" aria-hidden="true">CM</span>
+        <span class="brand-text">
+          Casa Molinero
+          <small>Cocina de mercado · Sevilla</small>
+        </span>
+      </a>
       <nav aria-label="Principal">
         <a href="#carta">Carta</a>
+        <a href="#menu-dia">Menú del día</a>
         <a href="#local">El local</a>
-        <a href="#reserva">Reservar</a>
+        <a href="#resenas">Reseñas</a>
       </nav>
-      <a class="phone" href="#reserva">955 000 000</a>
+      <div class="top-actions">
+        <a class="tel" href="tel:+34955000000">955 000 000</a>
+        <a class="btn" href="#reserva">Reservar mesa</a>
+      </div>
     </header>
 
     <section class="hero" id="inicio">
       <div class="hero-text">
-        <p class="eyebrow">Cocina de mercado · Sevilla</p>
-        <h1>Lo de siempre, hecho como hay que hacerlo.</h1>
+        <p class="chip"><span class="dot" aria-hidden="true"></span>Abierto hoy hasta las 23:30</p>
+        <h1>Cocina de mercado, brasa de encina y una carta que cambia cada semana.</h1>
         <p class="lead">
-          Producto de temporada, brasa de encina y una carta corta que cambia cada semana
-          según lo que llega del mercado.
+          Veinte mesas en una casa de 1912 en pleno centro. Lo que llega del mercado por la
+          mañana es lo que se cocina por la noche.
         </p>
         <div class="hero-actions">
-          <a class="btn" href="#reserva">Reservar mesa</a>
-          <a class="btn ghost" href="#carta">Ver la carta</a>
+          <a class="btn big" href="#reserva">Reservar mesa</a>
+          <a class="btn ghost big" href="#carta">Ver la carta</a>
         </div>
+        <ul class="hero-facts">
+          <li><strong>4,8</strong><span>en 620 reseñas</span></li>
+          <li><strong>16,50 €</strong><span>menú del día</span></li>
+          <li><strong>12 años</strong><span>en el barrio</span></li>
+        </ul>
       </div>
+
       <div class="hero-art" aria-hidden="true">
-        <span class="plate"></span>
+        <div class="plate plate-a"><span></span></div>
+        <div class="plate plate-b"><span></span></div>
+        <div class="plate plate-c"><span></span></div>
+        <p class="art-note">Aquí irían tus fotos</p>
+      </div>
+    </section>
+
+    <section class="menu-dia" id="menu-dia">
+      <div class="menu-dia-card">
+        <div>
+          <p class="eyebrow">Menú del día</p>
+          <p class="precio-grande">{menuDia.precio} €</p>
+          <p class="menu-incluye">{menuDia.incluye}</p>
+          <p class="menu-dias">{menuDia.dias}</p>
+        </div>
+        <ul class="menu-dia-lista">
+          <li><strong>Primeros</strong> Crema del día · Ensalada de la huerta · Puchero</li>
+          <li><strong>Segundos</strong> Pescado del día · Pollo de corral · Guiso de temporada</li>
+          <li><strong>Postres</strong> Tarta de queso · Fruta · Café con dulce</li>
+        </ul>
+        <a class="btn" href="#reserva">Reservar para el mediodía</a>
       </div>
     </section>
 
     <section class="carta" id="carta">
-      <h2>La carta</h2>
-      <p class="note">Cambia cada semana. Esta es la de hoy.</p>
-      <div class="carta-grid">
-        {
-          carta.map((bloque) => (
-            <div class="carta-bloque">
-              <h3>{bloque.seccion}</h3>
-              <ul>
-                {bloque.platos.map((plato) => (
-                  <li>
-                    <span>{plato.nombre}</span>
-                    <span class="precio">{plato.precio} €</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))
-        }
-      </div>
-      <p class="alergenos">
-        Carta de alérgenos disponible en sala. Menú del día de martes a viernes: 16,50 €.
-      </p>
-    </section>
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">La carta</p>
+          <h2>Lo que hay hoy en la pizarra</h2>
+        </div>
+        <p class="sec-note">
+          Cambia cada semana según el mercado. Carta de alérgenos disponible en sala.
+        </p>
+      </header>
 
-    <section class="local" id="local">
-      <div>
-        <h2>El local</h2>
-        <p>
-          Veinte mesas, cocina vista y una barra para comer sin reserva. Estamos en una casa
-          de 1912 rehabilitada en el centro, a cinco minutos andando de la catedral.
-        </p>
-        <p class="direccion">
-          Calle del Horno 14, Sevilla<br />
-          <a href="#reserva">Cómo llegar</a>
-        </p>
-      </div>
-      <div class="horario">
-        <h3>Horarios</h3>
+      {
+        carta.map((bloque) => (
+          <div class="carta-bloque">
+            <div class="carta-titulo">
+              <h3>{bloque.seccion}</h3>
+              <p>{bloque.nota}</p>
+            </div>
+            <ul class="platos">
+              {bloque.platos.map((plato) => (
+                <li class="plato">
+                  <span class="plato-foto" aria-hidden="true" />
+                  <span class="plato-cuerpo">
+                    <span class="plato-linea">
+                      <span class="plato-nombre">{plato.nombre}</span>
+                      <span class="plato-precio">{plato.precio} €</span>
+                    </span>
+                    <span class="plato-desc">{plato.desc}</span>
+                    {plato.tags.length > 0 && (
+                      <span class="plato-tags">
+                        {plato.tags.map((tag) => (
+                          <span class="tag">{tag}</span>
+                        ))}
+                      </span>
+                    )}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+
+      <div class="bebidas">
+        <h3>Para beber</h3>
         <ul>
           {
-            horarios.map((h) => (
+            bebidas.map((b) => (
               <li>
-                <span>{h.dia}</span>
-                <span>{h.horas}</span>
+                <span>{b.nombre}</span>
+                <span class="plato-precio">{b.precio} €</span>
               </li>
             ))
           }
         </ul>
+        <p class="bodega">Bodega de 40 referencias, la mitad de vinos andaluces.</p>
+      </div>
+    </section>
+
+    <section class="galeria" aria-label="El local en imágenes">
+      {
+        galeria.map((titulo, i) => (
+          <figure class={`shot shot-${i + 1}`}>
+            <figcaption>{titulo}</figcaption>
+          </figure>
+        ))
+      }
+    </section>
+
+    <section class="local" id="local">
+      <div class="local-texto">
+        <p class="eyebrow">El local</p>
+        <h2>Una casa de 1912 con la cocina a la vista</h2>
+        <p>
+          Veinte mesas, barra para comer sin reserva y un patio interior con seis mesas más
+          cuando acompaña el tiempo. Accesible desde la calle y con trona para los peques.
+        </p>
+        <ul class="servicios">
+          <li>Terraza en el patio</li>
+          <li>Accesible</li>
+          <li>Opciones veganas</li>
+          <li>Sin gluten bajo aviso</li>
+          <li>Grupos hasta 24</li>
+        </ul>
+        <p class="direccion">
+          <strong>Calle del Horno 14, Sevilla</strong><br />
+          A cinco minutos andando de la catedral · Parking Arenal a 200 m
+        </p>
+      </div>
+
+      <div class="local-aside">
+        <div class="mapa" aria-hidden="true">
+          <span class="pin"></span>
+          <span class="calle calle-1"></span>
+          <span class="calle calle-2"></span>
+          <span class="calle calle-3"></span>
+        </div>
+        <div class="horario">
+          <h3>Horarios</h3>
+          <ul>
+            {
+              horarios.map((h) => (
+                <li class:list={{ cerrado: h.cerrado }}>
+                  <span>{h.dia}</span>
+                  <span>{h.horas}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="resenas" id="resenas">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Reseñas</p>
+          <h2>Lo que dicen quienes ya han venido</h2>
+        </div>
+        <p class="sec-note">4,8 sobre 5 · 620 reseñas entre Google y TripAdvisor</p>
+      </header>
+      <div class="resenas-grid">
+        {
+          resenas.map((r) => (
+            <blockquote>
+              <p class="estrellas" aria-label="5 sobre 5">★★★★★</p>
+              <p>{r.texto}</p>
+              <footer>
+                {r.autor} · {r.origen}
+              </footer>
+            </blockquote>
+          ))
+        }
       </div>
     </section>
 
     <section class="reserva" id="reserva">
-      <h2>Reservar</h2>
-      <p>Por teléfono en horario de cocina, o déjanos los datos y te confirmamos.</p>
-      <form>
-        <label>
-          Nombre
-          <input type="text" placeholder="A nombre de" required />
-        </label>
-        <label>
-          Personas
-          <input type="number" min="1" max="12" value="2" />
-        </label>
-        <label>
-          Día y hora
-          <input type="text" placeholder="Viernes 21:00" />
-        </label>
-        <label>
-          Teléfono
-          <input type="tel" placeholder="600 000 000" required />
-        </label>
-        <button type="button">Pedir reserva</button>
-      </form>
+      <div class="reserva-grid">
+        <div>
+          <p class="eyebrow claro">Reservar</p>
+          <h2>Mesa para hoy o para el sábado</h2>
+          <p class="reserva-texto">
+            Confirmamos por teléfono en menos de una hora dentro del horario de cocina. Para
+            grupos de más de ocho, mejor llámanos directamente.
+          </p>
+          <a class="tel-grande" href="tel:+34955000000">955 000 000</a>
+        </div>
+
+        <form>
+          <label>
+            Nombre
+            <input type="text" placeholder="A nombre de" required />
+          </label>
+          <label>
+            Teléfono
+            <input type="tel" placeholder="600 000 000" required />
+          </label>
+          <label>
+            Día
+            <input type="date" />
+          </label>
+          <label>
+            Hora
+            <select>
+              <option>13:30</option>
+              <option>14:00</option>
+              <option>14:30</option>
+              <option>21:00</option>
+              <option selected>21:30</option>
+              <option>22:00</option>
+            </select>
+          </label>
+          <label>
+            Personas
+            <select>
+              <option>1</option>
+              <option selected>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>Más de 6</option>
+            </select>
+          </label>
+          <label class="ancho">
+            Algo que debamos saber
+            <input type="text" placeholder="Alergias, trona, celebración…" />
+          </label>
+          <button type="button">Pedir reserva</button>
+          <p class="form-nota">Te llamamos para confirmar. Sin pago por adelantado.</p>
+        </form>
+      </div>
     </section>
 
     <footer class="foot">
-      <p>Casa Molinero · Calle del Horno 14, Sevilla · 955 000 000</p>
-      <p class="mini">Plantilla de ejemplo. Los datos son ficticios.</p>
+      <div>
+        <p class="foot-brand">Casa Molinero</p>
+        <p>Calle del Horno 14, Sevilla · 955 000 000 · hola@casamolinero.es</p>
+      </div>
+      <p class="mini">Plantilla de ejemplo. Nombres, precios y reseñas son ficticios.</p>
     </footer>
+
+    <!-- Barra fija en móvil: reservar nunca queda a más de un toque -->
+    <div class="barra-movil">
+      <a class="btn ghost" href="tel:+34955000000">Llamar</a>
+      <a class="btn" href="#reserva">Reservar mesa</a>
+    </div>
   </div>
 </DemoLayout>
 
@@ -159,203 +429,604 @@ const horarios = [
   .site {
     --tinta: #241a13;
     --papel: #fbf6ee;
-    --papel-2: #f3e9da;
+    --papel-2: #f4ebdd;
     --acento: #b4451f;
+    --acento-2: #d98032;
+    --verde: #4a6741;
     --suave: #7d6a5b;
+    --linea: rgba(36, 26, 19, 0.14);
 
     background: var(--papel);
     color: var(--tinta);
     font-family: 'Iowan Old Style', Georgia, 'Times New Roman', serif;
-    padding-bottom: 3rem;
+    padding-bottom: 5.5rem;
   }
 
+  /* --- Cabecera --- */
   .top {
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 20;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1.5rem;
-    padding: 1rem clamp(1.1rem, 4vw, 3rem);
-    background: rgba(251, 246, 238, 0.92);
-    border-bottom: 1px solid rgba(36, 26, 19, 0.12);
-    backdrop-filter: blur(8px);
+    padding: 0.85rem clamp(1.1rem, 4vw, 3.5rem);
+    background: rgba(251, 246, 238, 0.94);
+    border-bottom: 1px solid var(--linea);
+    backdrop-filter: blur(10px);
   }
 
   .brand {
-    font-size: 1.25rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
     text-decoration: none;
   }
 
+  .brand-mark {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--acento);
+    color: var(--papel);
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+  }
+
+  .brand-text {
+    display: grid;
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.15;
+  }
+
+  .brand-text small {
+    font-family: system-ui, sans-serif;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--suave);
+  }
+
   .top nav {
-    display: flex;
-    gap: 1.4rem;
+    display: none;
+    gap: 1.6rem;
+    font-size: 0.98rem;
   }
 
   .top nav a {
     text-decoration: none;
-    font-size: 0.95rem;
+    padding-bottom: 2px;
+    border-bottom: 2px solid transparent;
   }
 
   .top nav a:hover {
     color: var(--acento);
+    border-bottom-color: var(--acento);
   }
 
-  .phone {
-    padding: 0.5rem 1rem;
-    border: 1px solid var(--tinta);
-    border-radius: 999px;
-    font-size: 0.9rem;
+  .top-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .tel {
+    display: none;
+    font-family: system-ui, sans-serif;
+    font-size: 0.92rem;
     text-decoration: none;
-    white-space: nowrap;
+    color: var(--suave);
   }
 
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 0 1.3rem;
+    border-radius: 999px;
+    background: var(--acento);
+    color: var(--papel);
+    font-family: system-ui, sans-serif;
+    font-size: 0.94rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.15s ease, background-color 0.15s ease;
+  }
+
+  .btn:hover {
+    transform: translateY(-1px);
+    background: #9c3a19;
+  }
+
+  .btn.ghost {
+    background: transparent;
+    border: 1px solid var(--linea);
+    color: var(--tinta);
+  }
+
+  .btn.ghost:hover {
+    background: rgba(36, 26, 19, 0.06);
+  }
+
+  .btn.big {
+    min-height: 54px;
+    padding: 0 1.9rem;
+    font-size: 1rem;
+  }
+
+  /* --- Portada --- */
   .hero {
     display: grid;
-    gap: 2rem;
+    gap: 2.5rem;
     align-items: center;
-    padding: clamp(2.5rem, 7vw, 5rem) clamp(1.1rem, 4vw, 3rem);
+    padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1.1rem, 4vw, 3.5rem);
   }
 
-  .eyebrow {
-    margin: 0 0 0.8rem;
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 1.2rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    background: rgba(74, 103, 65, 0.12);
+    color: var(--verde);
     font-family: system-ui, sans-serif;
-    font-size: 0.78rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--acento);
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--verde);
   }
 
   h1 {
     margin: 0;
-    font-size: clamp(2rem, 5vw, 3.4rem);
-    line-height: 1.05;
+    font-size: clamp(2.1rem, 4.6vw, 3.6rem);
+    line-height: 1.06;
     letter-spacing: -0.02em;
+    max-width: 16ch;
   }
 
   .lead {
-    max-width: 44ch;
+    max-width: 46ch;
     color: var(--suave);
-    font-size: 1.05rem;
-    line-height: 1.6;
+    font-size: 1.08rem;
+    line-height: 1.65;
   }
 
   .hero-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 0.8rem;
-    margin-top: 1.6rem;
+    margin-top: 1.8rem;
   }
 
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    min-height: 48px;
-    padding: 0 1.4rem;
-    border-radius: 999px;
-    background: var(--acento);
-    color: var(--papel);
+  .hero-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.8rem;
+    margin: 2.2rem 0 0;
+    padding: 1.4rem 0 0;
+    border-top: 1px solid var(--linea);
+    list-style: none;
+  }
+
+  .hero-facts li {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .hero-facts strong {
+    font-size: 1.5rem;
+    color: var(--acento);
+  }
+
+  .hero-facts span {
     font-family: system-ui, sans-serif;
-    font-size: 0.95rem;
-    font-weight: 600;
-    text-decoration: none;
+    font-size: 0.84rem;
+    color: var(--suave);
   }
 
-  .btn.ghost {
-    background: transparent;
-    border: 1px solid rgba(36, 26, 19, 0.3);
-    color: var(--tinta);
-  }
-
+  /* Bodegón de platos: hasta que lleguen fotos reales, esto sugiere mesa */
   .hero-art {
+    position: relative;
     display: grid;
     place-items: center;
-    aspect-ratio: 4 / 3;
-    border-radius: 18px;
-    background: radial-gradient(70% 70% at 50% 40%, #e8cfae 0%, #cda878 60%, #a8794a 100%);
+    aspect-ratio: 4 / 3.4;
+    border-radius: 22px;
+    background:
+      radial-gradient(80% 70% at 70% 20%, rgba(255, 255, 255, 0.35), transparent 60%),
+      linear-gradient(150deg, #e8cfae 0%, #c99a63 55%, #8d5f34 100%);
+    overflow: hidden;
   }
 
   .plate {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: radial-gradient(circle at 38% 32%, #fff 0%, #f3e8d6 55%, #dcc7a6 100%);
+    box-shadow: 0 22px 44px rgba(60, 35, 12, 0.32);
+  }
+
+  .plate span {
+    border-radius: 50%;
+  }
+
+  .plate-a {
+    width: 54%;
+    aspect-ratio: 1;
+    top: 12%;
+    left: 8%;
+  }
+
+  .plate-a span {
+    width: 62%;
+    aspect-ratio: 1;
+    background: radial-gradient(circle at 40% 35%, #d8a34e, #a8641f 70%, #7c4413);
+  }
+
+  .plate-b {
+    width: 40%;
+    aspect-ratio: 1;
+    right: 7%;
+    top: 26%;
+  }
+
+  .plate-b span {
+    width: 60%;
+    aspect-ratio: 1;
+    background: radial-gradient(circle at 45% 40%, #7fa25f, #48622f);
+  }
+
+  .plate-c {
+    width: 34%;
+    aspect-ratio: 1;
+    bottom: 8%;
+    left: 34%;
+  }
+
+  .plate-c span {
     width: 58%;
     aspect-ratio: 1;
-    border-radius: 50%;
-    background: radial-gradient(circle at 40% 35%, #fff 0%, #f0e3cf 55%, #d9c3a2 100%);
-    box-shadow: inset 0 0 0 10px rgba(255, 255, 255, 0.55), 0 18px 40px rgba(60, 35, 12, 0.3);
+    background: radial-gradient(circle at 42% 38%, #f0e0c2, #c9a06a);
   }
 
-  section {
-    padding: clamp(2.2rem, 6vw, 4rem) clamp(1.1rem, 4vw, 3rem);
-  }
-
-  h2 {
-    margin: 0 0 0.4rem;
-    font-size: clamp(1.6rem, 3.5vw, 2.3rem);
-  }
-
-  .note {
-    margin: 0 0 2rem;
-    color: var(--suave);
-    font-style: italic;
-  }
-
-  .carta {
-    background: var(--papel-2);
-  }
-
-  .carta-grid {
-    display: grid;
-    gap: 2rem;
-  }
-
-  h3 {
-    margin: 0 0 0.9rem;
+  .art-note {
+    position: absolute;
+    right: 0.9rem;
+    bottom: 0.7rem;
+    margin: 0;
     font-family: system-ui, sans-serif;
-    font-size: 0.8rem;
-    letter-spacing: 0.16em;
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  /* --- Menú del día --- */
+  .menu-dia {
+    padding: 0 clamp(1.1rem, 4vw, 3.5rem);
+  }
+
+  .menu-dia-card {
+    display: grid;
+    gap: 1.6rem;
+    align-items: center;
+    padding: clamp(1.6rem, 4vw, 2.6rem);
+    border-radius: 22px;
+    background: linear-gradient(120deg, var(--acento) 0%, var(--acento-2) 100%);
+    color: var(--papel);
+  }
+
+  .menu-dia-card .eyebrow {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .precio-grande {
+    margin: 0.2rem 0 0.4rem;
+    font-size: clamp(2.6rem, 6vw, 3.6rem);
+    line-height: 1;
+  }
+
+  .menu-incluye {
+    margin: 0;
+    font-size: 1.02rem;
+  }
+
+  .menu-dias {
+    margin: 0.4rem 0 0;
+    font-family: system-ui, sans-serif;
+    font-size: 0.86rem;
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  .menu-dia-lista {
+    display: grid;
+    gap: 0.7rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.98rem;
+  }
+
+  .menu-dia-lista li {
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  }
+
+  .menu-dia-lista strong {
+    display: block;
+    font-family: system-ui, sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .menu-dia-card .btn {
+    background: var(--papel);
+    color: var(--acento);
+    justify-self: start;
+  }
+
+  .menu-dia-card .btn:hover {
+    background: #fff;
+  }
+
+  /* --- Carta --- */
+  section {
+    padding: clamp(2.6rem, 6vw, 4.5rem) clamp(1.1rem, 4vw, 3.5rem);
+  }
+
+  .eyebrow {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--acento);
   }
 
-  .carta ul {
-    display: grid;
-    gap: 0.75rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
+  .eyebrow.claro {
+    color: rgba(251, 246, 238, 0.8);
   }
 
-  .carta li {
+  .sec-head {
     display: grid;
-    grid-template-columns: 1fr auto;
     gap: 0.8rem;
-    align-items: baseline;
-    padding-bottom: 0.55rem;
-    border-bottom: 1px dotted rgba(36, 26, 19, 0.25);
+    margin-bottom: 2.4rem;
   }
 
-  .precio {
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
+  h2 {
+    margin: 0.3rem 0 0;
+    font-size: clamp(1.7rem, 3.6vw, 2.5rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
   }
 
-  .alergenos {
-    margin: 2rem 0 0;
+  .sec-note {
+    margin: 0;
+    max-width: 46ch;
+    font-family: system-ui, sans-serif;
+    font-size: 0.9rem;
+    color: var(--suave);
+  }
+
+  .carta-bloque {
+    display: grid;
+    gap: 1.2rem;
+    padding-block: 1.8rem;
+    border-top: 1px solid var(--linea);
+  }
+
+  .carta-titulo h3 {
+    margin: 0;
+    font-size: 1.45rem;
+  }
+
+  .carta-titulo p {
+    margin: 0.2rem 0 0;
     font-family: system-ui, sans-serif;
     font-size: 0.85rem;
     color: var(--suave);
   }
 
+  .platos {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .plato {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+    padding: 0.9rem;
+    border-radius: 16px;
+    background: #fff;
+    border: 1px solid var(--linea);
+  }
+
+  .plato-foto {
+    width: 62px;
+    height: 62px;
+    border-radius: 12px;
+    background:
+      radial-gradient(circle at 35% 30%, #fff 0%, #f0e2cb 45%, #d3b287 100%);
+    box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.7);
+  }
+
+  .plato:nth-child(2n) .plato-foto {
+    background: radial-gradient(circle at 35% 30%, #fdf3e2 0%, #e2c79b 50%, #b98b4f 100%);
+  }
+
+  .plato:nth-child(3n) .plato-foto {
+    background: radial-gradient(circle at 35% 30%, #eef3e4 0%, #bfd0a4 50%, #7f9b5f 100%);
+  }
+
+  .plato-cuerpo {
+    display: grid;
+    gap: 0.3rem;
+    align-content: center;
+  }
+
+  .plato-linea {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .plato-nombre {
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+
+  .plato-precio {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    color: var(--acento);
+    font-weight: 700;
+  }
+
+  .plato-desc {
+    font-family: system-ui, sans-serif;
+    font-size: 0.86rem;
+    color: var(--suave);
+    line-height: 1.5;
+  }
+
+  .plato-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.2rem;
+  }
+
+  .tag {
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    background: var(--papel-2);
+    font-family: system-ui, sans-serif;
+    font-size: 0.72rem;
+    color: var(--suave);
+  }
+
+  .bebidas {
+    margin-top: 2rem;
+    padding: 1.6rem;
+    border-radius: 18px;
+    background: var(--papel-2);
+  }
+
+  .bebidas h3 {
+    margin: 0 0 1rem;
+    font-size: 1.3rem;
+  }
+
+  .bebidas ul {
+    display: grid;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .bebidas li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px dotted var(--linea);
+  }
+
+  .bodega {
+    margin: 1.2rem 0 0;
+    font-family: system-ui, sans-serif;
+    font-size: 0.85rem;
+    color: var(--suave);
+  }
+
+  /* --- Galería --- */
+  .galeria {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+    padding-block: 0;
+  }
+
+  .shot {
+    position: relative;
+    margin: 0;
+    aspect-ratio: 4 / 3;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .shot-1 {
+    background: linear-gradient(160deg, #caa87b, #7e5730);
+  }
+  .shot-2 {
+    background: linear-gradient(160deg, #d98032, #8c3f14);
+  }
+  .shot-3 {
+    background: linear-gradient(160deg, #a9b78f, #4a6741);
+  }
+  .shot-4 {
+    background: linear-gradient(160deg, #e3d3b8, #ab8a5e);
+  }
+
+  figcaption {
+    position: absolute;
+    left: 0.9rem;
+    bottom: 0.8rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(36, 26, 19, 0.55);
+    color: var(--papel);
+    font-family: system-ui, sans-serif;
+    font-size: 0.78rem;
+  }
+
+  /* --- El local --- */
   .local {
     display: grid;
-    gap: 2rem;
+    gap: 2.2rem;
   }
 
   .local p {
     max-width: 52ch;
-    line-height: 1.65;
+    color: var(--suave);
+    line-height: 1.7;
+  }
+
+  .servicios {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1.4rem 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .servicios li {
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--linea);
+    border-radius: 999px;
+    font-family: system-ui, sans-serif;
+    font-size: 0.82rem;
     color: var(--suave);
   }
 
@@ -363,9 +1034,59 @@ const horarios = [
     color: var(--tinta) !important;
   }
 
+  .local-aside {
+    display: grid;
+    gap: 1.2rem;
+  }
+
+  .mapa {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    border-radius: 16px;
+    background: #e9e2d4;
+    overflow: hidden;
+  }
+
+  .calle {
+    position: absolute;
+    background: #d6cbb6;
+  }
+
+  .calle-1 {
+    inset: 38% 0 auto 0;
+    height: 12px;
+  }
+
+  .calle-2 {
+    inset: 0 auto 0 28%;
+    width: 10px;
+  }
+
+  .calle-3 {
+    inset: 72% 0 auto 0;
+    height: 8px;
+  }
+
+  .pin {
+    position: absolute;
+    left: 46%;
+    top: 34%;
+    width: 22px;
+    height: 22px;
+    border-radius: 50% 50% 50% 0;
+    rotate: -45deg;
+    background: var(--acento);
+    box-shadow: 0 6px 14px rgba(180, 69, 31, 0.5);
+  }
+
+  .horario h3 {
+    margin: 0 0 0.9rem;
+    font-size: 1.2rem;
+  }
+
   .horario ul {
     display: grid;
-    gap: 0.6rem;
+    gap: 0.55rem;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -378,93 +1099,245 @@ const horarios = [
     grid-template-columns: 1fr auto;
     gap: 1rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid rgba(36, 26, 19, 0.12);
+    border-bottom: 1px solid var(--linea);
   }
 
+  .horario li.cerrado {
+    color: var(--suave);
+  }
+
+  /* --- Reseñas --- */
+  .resenas {
+    background: var(--papel-2);
+  }
+
+  .resenas-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  blockquote {
+    margin: 0;
+    padding: 1.5rem;
+    border-radius: 18px;
+    background: #fff;
+    border: 1px solid var(--linea);
+  }
+
+  .estrellas {
+    margin: 0 0 0.6rem;
+    color: var(--acento-2);
+    letter-spacing: 0.1em;
+  }
+
+  blockquote p {
+    margin: 0;
+    line-height: 1.65;
+  }
+
+  blockquote footer {
+    margin-top: 1rem;
+    font-family: system-ui, sans-serif;
+    font-size: 0.84rem;
+    color: var(--suave);
+  }
+
+  /* --- Reserva --- */
   .reserva {
     background: var(--tinta);
     color: var(--papel);
   }
 
-  .reserva p {
-    color: rgba(251, 246, 238, 0.75);
+  .reserva-grid {
+    display: grid;
+    gap: 2.2rem;
+  }
+
+  .reserva h2 {
+    max-width: 14ch;
+  }
+
+  .reserva-texto {
+    max-width: 44ch;
+    color: rgba(251, 246, 238, 0.78);
+    line-height: 1.7;
+  }
+
+  .tel-grande {
+    display: inline-block;
+    margin-top: 1.2rem;
+    font-size: 1.8rem;
+    color: var(--papel);
+    text-decoration: none;
+    border-bottom: 2px solid var(--acento-2);
   }
 
   form {
     display: grid;
     gap: 1rem;
-    margin-top: 1.8rem;
-    max-width: 44rem;
+    padding: clamp(1.3rem, 3vw, 2rem);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(251, 246, 238, 0.14);
   }
 
   label {
     display: grid;
     gap: 0.4rem;
     font-family: system-ui, sans-serif;
-    font-size: 0.85rem;
+    font-size: 0.84rem;
   }
 
-  input {
+  input,
+  select {
     min-height: 48px;
     padding: 0 0.9rem;
-    border: 1px solid rgba(251, 246, 238, 0.3);
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(251, 246, 238, 0.28);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.08);
     color: var(--papel);
     font: inherit;
     font-family: system-ui, sans-serif;
+    font-size: 0.95rem;
   }
 
-  input:focus-visible {
-    outline: 2px solid var(--acento);
+  select option {
+    color: #241a13;
+  }
+
+  input:focus-visible,
+  select:focus-visible {
+    outline: 2px solid var(--acento-2);
     outline-offset: 2px;
   }
 
   button {
-    min-height: 52px;
+    min-height: 54px;
     border: 0;
     border-radius: 999px;
-    background: var(--acento);
-    color: var(--papel);
+    background: var(--acento-2);
+    color: #2a1509;
     font-family: system-ui, sans-serif;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 1rem;
     cursor: pointer;
   }
 
-  .foot {
-    padding: 2rem clamp(1.1rem, 4vw, 3rem) 3rem;
+  button:hover {
+    background: #eb9245;
+  }
+
+  .form-nota {
+    margin: 0;
     font-family: system-ui, sans-serif;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    color: rgba(251, 246, 238, 0.7);
+  }
+
+  /* --- Pie --- */
+  .foot {
+    display: grid;
+    gap: 0.8rem;
+    padding: 2.4rem clamp(1.1rem, 4vw, 3.5rem) 2rem;
+    font-family: system-ui, sans-serif;
+    font-size: 0.88rem;
     color: var(--suave);
   }
 
-  .mini {
-    font-size: 0.75rem;
+  .foot-brand {
+    margin: 0;
+    font-family: 'Iowan Old Style', Georgia, serif;
+    font-size: 1.2rem;
+    color: var(--tinta);
   }
 
-  @media (min-width: 880px) {
-    .hero {
-      grid-template-columns: 1.1fr 0.9fr;
+  .foot p {
+    margin: 0;
+  }
+
+  .mini {
+    font-size: 0.76rem;
+  }
+
+  /* --- Barra fija en móvil --- */
+  .barra-movil {
+    position: fixed;
+    inset: auto 0 1.9rem 0;
+    z-index: 30;
+    display: flex;
+    gap: 0.6rem;
+    padding: 0.6rem 1rem;
+    background: rgba(251, 246, 238, 0.95);
+    border-top: 1px solid var(--linea);
+    backdrop-filter: blur(10px);
+  }
+
+  .barra-movil .btn {
+    flex: 1;
+  }
+
+  @media (min-width: 860px) {
+    .top nav,
+    .tel {
+      display: flex;
     }
 
-    .carta-grid {
-      grid-template-columns: repeat(3, 1fr);
+    .hero {
+      grid-template-columns: 1.05fr 0.95fr;
+    }
+
+    .menu-dia-card {
+      grid-template-columns: 0.9fr 1.2fr auto;
+    }
+
+    .carta-bloque {
+      grid-template-columns: 240px 1fr;
       gap: 2.5rem;
     }
 
+    .platos {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .bebidas ul {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.6rem 2.5rem;
+    }
+
+    .galeria {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
     .local {
-      grid-template-columns: 1.2fr 0.8fr;
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+
+    .resenas-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .reserva-grid {
+      grid-template-columns: 0.9fr 1.1fr;
+      align-items: start;
     }
 
     form {
       grid-template-columns: repeat(2, 1fr);
     }
 
-    button {
+    .ancho,
+    button,
+    .form-nota {
       grid-column: span 2;
-      justify-self: start;
-      padding: 0 2.4rem;
+    }
+
+    .foot {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+    }
+
+    .barra-movil {
+      display: none;
     }
   }
 </style>
