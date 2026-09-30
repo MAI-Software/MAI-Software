@@ -9,7 +9,7 @@ published: true
 year: 2026
 status: "En desarrollo"
 cover: "/projects/slime-abyss/cover.webp"
-coverAlt: "El limo azul de Slime Abyss con cara kawaii, en la habitación del menú, junto al logotipo del juego"
+coverAlt: "El limo azul de Slime Abyss sale disparado de un cañón con cara de atracción de feria, con el cofre del tesoro al fondo y el logotipo del juego a la izquierda"
 gallery: []
 demoUrl: "https://slime-abyss.pages.dev/"
 technologies:
