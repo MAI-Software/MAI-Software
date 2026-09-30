@@ -106,10 +106,6 @@ export const ui = {
     'offer.note': 'Cuéntanos qué haces y te decimos qué necesitas. Sin compromiso.',
     'offer.prefill': 'Tengo un negocio y quiero una web. Esto es lo que hago:',
 
-    'studio.title': 'Nos gusta *imaginar*.\nMás aún, hacerlo realidad.',
-    'studio.text':
-      'Hay proyectos que empiezan por necesidad, otros por curiosidad y algunos simplemente porque queríamos descubrir si podíamos hacerlos. Diseño y tecnología son las herramientas. Crear algo que antes no existía es la parte que nos mueve.',
-    'studio.link': 'Conocer MAI',
 
     'final.title': '¿Qué idea tienes entre *manos*?',
 
@@ -293,10 +289,6 @@ export const ui = {
     'offer.note': 'Tell us what you do and we will tell you what you need. No strings attached.',
     'offer.prefill': 'I run a business and I want a website. This is what I do:',
 
-    'studio.title': 'We build product, not just screens.',
-    'studio.text':
-      'MAI Softwares combines development, design and product thinking to turn ideas into real digital experiences.',
-    'studio.link': 'About the studio',
 
     'final.title': 'Your next product can start with a *conversation*.',
 

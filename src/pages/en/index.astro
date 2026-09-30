@@ -6,7 +6,6 @@ import ProjectFeed from '../../components/home/ProjectFeed.astro';
 import Process from '../../components/home/Process.astro';
 import ClientSites from '../../components/home/ClientSites.astro';
 import WebOffer from '../../components/home/WebOffer.astro';
-import StudioIntro from '../../components/home/StudioIntro.astro';
 import ContactSection from '../../components/home/ContactSection.astro';
 import { company } from '../../data/company';
 import { getProjects, getFeaturedProject } from '../../lib/projects';
@@ -64,6 +63,5 @@ const software = all.filter((p) => p.data.category !== 'game').slice(0, 3);
   <Process locale={locale} />
   <ClientSites locale={locale} />
   <WebOffer locale={locale} />
-  <StudioIntro locale={locale} />
   <ContactSection locale={locale} />
 </BaseLayout>
