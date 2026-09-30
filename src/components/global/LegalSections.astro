@@ -1,0 +1,78 @@
+---
+import type { Locale } from '../../data/company';
+import { company } from '../../data/company';
+import type { LegalSection } from '../../data/legal-copy';
+import { useTranslations, contactPath } from '../../i18n/utils';
+
+interface Props {
+  locale: Locale;
+  sections: LegalSection[];
+}
+
+const { locale, sections } = Astro.props;
+const t = useTranslations(locale);
+
+/* Los datos de identificación se publican cuando existan. Mientras tanto se
+   dice que faltan: es más honesto que dejar el hueco en blanco o rellenarlo. */
+const identified = Boolean(company.legal.legalName && company.legal.taxId);
+---
+
+<div class="legal-body">
+  <section class="legal-block">
+    <h2>{t('legal.holder')}</h2>
+    {
+      identified ? (
+        <ul class="legal-data">
+          <li>{company.legal.legalName}</li>
+          <li>{company.legal.taxId}</li>
+          {company.legal.address && <li>{company.legal.address}</li>}
+        </ul>
+      ) : (
+        <p>{t('legal.holder.pending')}</p>
+      )
+    }
+    <p>
+      <a href={contactPath(locale)} class="link-editorial">{t('legal.holder.contact')}</a>
+    </p>
+  </section>
+
+  {
+    sections.map((section) => (
+      <section class="legal-block">
+        <h2>{section.heading[locale]}</h2>
+        {section.paragraphs[locale].map((paragraph) => (
+          <p>{paragraph}</p>
+        ))}
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  .legal-body {
+    display: grid;
+    gap: clamp(var(--space-5), 4vw, var(--space-7));
+  }
+
+  .legal-block {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .legal-block h2 {
+    font-size: var(--font-size-xl);
+  }
+
+  .legal-block p {
+    color: var(--text-muted);
+  }
+
+  .legal-data {
+    display: grid;
+    gap: var(--space-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--text-muted);
+  }
+</style>

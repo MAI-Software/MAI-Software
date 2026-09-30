@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import LegalSections from '../../components/global/LegalSections.astro';
 import { company } from '../../data/company';
+import { legalNotice } from '../../data/legal-copy';
 import { useTranslations } from '../../i18n/utils';
 
 const locale = 'en';
@@ -10,14 +12,18 @@ const t = useTranslations(locale);
 <BaseLayout
   locale={locale}
   title={`${t('legal.title')} — ${company.name}`}
-  description={t('legal.pending')}
+  description={t('legal.intro')}
   alternatePath="/legal"
 >
   <section class="section">
     <div class="container">
       <div class="container-reading legal-page">
         <h1>{t('legal.title')}</h1>
-        <p>{t('legal.pending')}</p>
+        <p class="lead">{t('legal.intro')}</p>
+
+        <LegalSections locale={locale} sections={legalNotice} />
+
+        <p class="legal-updated">{t('legal.updated')}</p>
       </div>
     </div>
   </section>
@@ -26,11 +32,11 @@ const t = useTranslations(locale);
 <style>
   .legal-page {
     display: grid;
-    gap: var(--space-5);
-    min-height: 40vh;
+    gap: clamp(var(--space-5), 4vw, var(--space-7));
   }
 
-  .legal-page p {
-    color: var(--color-text-muted);
+  .legal-updated {
+    color: var(--text-soft);
+    font-size: var(--font-size-sm);
   }
 </style>

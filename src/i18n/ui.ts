@@ -174,9 +174,18 @@ export const ui = {
     'links.githubText': 'Código y proyectos del estudio.',
 
     'legal.title': 'Aviso legal',
+    'legal.intro':
+      'Quién está detrás de esta web, en qué condiciones se usa y qué puedes esperar de lo que publicamos aquí.',
+    'legal.holder': 'Titular del sitio',
+    'legal.holder.pending':
+      'MAI Softwares opera hoy como proyecto en marcha y todavía no está constituida como sociedad, así que aquí no aparecen denominación social, NIF ni domicilio: se publicarán en cuanto existan, en lugar de rellenar el hueco con datos que no son.',
+    'legal.holder.contact': 'Escríbenos por el formulario de contacto',
+    'legal.updated': 'Última revisión: septiembre de 2026.',
     'legal.pending':
       'MAI Softwares se encuentra en fase de constitución. Los datos societarios se publicarán en esta página cuando el proceso esté completado.',
     'privacy.title': 'Privacidad',
+    'privacy.intro':
+      'Esta web no te sigue el rastro. No hay analítica, no hay cookies de terceros y lo único que se recoge es lo que escribes tú si decides mandarnos un mensaje.',
     'privacy.text':
       'Esta web es un sitio estático: no utiliza cookies ni herramientas de analítica, y navegar por ella no requiere facilitar ningún dato.',
     /* TODO (revisión humana): falta el responsable del tratamiento, la base
@@ -209,9 +218,9 @@ export const ui = {
     'music.pause': 'Mute music',
 
     'hero.eyebrow': 'GAMES · SAAS · CALCULATORS · WEBS',
-    'hero.title': 'We turn ideas into unforgettable products',
+    'hero.title': 'From idea to your *hands*',
     'hero.text':
-      'We design, build and maintain our own digital products: games, calculators, SaaS tools and websites. Everything here is published and in use.',
+      'We build websites, tools, SaaS and games so that an idea stops living in someone’s head and starts existing.',
     'skip.main': 'Skip to content',
     'nav.breadcrumb': 'Breadcrumb',
     'faq.title': 'Frequently asked *questions*.',
@@ -230,8 +239,8 @@ export const ui = {
     'cta.openRepo': 'View code',
 
     'categories.eyebrow': 'What we do',
-    'categories.title': '{n} disciplines. One way of building.',
-    'categories.title.one': 'One discipline. One way of building.',
+    'categories.title': 'Different ways of *building*.',
+    'categories.title.one': 'Different ways of *building*.',
     'categories.cta': 'View projects',
     'category.game.b1': 'Playable prototypes from day one',
     'category.game.b2': 'Mechanics at the core of the design',
@@ -255,7 +264,7 @@ export const ui = {
     'feed.all': 'View all projects',
 
     'process.eyebrow': 'How we work',
-    'process.title': 'How we *work*',
+    'process.title': 'How an idea comes to *life*.',
     'process.1.title': 'Idea',
     'process.1.text':
       'We define the problem, the opportunity and the outcome the product must achieve.',
@@ -275,8 +284,8 @@ export const ui = {
     'process.3.b2': 'Improve after launch',
     'process.3.b3': 'A base ready to grow',
 
-    'clients.eyebrow': 'Clients',
-    'clients.title': 'A few websites we built for *clients*',
+    'clients.eyebrow': 'We build for other people',
+    'clients.title': 'Other people’s ideas, made *real*.',
     'clients.text':
       'Projects we designed and developed for others. Every one is live and can be visited.',
 
@@ -301,11 +310,11 @@ export const ui = {
     'offer.prefill': 'I run a business and I want a website. This is what I do:',
 
 
-    'final.title': 'Your next product can start with a *conversation*.',
+    'final.title': 'What idea have you got on your *hands*?',
 
-    'projects.title': 'All *projects*',
+    'projects.title': 'Ideas that already *exist*.',
     'projects.intro':
-      'An archive of everything we build: video games, SaaS tools and web experiences.',
+      'Websites, games, tools and digital products that were once just an idea and that you can open today.',
     'projects.filter.all': 'All',
     'projects.empty':
       'We work in this discipline, but nothing is published here yet. Tell us about your project and we will build it.',
@@ -321,21 +330,21 @@ export const ui = {
     'projects.live': 'Live',
     'projects.soon': 'Coming soon',
 
-    'studio.page.title': 'Studio',
+    'studio.page.title': 'Some ideas deserve to leave your *head*.',
     'studio.page.intro':
       'MAI Softwares is a digital product studio working across software, design and interactive experiences.',
-    'studio.principles.title': 'Principles',
+    'studio.principles.title': 'How we think',
     'studio.principle.1': 'Clarity over noise.',
     'studio.principle.2': 'Product over decoration.',
     'studio.principle.3': 'Technology in service of an idea.',
     'studio.principle.4': 'Speed without sacrificing judgement.',
     'studio.principle.5': 'Systems built to grow.',
-    'studio.areas.title': 'Areas',
-    'studio.tech.title': 'Technology',
+    'studio.areas.title': 'An idea can take many *shapes*.',
+    'studio.tech.title': 'What we build with',
     'studio.tech.text':
       'We work with modern, performance-oriented web technologies: TypeScript, Astro and lightweight tools chosen per project.',
 
-    'contact.title': 'Tell us what you want to *build*.',
+    'contact.title': 'What idea have you got on your *hands*?',
     'contact.text':
       "An idea, a product that needs improving, or an opportunity that doesn't have a shape yet. Let's start by understanding it.",
     'contact.email.pending':
@@ -363,9 +372,18 @@ export const ui = {
     'links.githubText': "The studio's code and projects.",
 
     'legal.title': 'Legal notice',
+    'legal.intro':
+      'Who is behind this site, the terms it is used under and what you can expect from what we publish here.',
+    'legal.holder': 'Site owner',
+    'legal.holder.pending':
+      'MAI Softwares currently operates as an ongoing project and is not yet registered as a company, so no company name, tax ID or registered address appears here: they will be published as soon as they exist, rather than filling the gap with something untrue.',
+    'legal.holder.contact': 'Write to us through the contact form',
+    'legal.updated': 'Last reviewed: September 2026.',
     'legal.pending':
       'MAI Softwares is currently being incorporated. Company details will be published on this page once the process is complete.',
     'privacy.title': 'Privacy',
+    'privacy.intro':
+      'This site does not track you. No analytics, no third-party cookies, and the only thing collected is what you type if you decide to send us a message.',
     'privacy.text':
       'This is a static website: it uses no cookies and no analytics tools, and browsing it requires no personal data.',
     'privacy.form.title': 'Contact form',

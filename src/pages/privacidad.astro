@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import LegalSections from '../components/global/LegalSections.astro';
 import { company } from '../data/company';
+import { privacyPolicy } from '../data/legal-copy';
 import { useTranslations } from '../i18n/utils';
 
 const locale = 'es';
@@ -10,29 +12,31 @@ const t = useTranslations(locale);
 <BaseLayout
   locale={locale}
   title={`${t('privacy.title')} — ${company.name}`}
-  description={t('privacy.text')}
+  description={t('privacy.intro')}
   alternatePath="/en/privacy"
 >
   <section class="section">
     <div class="container">
-      <div class="container-reading privacy-page">
+      <div class="container-reading legal-page">
         <h1>{t('privacy.title')}</h1>
-        <p>{t('privacy.text')}</p>
-        <h2>{t('privacy.form.title')}</h2>
-        <p>{t('privacy.form.text')}</p>
+        <p class="lead">{t('privacy.intro')}</p>
+
+        <LegalSections locale={locale} sections={privacyPolicy} />
+
+        <p class="legal-updated">{t('legal.updated')}</p>
       </div>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .privacy-page {
+  .legal-page {
     display: grid;
-    gap: var(--space-5);
-    min-height: 40vh;
+    gap: clamp(var(--space-5), 4vw, var(--space-7));
   }
 
-  .privacy-page p {
-    color: var(--color-text-muted);
+  .legal-updated {
+    color: var(--text-soft);
+    font-size: var(--font-size-sm);
   }
 </style>
