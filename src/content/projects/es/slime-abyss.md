@@ -8,8 +8,8 @@ featured: false
 published: true
 year: 2026
 status: "En desarrollo"
-cover: "/projects/slime-abyss/cover.webp?v=2"
-coverAlt: "Menú de Slime Abyss: el logotipo del juego a la izquierda y el limo azul sobre la alfombra de su habitación, con los botones del menú a la derecha"
+cover: "/projects/slime-abyss/cover.webp?v=3"
+coverAlt: "El logotipo de Slime Abyss y el limo azul sobre la alfombra de su habitación, iluminada por una vela"
 gallery: []
 demoUrl: "https://slime-abyss.pages.dev/"
 technologies:
