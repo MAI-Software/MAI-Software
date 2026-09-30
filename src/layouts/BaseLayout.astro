@@ -1,8 +1,8 @@
 ---
-import '@fontsource-variable/space-grotesk';
-import '@fontsource-variable/inter';
-import spaceGroteskWoff2 from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url';
-import interWoff2 from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import '@fontsource-variable/bricolage-grotesque/wdth.css';
+import '@fontsource-variable/ibm-plex-sans';
+import displayWoff2 from '@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wdth-normal.woff2?url';
+import bodyWoff2 from '@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-latin-standard-normal.woff2?url';
 import '../styles/tokens.css';
 import '../styles/global.css';
 import '../styles/typography.css';
@@ -101,8 +101,8 @@ const jsonLd = {
     <meta name="generator" content={Astro.generator} />
     <meta name="theme-color" content="#0B1220" />
 
-    <link rel="preload" as="font" type="font/woff2" href={spaceGroteskWoff2} crossorigin />
-    <link rel="preload" as="font" type="font/woff2" href={interWoff2} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={displayWoff2} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={bodyWoff2} crossorigin />
 
     {alternateUrl && <link rel="alternate" hreflang={alternateLocale} href={alternateUrl} />}
     {alternateUrl && <link rel="alternate" hreflang={locale} href={canonical} />}
@@ -142,7 +142,6 @@ const jsonLd = {
     <div class="cursor-glow" aria-hidden="true" transition:persist></div>
     <div class="grain" aria-hidden="true" transition:persist></div>
     <div class="progress-track" aria-hidden="true"><div class="progress-fill"></div></div>
-    <a href="#main" class="skip-link">{t('skip.content')}</a>
     <a href="#main" class="skip-link">{t('skip.main')}</a>
     <Header locale={locale} alternatePath={alternatePath} />
     <main id="main">

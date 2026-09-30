@@ -5,7 +5,6 @@ import type { Locale } from '../data/company';
  */
 export const ui = {
   es: {
-    'skip.content': 'Saltar al contenido',
     'nav.menu': 'Menú',
     'nav.close': 'Cerrar menú',
     'nav.home': 'Inicio',
@@ -207,7 +206,6 @@ export const ui = {
     'footer.contactTitle': 'Contacto',
   },
   en: {
-    'skip.content': 'Skip to content',
     'nav.menu': 'Menu',
     'nav.close': 'Close menu',
     'nav.home': 'Home',

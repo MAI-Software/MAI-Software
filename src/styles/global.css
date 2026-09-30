@@ -412,6 +412,9 @@ button {
   transition: transform var(--duration-base) var(--ease-standard);
 }
 
+/* :focus además de :focus-visible: al entrar tabulando desde la barra del
+   navegador no siempre se marca como visible y el enlace no aparecía */
+.skip-link:focus,
 .skip-link:focus-visible {
   transform: none;
 }
@@ -1022,7 +1025,6 @@ button {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  font-style: italic;
   padding-inline-end: 0.06em;
 }
 
@@ -1166,29 +1168,6 @@ button {
   display: none;
 }
 
-/* --- Saltar al contenido -------------------------------------------- */
-.skip-link {
-  position: fixed;
-  top: var(--space-3);
-  left: var(--space-3);
-  z-index: 1000;
-  padding: 0.75rem 1.1rem;
-  border-radius: var(--radius-md);
-  background: var(--violet);
-  color: var(--color-white);
-  font-family: var(--font-display);
-  font-weight: 600;
-  text-decoration: none;
-  /* Fuera de pantalla hasta que alguien tabula: no molesta con el ratón */
-  translate: 0 calc(-100% - var(--space-5));
-  transition: translate var(--duration-base) var(--ease-standard);
-}
-
-.skip-link:focus,
-.skip-link:focus-visible {
-  translate: 0;
-}
-
 /* Con la cabecera pegada arriba, un salto a #ancla dejaba el título debajo */
 :target,
 #main,
@@ -1203,4 +1182,31 @@ button {
   inset: 50% 0 auto 0;
   height: 44px;
   translate: 0 -50%;
+}
+
+/* --- Palabra fuerte de un titular -----------------------------------
+   Se estrecha y engorda con el eje de anchura de la tipografía. Destaca
+   por forma, no por color, así que funciona igual para quien no distingue
+   el degradado y no repite el tópico del degradado violeta-azul. */
+.accent-word {
+  font-stretch: 75%;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  /* Un trazo bajo la palabra, no la palabra pintada: se ve el énfasis
+     aunque no se distinga el color y no imita el degradado del hero. */
+  text-decoration: underline;
+  text-decoration-color: var(--cyan);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 0.14em;
+  text-decoration-skip-ink: none;
+}
+
+@supports not (font-stretch: 78%) {
+  .accent-word {
+    font-weight: 800;
+    text-decoration: underline;
+    text-decoration-color: var(--cyan);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.18em;
+  }
 }

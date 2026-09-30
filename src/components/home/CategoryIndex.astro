@@ -89,9 +89,34 @@ const bulletKeys = (id: string): UIKey[] =>
   }
 
   @media (min-width: 1080px) {
-    /* Tantas columnas como disciplinas haya: sin huecos si alguna se cae */
+    /* Cuatro tarjetas idénticas en fila es la postal de web hecha con IA.
+       Con seis columnas y anchos alternos (4-2, 2-4) la rejilla respira y
+       cada disciplina ocupa un sitio distinto sin dejar huecos. */
     .category-grid {
-      grid-template-columns: repeat(var(--cols, 4), 1fr);
+      grid-template-columns: repeat(6, 1fr);
+    }
+
+    .category-card {
+      grid-column: span 3;
+    }
+
+    .category-grid:has(> :nth-child(4)) .category-card:nth-child(4n + 1),
+    .category-grid:has(> :nth-child(4)) .category-card:nth-child(4n) {
+      grid-column: span 4;
+    }
+
+    .category-grid:has(> :nth-child(4)) .category-card:nth-child(4n + 2),
+    .category-grid:has(> :nth-child(4)) .category-card:nth-child(4n + 3) {
+      grid-column: span 2;
+    }
+
+    /* Con tres o menos, reparto en tres columnas y sin inventos */
+    .category-grid:not(:has(> :nth-child(4))) .category-card {
+      grid-column: span 2;
+    }
+
+    .category-card:nth-child(4n + 1) {
+      min-height: 300px;
     }
   }
 </style>

@@ -16,7 +16,7 @@ const { locale, projects } = Astro.props;
 const t = useTranslations(locale);
 
 // La palabra fuerte del H1 va marcada con asteriscos en el texto
-const title = highlightTitle(t('hero.title'), true);
+const title = highlightTitle(t('hero.title'), true, 'grad-text');
 
 // Pila de vistas previas reales: el hero enseña producto, no adornos
 const previews = projects.slice(0, 6);

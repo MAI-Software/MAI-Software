@@ -22,7 +22,7 @@ const hasForm = company.contact.web3formsKey !== '';
       <div class="contact-inner">
         <div class="contact-copy" data-reveal-group>
           <p class="eyebrow" data-reveal>{t('cta.contact')}</p>
-          <h2 data-reveal set:html={highlightTitle(t('final.title'))} />
+          <h2 data-reveal set:html={highlightTitle(t('final.title'), false, 'grad-text')} />
           <p class="lead" data-reveal>{t('contact.text')}</p>
 
           {
