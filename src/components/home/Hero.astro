@@ -72,21 +72,26 @@ const previews = projects.slice(0, 6);
       </ul>
 
       {
-        /* La pila gira sola, pero quien entra puede querer mandar ya:
-           las flechas dan control sin bajar a la sección de proyectos. */
+        /* Los controles van debajo de la pila, no encima de la tarjeta:
+           sobre la portada apenas se veían y tapaban la imagen. */
         previews.length > 1 && (
-          <Fragment>
-            <button type="button" class="carousel-nav stack-nav stack-prev" data-stack-step="-1" aria-label={t('carousel.prev')}>
+          <div class="stack-controls">
+            <button type="button" class="carousel-nav" data-stack-step="-1" aria-label={t('carousel.prev')}>
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="m14.5 5-7 7 7 7" />
               </svg>
             </button>
-            <button type="button" class="carousel-nav stack-nav stack-next" data-stack-step="1" aria-label={t('carousel.next')}>
+            <p class="stack-count" aria-live="polite">
+              <span data-stack-current>1</span>
+              <span aria-hidden="true">/</span>
+              <span>{previews.length}</span>
+            </p>
+            <button type="button" class="carousel-nav" data-stack-step="1" aria-label={t('carousel.next')}>
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="m9.5 5 7 7-7 7" />
               </svg>
             </button>
-          </Fragment>
+          </div>
         )
       }
     </div>
@@ -112,7 +117,10 @@ const previews = projects.slice(0, 6);
       let front = 0;
       let timer: number | undefined;
 
+      const counter = stack.querySelector<HTMLElement>('[data-stack-current]');
+
       const render = () => {
+        if (counter) counter.textContent = String(front + 1);
         items.forEach((item, index) => {
           const depth = (index - front + items.length) % items.length;
           item.style.setProperty('--i', String(depth));
@@ -205,20 +213,23 @@ const previews = projects.slice(0, 6);
     perspective: 1400px;
   }
 
-  /* Flechas sobre los bordes de la tarjeta frontal */
-  .stack-nav {
-    position: absolute;
-    top: 50%;
-    translate: 0 -50%;
-    z-index: 20;
+  /* Controles bajo la pila, alineados a la derecha */
+  .stack-controls {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
   }
 
-  .stack-prev {
-    left: 0.85rem;
-  }
-
-  .stack-next {
-    right: 0.85rem;
+  .stack-count {
+    display: flex;
+    gap: 0.35rem;
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--font-size-sm);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-muted);
   }
 
   .stack-list {

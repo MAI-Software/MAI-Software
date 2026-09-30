@@ -1,0 +1,352 @@
+---
+import type { Locale } from '../../data/company';
+import { demoTemplates, demoPath } from '../../data/demos';
+import { useTranslations, contactPath } from '../../i18n/utils';
+import { withBase } from '../../lib/base';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<div class="demo-browser">
+  <div class="demo-list" role="tablist" aria-label={t('demos.list')}>
+    {
+      demoTemplates.map((demo, index) => (
+        <button
+          type="button"
+          role="tab"
+          class:list={['demo-item', { active: index === 0 }]}
+          id={`demo-tab-${demo.slug}`}
+          aria-selected={index === 0 ? 'true' : 'false'}
+          aria-controls="demo-preview"
+          tabindex={index === 0 ? 0 : -1}
+          data-demo={demo.slug}
+          data-src={withBase(demoPath(demo.slug))}
+          data-format={demo.format}
+          data-name={demo.name[locale]}
+        >
+          <span class="demo-dot" style={`--accent:${demo.accent}`} aria-hidden="true" />
+          <span class="demo-text">
+            <span class="demo-sector">{demo.sector[locale]}</span>
+            <span class="demo-name">{demo.name[locale]}</span>
+            <span class="demo-pitch">{demo.pitch[locale]}</span>
+            <span class="demo-highlights">
+              {demo.highlights[locale].map((item) => (
+                <span>{item}</span>
+              ))}
+            </span>
+          </span>
+        </button>
+      ))
+    }
+
+    <div class="demo-ask">
+      <p>{t('demos.ask')}</p>
+      <a href={contactPath(locale)} class="btn btn-brand btn-sm">{t('demos.askCta')}</a>
+    </div>
+  </div>
+
+  <div class="demo-stage">
+    <div class="demo-frame" data-frame data-format="mobile">
+      <div class="demo-bar">
+        <span class="demo-dots" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+        <span class="demo-url" data-frame-name>{demoTemplates[0]!.name[locale]}</span>
+        <a
+          class="demo-open"
+          data-frame-open
+          href={withBase(demoPath(demoTemplates[0]!.slug))}
+          target="_blank"
+          rel="noopener"
+        >
+          {t('demos.open')}
+        </a>
+      </div>
+
+      <div class="demo-screen">
+        <iframe
+          id="demo-preview"
+          role="tabpanel"
+          aria-labelledby={`demo-tab-${demoTemplates[0]!.slug}`}
+          src={withBase(demoPath(demoTemplates[0]!.slug))}
+          title={demoTemplates[0]!.name[locale]}
+          loading="lazy"
+        ></iframe>
+      </div>
+    </div>
+
+    <p class="demo-note">{t('demos.note')}</p>
+  </div>
+</div>
+
+<script>
+  /**
+   * Cambia la plantilla previsualizada. El marco se estrecha a tamaño de
+   * teléfono cuando la plantilla es vertical, porque enseñar una web pensada
+   * para el pulgar estirada a 1200 px no dice nada de cómo se ve de verdad.
+   */
+  const setup = () => {
+    const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-demo]'));
+    const frame = document.querySelector<HTMLElement>('[data-frame]');
+    const iframe = document.querySelector<HTMLIFrameElement>('#demo-preview');
+    const name = document.querySelector<HTMLElement>('[data-frame-name]');
+    const open = document.querySelector<HTMLAnchorElement>('[data-frame-open]');
+    if (tabs.length === 0 || !frame || !iframe) return;
+
+    const select = (tab: HTMLButtonElement, moveFocus = false) => {
+      for (const other of tabs) {
+        const active = other === tab;
+        other.classList.toggle('active', active);
+        other.setAttribute('aria-selected', String(active));
+        other.tabIndex = active ? 0 : -1;
+      }
+
+      const src = tab.dataset.src ?? '';
+      if (iframe.getAttribute('src') !== src) iframe.setAttribute('src', src);
+      iframe.setAttribute('aria-labelledby', tab.id);
+      iframe.title = tab.dataset.name ?? '';
+      frame.dataset.format = tab.dataset.format ?? 'desktop';
+      if (name) name.textContent = tab.dataset.name ?? '';
+      if (open) open.href = src;
+      if (moveFocus) tab.focus();
+    };
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => select(tab));
+      // Flechas para recorrer la lista, como espera un lector de pantalla
+      tab.addEventListener('keydown', (event) => {
+        const keys = ['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft', 'Home', 'End'];
+        if (!keys.includes(event.key)) return;
+        event.preventDefault();
+        const last = tabs.length - 1;
+        let next = index;
+        if (event.key === 'ArrowDown' || event.key === 'ArrowRight') next = index === last ? 0 : index + 1;
+        if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') next = index === 0 ? last : index - 1;
+        if (event.key === 'Home') next = 0;
+        if (event.key === 'End') next = last;
+        select(tabs[next]!, true);
+      });
+    });
+
+    const first = tabs.find((tab) => tab.classList.contains('active')) ?? tabs[0]!;
+    frame.dataset.format = first.dataset.format ?? 'desktop';
+  };
+
+  setup();
+  document.addEventListener('astro:after-swap', setup);
+</script>
+
+<style>
+  .demo-browser {
+    display: grid;
+    gap: var(--space-5);
+    align-items: start;
+  }
+
+  /* --- Lista --- */
+  .demo-list {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .demo-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--card);
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition:
+      border-color var(--duration-base) var(--ease-standard),
+      background-color var(--duration-base) var(--ease-standard);
+  }
+
+  .demo-item:hover {
+    border-color: var(--line-strong);
+    background: var(--card-hover);
+  }
+
+  .demo-item.active {
+    border-color: var(--cyan);
+    background: var(--card-hover);
+  }
+
+  .demo-dot {
+    width: 12px;
+    height: 12px;
+    margin-top: 0.42rem;
+    border-radius: 50%;
+    background: var(--accent, var(--cyan));
+  }
+
+  .demo-text {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .demo-sector {
+    font-family: var(--font-display);
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .demo-name {
+    font-family: var(--font-display);
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .demo-pitch {
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+    line-height: 1.6;
+  }
+
+  /* Los tres puntos fuertes solo se abren en la plantilla elegida: la lista
+     se lee de un vistazo y el detalle aparece cuando importa. */
+  .demo-highlights {
+    display: none;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-top: 0.3rem;
+  }
+
+  .demo-item.active .demo-highlights {
+    display: flex;
+  }
+
+  .demo-highlights span {
+    padding: 0.3rem 0.7rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-pill);
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+  }
+
+  .demo-ask {
+    display: grid;
+    gap: var(--space-3);
+    justify-items: start;
+    padding: var(--space-4);
+    border: 1px dashed var(--line-strong);
+    border-radius: var(--radius-lg);
+  }
+
+  .demo-ask p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  /* --- Escenario --- */
+  .demo-stage {
+    display: grid;
+    gap: var(--space-3);
+    position: sticky;
+    top: calc(var(--header-h) + var(--space-4));
+  }
+
+  .demo-frame {
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-lg);
+    background: var(--surface-raised);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .demo-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 0.6rem var(--space-4);
+    border-bottom: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .demo-dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .demo-dots span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--line-strong);
+  }
+
+  .demo-url {
+    flex: 1;
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+  }
+
+  .demo-open {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    font-family: var(--font-display);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--cyan);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .demo-screen {
+    display: grid;
+    justify-items: center;
+    background: #0d0f16;
+    padding: 0;
+  }
+
+  iframe {
+    width: 100%;
+    height: clamp(420px, 68vh, 760px);
+    border: 0;
+    background: #fff;
+  }
+
+  /* Plantilla vertical: se enseña con ancho de teléfono */
+  .demo-frame[data-format='mobile'] .demo-screen {
+    padding: var(--space-4) 0;
+    background:
+      radial-gradient(120% 60% at 50% 0%, rgba(98, 66, 252, 0.16), transparent 60%),
+      #0d0f16;
+  }
+
+  .demo-frame[data-format='mobile'] iframe {
+    width: min(390px, 100%);
+    border-radius: 18px;
+    border: 8px solid #1b1e2b;
+  }
+
+  .demo-note {
+    margin: 0;
+    color: var(--text-soft);
+    font-size: var(--font-size-sm);
+  }
+
+  @media (min-width: 1000px) {
+    .demo-browser {
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+      gap: var(--space-6);
+    }
+  }
+</style>

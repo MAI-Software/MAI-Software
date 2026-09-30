@@ -1,0 +1,554 @@
+---
+import '@fontsource-variable/ibm-plex-sans';
+import DemoLayout from '../../../layouts/DemoLayout.astro';
+
+/* Tarifas a la vista desde el primer pantallazo: en este sector, esconder el
+   precio es el motivo principal por el que la gente cierra la web. */
+const tratamientos = [
+  {
+    nombre: 'Masaje descontracturante',
+    duracion: '50 min',
+    precio: '45 €',
+    texto: 'Para la espalda cargada de oficina, entrenamiento o malas posturas.',
+  },
+  {
+    nombre: 'Masaje deportivo',
+    duracion: '60 min',
+    precio: '55 €',
+    texto: 'Antes o después de competir, y en recuperación de sobrecargas.',
+  },
+  {
+    nombre: 'Drenaje linfático',
+    duracion: '60 min',
+    precio: '50 €',
+    texto: 'Piernas pesadas, retención de líquidos y postoperatorio.',
+  },
+  {
+    nombre: 'Relajante de cuerpo entero',
+    duracion: '75 min',
+    precio: '60 €',
+    texto: 'Presión suave, luz baja y ningún reloj a la vista.',
+  },
+];
+
+const bonos = [
+  { nombre: 'Bono 5 sesiones', precio: '200 €', nota: 'Ahorras 25 €. Sin caducidad.' },
+  { nombre: 'Bono 10 sesiones', precio: '380 €', nota: 'Ahorras 70 €. Compartible.' },
+  { nombre: 'Primera visita', precio: '35 €', nota: 'Valoración incluida, 50 min.' },
+];
+
+const pasos = [
+  'Nos cuentas qué te duele y desde cuándo.',
+  'Valoramos la zona y decidimos el tratamiento juntos.',
+  'Sesión y pautas para casa, sin vendernos un bono a la fuerza.',
+];
+---
+
+<DemoLayout
+  title="Centro Sereno · masaje y fisioterapia"
+  description="Plantilla de ejemplo: web para clínica de masajes con tratamientos, precios, bonos y cita."
+>
+  <div class="site">
+    <header class="top">
+      <a class="brand" href="#inicio">
+        <span class="dot" aria-hidden="true"></span>
+        Centro Sereno
+      </a>
+      <nav aria-label="Principal">
+        <a href="#tratamientos">Tratamientos</a>
+        <a href="#precios">Precios</a>
+        <a href="#equipo">Equipo</a>
+      </nav>
+      <a class="btn small" href="#cita">Pedir cita</a>
+    </header>
+
+    <section class="hero" id="inicio">
+      <p class="eyebrow">Masaje terapéutico · Granada</p>
+      <h1>Media hora para ti. El resto del día lo notas.</h1>
+      <p class="lead">
+        Tratamientos de una en una persona, sin prisa y sin música de ascensor. Te decimos
+        cuántas sesiones necesitas de verdad, aunque sean menos de las que esperabas.
+      </p>
+      <div class="hero-actions">
+        <a class="btn" href="#cita">Pedir cita</a>
+        <a class="btn ghost" href="#precios">Ver precios</a>
+      </div>
+      <ul class="badges">
+        <li>Fisioterapeutas colegiados</li>
+        <li>Abierto sábados por la mañana</li>
+        <li>Parking en la puerta</li>
+      </ul>
+    </section>
+
+    <section class="tratamientos" id="tratamientos">
+      <h2>Tratamientos</h2>
+      <div class="grid">
+        {
+          tratamientos.map((t) => (
+            <article class="card">
+              <header>
+                <h3>{t.nombre}</h3>
+                <p class="meta">
+                  {t.duracion} · <strong>{t.precio}</strong>
+                </p>
+              </header>
+              <p>{t.texto}</p>
+              <a href="#cita">Reservar esta sesión</a>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="precios" id="precios">
+      <h2>Bonos y primera visita</h2>
+      <div class="bonos">
+        {
+          bonos.map((b) => (
+            <div class="bono">
+              <p class="bono-nombre">{b.nombre}</p>
+              <p class="bono-precio">{b.precio}</p>
+              <p class="bono-nota">{b.nota}</p>
+            </div>
+          ))
+        }
+      </div>
+      <p class="aviso">Precios finales, IVA incluido. Sin cuotas ni permanencia.</p>
+    </section>
+
+    <section class="proceso" id="equipo">
+      <div>
+        <h2>Cómo trabajamos</h2>
+        <ol>
+          {pasos.map((paso) => <li>{paso}</li>)}
+        </ol>
+      </div>
+      <div class="equipo">
+        <div class="persona">
+          <span class="avatar" aria-hidden="true">LM</span>
+          <div>
+            <strong>Lucía Marín</strong>
+            <span>Fisioterapeuta · col. 12345</span>
+          </div>
+        </div>
+        <div class="persona">
+          <span class="avatar" aria-hidden="true">DR</span>
+          <div>
+            <strong>Diego Ruiz</strong>
+            <span>Masaje deportivo · col. 12346</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cita" id="cita">
+      <div class="cita-inner">
+        <h2>Pedir cita</h2>
+        <p>Contesta la misma persona que te atiende. Normalmente en el mismo día.</p>
+        <form>
+          <label>
+            Nombre
+            <input type="text" placeholder="Tu nombre" required />
+          </label>
+          <label>
+            Teléfono
+            <input type="tel" placeholder="600 000 000" required />
+          </label>
+          <label class="ancho">
+            Qué te pasa
+            <textarea rows="3" placeholder="Zona, desde cuándo y si viene de algún golpe"></textarea>
+          </label>
+          <button type="button">Pedir cita</button>
+        </form>
+        <p class="alt">o por WhatsApp al 600 000 000</p>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <p>Centro Sereno · Calle Recogidas 8, Granada · 958 000 000</p>
+      <p class="mini">Plantilla de ejemplo. Los datos son ficticios.</p>
+    </footer>
+  </div>
+</DemoLayout>
+
+<style>
+  .site {
+    --verde: #2f5d43;
+    --verde-claro: #6f9c76;
+    --crema: #f6f4ef;
+    --crema-2: #eae6dc;
+    --tinta: #1d241f;
+    --suave: #5d6b60;
+
+    background: var(--crema);
+    color: var(--tinta);
+    font-family: 'IBM Plex Sans Variable', system-ui, sans-serif;
+    padding-bottom: 3rem;
+  }
+
+  .top {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 0.9rem clamp(1.1rem, 4vw, 3rem);
+    background: rgba(246, 244, 239, 0.94);
+    border-bottom: 1px solid rgba(29, 36, 31, 0.1);
+    backdrop-filter: blur(8px);
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-decoration: none;
+  }
+
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--verde-claro);
+  }
+
+  .top nav {
+    display: none;
+    gap: 1.4rem;
+  }
+
+  .top nav a {
+    font-size: 0.92rem;
+    color: var(--suave);
+    text-decoration: none;
+  }
+
+  .top nav a:hover {
+    color: var(--verde);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 1.4rem;
+    border-radius: 999px;
+    background: var(--verde);
+    color: var(--crema);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+  }
+
+  .btn.small {
+    min-height: 42px;
+    padding: 0 1.1rem;
+    font-size: 0.88rem;
+  }
+
+  .btn.ghost {
+    background: transparent;
+    border: 1px solid rgba(29, 36, 31, 0.25);
+    color: var(--tinta);
+  }
+
+  section {
+    padding: clamp(2.4rem, 6vw, 4.5rem) clamp(1.1rem, 4vw, 3rem);
+  }
+
+  .hero {
+    max-width: 52rem;
+  }
+
+  .eyebrow {
+    margin: 0 0 0.9rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--verde-claro);
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(1.9rem, 4.6vw, 3.1rem);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    max-width: 18ch;
+  }
+
+  .lead {
+    max-width: 50ch;
+    color: var(--suave);
+    line-height: 1.65;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 1.6rem;
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 2rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .badges li {
+    padding: 0.4rem 0.85rem;
+    border: 1px solid rgba(29, 36, 31, 0.16);
+    border-radius: 999px;
+    font-size: 0.82rem;
+    color: var(--suave);
+  }
+
+  h2 {
+    margin: 0 0 1.6rem;
+    font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+    letter-spacing: -0.01em;
+  }
+
+  .grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .card {
+    display: grid;
+    gap: 0.7rem;
+    align-content: start;
+    padding: 1.4rem;
+    border: 1px solid rgba(29, 36, 31, 0.12);
+    border-radius: 16px;
+    background: #fff;
+  }
+
+  .card h3 {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+
+  .meta {
+    margin: 0.2rem 0 0;
+    color: var(--suave);
+    font-size: 0.9rem;
+  }
+
+  .meta strong {
+    color: var(--verde);
+  }
+
+  .card p {
+    margin: 0;
+    color: var(--suave);
+    line-height: 1.6;
+  }
+
+  .card a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--verde);
+    font-weight: 600;
+    font-size: 0.92rem;
+  }
+
+  .precios {
+    background: var(--crema-2);
+  }
+
+  .bonos {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .bono {
+    padding: 1.4rem;
+    border-radius: 16px;
+    background: #fff;
+    border: 1px solid rgba(29, 36, 31, 0.1);
+  }
+
+  .bono-nombre {
+    margin: 0;
+    font-weight: 600;
+  }
+
+  .bono-precio {
+    margin: 0.3rem 0;
+    font-size: 1.8rem;
+    color: var(--verde);
+  }
+
+  .bono-nota {
+    margin: 0;
+    color: var(--suave);
+    font-size: 0.88rem;
+  }
+
+  .aviso {
+    margin: 1.6rem 0 0;
+    color: var(--suave);
+    font-size: 0.88rem;
+  }
+
+  .proceso {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  ol {
+    display: grid;
+    gap: 0.9rem;
+    margin: 0;
+    padding-left: 1.2rem;
+    color: var(--suave);
+    line-height: 1.6;
+    max-width: 46ch;
+  }
+
+  .equipo {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+  }
+
+  .persona {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    border-radius: 14px;
+    background: #fff;
+    border: 1px solid rgba(29, 36, 31, 0.1);
+  }
+
+  .avatar {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--verde-claro);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .persona div {
+    display: grid;
+  }
+
+  .persona span:last-child {
+    color: var(--suave);
+    font-size: 0.85rem;
+  }
+
+  .cita {
+    background: var(--verde);
+    color: var(--crema);
+  }
+
+  .cita-inner {
+    max-width: 46rem;
+  }
+
+  .cita p {
+    color: rgba(246, 244, 239, 0.8);
+  }
+
+  form {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.6rem;
+  }
+
+  label {
+    display: grid;
+    gap: 0.4rem;
+    font-size: 0.86rem;
+  }
+
+  input,
+  textarea {
+    padding: 0.8rem 0.9rem;
+    min-height: 48px;
+    border: 1px solid rgba(246, 244, 239, 0.3);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--crema);
+    font: inherit;
+  }
+
+  input:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid var(--crema);
+    outline-offset: 2px;
+  }
+
+  button {
+    min-height: 52px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--crema);
+    color: var(--verde);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .alt {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+  }
+
+  .foot {
+    padding: 2rem clamp(1.1rem, 4vw, 3rem) 3rem;
+    color: var(--suave);
+    font-size: 0.86rem;
+  }
+
+  .mini {
+    font-size: 0.76rem;
+  }
+
+  @media (min-width: 760px) {
+    .top nav {
+      display: flex;
+    }
+
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .bonos {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .proceso {
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+
+    form {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ancho,
+    button {
+      grid-column: span 2;
+    }
+
+    button {
+      justify-self: start;
+      padding: 0 2.4rem;
+    }
+  }
+</style>

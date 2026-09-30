@@ -29,6 +29,10 @@ const items: NavItem[] = [
     href: { es: '/webs', en: '/en/webs' },
   },
   {
+    label: { es: 'Demos', en: 'Demos' },
+    href: { es: '/demos', en: '/en/demos' },
+  },
+  {
     label: { es: 'Estudio', en: 'Studio' },
     href: { es: '/estudio', en: '/en/studio' },
   },
@@ -71,7 +75,7 @@ const pick = (...labels: string[]): NavItem[] =>
 export const footerGroups: { titleKey: string; items: NavItem[] }[] = [
   {
     titleKey: 'footer.explore',
-    items: applyBase(pick('Proyectos', 'Videojuegos', 'SaaS', 'Calculadoras', 'Webs')),
+    items: applyBase(pick('Proyectos', 'Videojuegos', 'SaaS', 'Calculadoras', 'Webs', 'Demos')),
   },
   {
     titleKey: 'footer.studio',

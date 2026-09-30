@@ -61,6 +61,8 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
+      // Las plantillas de demostración van con noindex: fuera del sitemap
+      filter: (page) => !page.includes('/demos/plantillas/'),
       i18n: {
         defaultLocale: 'es',
         locales: { es: 'es', en: 'en' },

@@ -209,10 +209,8 @@ const t = useTranslations(locale);
   }
 
   @media (min-width: 1060px) {
-    /* Tres tarjetas calcadas en fila es la postal de web hecha con IA. La
-       primera pesa más y la fila deja de leerse como una plantilla. */
     .feed-grid {
-      grid-template-columns: 1.35fr 1fr 1fr;
+      grid-template-columns: repeat(3, 1fr);
     }
 
     .feed-track {

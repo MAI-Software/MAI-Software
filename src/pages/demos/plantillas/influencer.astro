@@ -1,0 +1,372 @@
+---
+import '@fontsource-variable/space-grotesk';
+import DemoLayout from '../../../layouts/DemoLayout.astro';
+
+/* Plantilla vertical tipo "enlace en la biografía": se consume entera con el
+   pulgar, así que todo es una columna y cada bloque es un objetivo grande. */
+const links = [
+  { label: 'Mi última colaboración', detail: 'Código NOA15 · 15 % de descuento', kind: 'primary' },
+  { label: 'Canal de YouTube', detail: '128 vídeos · nuevo los martes' },
+  { label: 'Twitch', detail: 'Directos lunes, miércoles y viernes' },
+  { label: 'Tienda de merchandising', detail: 'Envíos a toda la península' },
+  { label: 'Lista de reproducción', detail: 'Lo que suena en los directos' },
+];
+
+const videos = [
+  { title: 'Monté mi setup entero por menos de 600 €', views: '412 mil visitas' },
+  { title: 'Una semana entrenando como un profesional', views: '287 mil visitas' },
+  { title: 'Respondo a vuestras preguntas incómodas', views: '156 mil visitas' },
+];
+
+const brands = ['Nordvik', 'Casa Pérez', 'Tebra Fit', 'Lumen Audio'];
+---
+
+<DemoLayout
+  title="Noa Ferrán · creadora de contenido"
+  description="Plantilla de ejemplo: página vertical para creadores de contenido, con enlaces, vídeos y contacto para marcas."
+>
+  <main class="page">
+    <header class="hero">
+      <div class="avatar" aria-hidden="true">NF</div>
+      <h1>Noa Ferrán</h1>
+      <p class="handle">@noaferran</p>
+      <p class="bio">
+        Deporte, tecnología y lo que se me cruce. Directos tres días por semana y vídeo nuevo
+        los martes.
+      </p>
+      <ul class="stats">
+        <li><strong>184 mil</strong><span>seguidores</span></li>
+        <li><strong>2,3 M</strong><span>visitas al mes</span></li>
+        <li><strong>4 años</strong><span>creando</span></li>
+      </ul>
+    </header>
+
+    <nav class="links" aria-label="Mis enlaces">
+      {
+        links.map((link) => (
+          <a href="#contacto" class:list={['link', { primary: link.kind === 'primary' }]}>
+            <span class="link-label">{link.label}</span>
+            <span class="link-detail">{link.detail}</span>
+            <span class="link-go" aria-hidden="true">→</span>
+          </a>
+        ))
+      }
+    </nav>
+
+    <section class="block">
+      <h2>Lo último</h2>
+      <ul class="videos">
+        {
+          videos.map((video) => (
+            <li>
+              <a href="#contacto">
+                <span class="thumb" aria-hidden="true">
+                  <span class="play" />
+                </span>
+                <span class="video-text">
+                  <strong>{video.title}</strong>
+                  <span>{video.views}</span>
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="block">
+      <h2>Marcas con las que he trabajado</h2>
+      <ul class="brands">
+        {brands.map((brand) => <li>{brand}</li>)}
+      </ul>
+    </section>
+
+    <section class="block contact" id="contacto">
+      <h2>¿Eres una marca?</h2>
+      <p>Cuéntame qué tienes en mente y te paso el kit con audiencia, tarifas y ejemplos.</p>
+      <form>
+        <label>
+          Marca o empresa
+          <input type="text" name="marca" placeholder="Nombre" required />
+        </label>
+        <label>
+          Correo
+          <input type="email" name="email" placeholder="hola@marca.com" required />
+        </label>
+        <label>
+          Propuesta
+          <textarea name="mensaje" rows="3" placeholder="Qué producto y para cuándo"></textarea>
+        </label>
+        <button type="button">Enviar propuesta</button>
+      </form>
+      <p class="mail">o escríbeme a hola@noaferran.com</p>
+    </section>
+
+    <footer class="foot">
+      <p>© 2026 Noa Ferrán</p>
+    </footer>
+  </main>
+</DemoLayout>
+
+<style>
+  .page {
+    --ink: #08080d;
+    --surface: #131320;
+    --line: rgba(255, 255, 255, 0.1);
+    --text: #f4f4fb;
+    --muted: #a3a3bb;
+    --accent: #ff3d8b;
+    --accent-2: #8b5bff;
+
+    max-width: 30rem;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 3rem 1.25rem 4.5rem;
+    background: radial-gradient(120% 60% at 50% 0%, #241035 0%, var(--ink) 55%);
+    color: var(--text);
+    font-family: 'Space Grotesk Variable', system-ui, sans-serif;
+  }
+
+  .hero {
+    text-align: center;
+    display: grid;
+    gap: 0.6rem;
+    justify-items: center;
+  }
+
+  .avatar {
+    display: grid;
+    place-items: center;
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  h1 {
+    margin: 0.4rem 0 0;
+    font-size: 1.9rem;
+    letter-spacing: -0.02em;
+  }
+
+  .handle {
+    margin: 0;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .bio {
+    margin: 0.2rem 0 0;
+    max-width: 26ch;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  .stats {
+    display: flex;
+    gap: 1.4rem;
+    margin: 1.2rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .stats li {
+    display: grid;
+    gap: 0.1rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .stats strong {
+    font-size: 1.05rem;
+    color: var(--text);
+  }
+
+  .links {
+    display: grid;
+    gap: 0.7rem;
+    margin-top: 2.2rem;
+  }
+
+  .link {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 0.1rem 1rem;
+    /* Altura de sobra para el pulgar: estos enlaces son el producto */
+    min-height: 64px;
+    padding: 0.85rem 1.1rem;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--surface);
+    text-decoration: none;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+
+  .link:hover,
+  .link:focus-visible {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.28);
+  }
+
+  .link.primary {
+    background: linear-gradient(120deg, var(--accent), var(--accent-2));
+    border-color: transparent;
+  }
+
+  .link-label {
+    font-weight: 600;
+  }
+
+  .link-detail {
+    grid-column: 1;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  .link.primary .link-detail {
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  .link-go {
+    grid-row: 1 / span 2;
+    font-size: 1.1rem;
+  }
+
+  .block {
+    margin-top: 2.6rem;
+  }
+
+  h2 {
+    margin: 0 0 1rem;
+    font-size: 1.05rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .videos {
+    display: grid;
+    gap: 0.7rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .videos a {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 0.9rem;
+    align-items: center;
+    padding: 0.5rem;
+    border-radius: 14px;
+    background: var(--surface);
+    text-decoration: none;
+  }
+
+  .thumb {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 16 / 10;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #2b2b46, #191927);
+  }
+
+  .play {
+    width: 0;
+    height: 0;
+    border-left: 12px solid var(--text);
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+  }
+
+  .video-text {
+    display: grid;
+    gap: 0.2rem;
+    font-size: 0.9rem;
+  }
+
+  .video-text span {
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+
+  .brands {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .brands li {
+    padding: 0.45rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .contact p {
+    margin: 0 0 1rem;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  form {
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  label {
+    display: grid;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  input,
+  textarea {
+    padding: 0.8rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.95rem;
+  }
+
+  input:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  button {
+    min-height: 52px;
+    border: 0;
+    border-radius: 12px;
+    background: linear-gradient(120deg, var(--accent), var(--accent-2));
+    color: #fff;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .mail {
+    margin-top: 0.9rem;
+    text-align: center;
+    font-size: 0.85rem;
+  }
+
+  .foot {
+    margin-top: 3rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+</style>

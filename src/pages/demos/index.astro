@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import DemoBrowser from '../../components/demos/DemoBrowser.astro';
+import WebOffer from '../../components/home/WebOffer.astro';
+import { company } from '../../data/company';
+import { useTranslations, homePath } from '../../i18n/utils';
+import { highlightTitle } from '../../lib/highlight';
+
+const locale = 'es';
+const t = useTranslations(locale);
+
+const crumbs = [
+  { name: t('nav.home'), path: homePath(locale) },
+  { name: t('nav.demos') },
+];
+---
+
+<BaseLayout
+  locale={locale}
+  title={`Plantillas web de ejemplo por sector — ${company.name}`}
+  description="Plantillas web de ejemplo para restaurantes, clínicas, centros de masaje e influencers. Ábrelas, recórrelas y pide la tuya con tus textos y tu dominio."
+  alternatePath="/en/demos"
+  breadcrumbs={crumbs}
+>
+  <section class="section">
+    <div class="container">
+      <header class="demos-head" data-reveal>
+        <p class="eyebrow">{t('demos.eyebrow')}</p>
+        <h1 set:html={highlightTitle(t('demos.title'))} />
+        <p class="lead">{t('demos.intro')}</p>
+      </header>
+
+      <DemoBrowser locale={locale} />
+    </div>
+  </section>
+
+  <WebOffer locale={locale} />
+</BaseLayout>
+
+<style>
+  .demos-head {
+    display: grid;
+    gap: var(--space-4);
+    margin-bottom: clamp(var(--space-6), 5vw, var(--space-8));
+  }
+
+  .demos-head .lead {
+    max-width: 62ch;
+  }
+</style>

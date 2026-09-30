@@ -1,0 +1,470 @@
+---
+import DemoLayout from '../../../layouts/DemoLayout.astro';
+
+/* Lo que busca alguien con hambre y el móvil en la mano: qué se come, cuánto
+   cuesta, si está abierto y cómo reservar. En ese orden. */
+const carta = [
+  {
+    seccion: 'Para empezar',
+    platos: [
+      { nombre: 'Pan de masa madre con tomate y anchoa', precio: '7,50' },
+      { nombre: 'Croquetas de puchero (6 u.)', precio: '9,00' },
+      { nombre: 'Ensaladilla de la casa con langostinos', precio: '11,50' },
+      { nombre: 'Alcachofas confitadas con jamón', precio: '12,00' },
+    ],
+  },
+  {
+    seccion: 'Del fuego',
+    platos: [
+      { nombre: 'Arroz meloso de secreto y setas', precio: '18,50' },
+      { nombre: 'Pluma ibérica con puré de manzana', precio: '21,00' },
+      { nombre: 'Lubina a la brasa con verduras de temporada', precio: '23,50' },
+      { nombre: 'Costilla glaseada 12 horas', precio: '19,00' },
+    ],
+  },
+  {
+    seccion: 'Dulces',
+    platos: [
+      { nombre: 'Tarta de queso al horno', precio: '6,50' },
+      { nombre: 'Torrija caramelizada con helado de vainilla', precio: '7,00' },
+    ],
+  },
+];
+
+const horarios = [
+  { dia: 'Martes a jueves', horas: '13:00 – 16:00 · 20:00 – 23:30' },
+  { dia: 'Viernes y sábado', horas: '13:00 – 16:30 · 20:00 – 00:00' },
+  { dia: 'Domingo', horas: '13:00 – 16:30' },
+  { dia: 'Lunes', horas: 'Cerrado' },
+];
+---
+
+<DemoLayout
+  title="Casa Molinero · cocina de mercado"
+  description="Plantilla de ejemplo: web para restaurante con carta, horarios, cómo llegar y reserva."
+>
+  <div class="site">
+    <header class="top">
+      <a class="brand" href="#inicio">Casa Molinero</a>
+      <nav aria-label="Principal">
+        <a href="#carta">Carta</a>
+        <a href="#local">El local</a>
+        <a href="#reserva">Reservar</a>
+      </nav>
+      <a class="phone" href="#reserva">955 000 000</a>
+    </header>
+
+    <section class="hero" id="inicio">
+      <div class="hero-text">
+        <p class="eyebrow">Cocina de mercado · Sevilla</p>
+        <h1>Lo de siempre, hecho como hay que hacerlo.</h1>
+        <p class="lead">
+          Producto de temporada, brasa de encina y una carta corta que cambia cada semana
+          según lo que llega del mercado.
+        </p>
+        <div class="hero-actions">
+          <a class="btn" href="#reserva">Reservar mesa</a>
+          <a class="btn ghost" href="#carta">Ver la carta</a>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <span class="plate"></span>
+      </div>
+    </section>
+
+    <section class="carta" id="carta">
+      <h2>La carta</h2>
+      <p class="note">Cambia cada semana. Esta es la de hoy.</p>
+      <div class="carta-grid">
+        {
+          carta.map((bloque) => (
+            <div class="carta-bloque">
+              <h3>{bloque.seccion}</h3>
+              <ul>
+                {bloque.platos.map((plato) => (
+                  <li>
+                    <span>{plato.nombre}</span>
+                    <span class="precio">{plato.precio} €</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+      <p class="alergenos">
+        Carta de alérgenos disponible en sala. Menú del día de martes a viernes: 16,50 €.
+      </p>
+    </section>
+
+    <section class="local" id="local">
+      <div>
+        <h2>El local</h2>
+        <p>
+          Veinte mesas, cocina vista y una barra para comer sin reserva. Estamos en una casa
+          de 1912 rehabilitada en el centro, a cinco minutos andando de la catedral.
+        </p>
+        <p class="direccion">
+          Calle del Horno 14, Sevilla<br />
+          <a href="#reserva">Cómo llegar</a>
+        </p>
+      </div>
+      <div class="horario">
+        <h3>Horarios</h3>
+        <ul>
+          {
+            horarios.map((h) => (
+              <li>
+                <span>{h.dia}</span>
+                <span>{h.horas}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <section class="reserva" id="reserva">
+      <h2>Reservar</h2>
+      <p>Por teléfono en horario de cocina, o déjanos los datos y te confirmamos.</p>
+      <form>
+        <label>
+          Nombre
+          <input type="text" placeholder="A nombre de" required />
+        </label>
+        <label>
+          Personas
+          <input type="number" min="1" max="12" value="2" />
+        </label>
+        <label>
+          Día y hora
+          <input type="text" placeholder="Viernes 21:00" />
+        </label>
+        <label>
+          Teléfono
+          <input type="tel" placeholder="600 000 000" required />
+        </label>
+        <button type="button">Pedir reserva</button>
+      </form>
+    </section>
+
+    <footer class="foot">
+      <p>Casa Molinero · Calle del Horno 14, Sevilla · 955 000 000</p>
+      <p class="mini">Plantilla de ejemplo. Los datos son ficticios.</p>
+    </footer>
+  </div>
+</DemoLayout>
+
+<style>
+  .site {
+    --tinta: #241a13;
+    --papel: #fbf6ee;
+    --papel-2: #f3e9da;
+    --acento: #b4451f;
+    --suave: #7d6a5b;
+
+    background: var(--papel);
+    color: var(--tinta);
+    font-family: 'Iowan Old Style', Georgia, 'Times New Roman', serif;
+    padding-bottom: 3rem;
+  }
+
+  .top {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1rem clamp(1.1rem, 4vw, 3rem);
+    background: rgba(251, 246, 238, 0.92);
+    border-bottom: 1px solid rgba(36, 26, 19, 0.12);
+    backdrop-filter: blur(8px);
+  }
+
+  .brand {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+  }
+
+  .top nav {
+    display: flex;
+    gap: 1.4rem;
+  }
+
+  .top nav a {
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+
+  .top nav a:hover {
+    color: var(--acento);
+  }
+
+  .phone {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--tinta);
+    border-radius: 999px;
+    font-size: 0.9rem;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .hero {
+    display: grid;
+    gap: 2rem;
+    align-items: center;
+    padding: clamp(2.5rem, 7vw, 5rem) clamp(1.1rem, 4vw, 3rem);
+  }
+
+  .eyebrow {
+    margin: 0 0 0.8rem;
+    font-family: system-ui, sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--acento);
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+
+  .lead {
+    max-width: 44ch;
+    color: var(--suave);
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 1.6rem;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 0 1.4rem;
+    border-radius: 999px;
+    background: var(--acento);
+    color: var(--papel);
+    font-family: system-ui, sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .btn.ghost {
+    background: transparent;
+    border: 1px solid rgba(36, 26, 19, 0.3);
+    color: var(--tinta);
+  }
+
+  .hero-art {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 4 / 3;
+    border-radius: 18px;
+    background: radial-gradient(70% 70% at 50% 40%, #e8cfae 0%, #cda878 60%, #a8794a 100%);
+  }
+
+  .plate {
+    width: 58%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, #fff 0%, #f0e3cf 55%, #d9c3a2 100%);
+    box-shadow: inset 0 0 0 10px rgba(255, 255, 255, 0.55), 0 18px 40px rgba(60, 35, 12, 0.3);
+  }
+
+  section {
+    padding: clamp(2.2rem, 6vw, 4rem) clamp(1.1rem, 4vw, 3rem);
+  }
+
+  h2 {
+    margin: 0 0 0.4rem;
+    font-size: clamp(1.6rem, 3.5vw, 2.3rem);
+  }
+
+  .note {
+    margin: 0 0 2rem;
+    color: var(--suave);
+    font-style: italic;
+  }
+
+  .carta {
+    background: var(--papel-2);
+  }
+
+  .carta-grid {
+    display: grid;
+    gap: 2rem;
+  }
+
+  h3 {
+    margin: 0 0 0.9rem;
+    font-family: system-ui, sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--acento);
+  }
+
+  .carta ul {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .carta li {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.8rem;
+    align-items: baseline;
+    padding-bottom: 0.55rem;
+    border-bottom: 1px dotted rgba(36, 26, 19, 0.25);
+  }
+
+  .precio {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .alergenos {
+    margin: 2rem 0 0;
+    font-family: system-ui, sans-serif;
+    font-size: 0.85rem;
+    color: var(--suave);
+  }
+
+  .local {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .local p {
+    max-width: 52ch;
+    line-height: 1.65;
+    color: var(--suave);
+  }
+
+  .direccion {
+    color: var(--tinta) !important;
+  }
+
+  .horario ul {
+    display: grid;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-family: system-ui, sans-serif;
+    font-size: 0.92rem;
+  }
+
+  .horario li {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(36, 26, 19, 0.12);
+  }
+
+  .reserva {
+    background: var(--tinta);
+    color: var(--papel);
+  }
+
+  .reserva p {
+    color: rgba(251, 246, 238, 0.75);
+  }
+
+  form {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.8rem;
+    max-width: 44rem;
+  }
+
+  label {
+    display: grid;
+    gap: 0.4rem;
+    font-family: system-ui, sans-serif;
+    font-size: 0.85rem;
+  }
+
+  input {
+    min-height: 48px;
+    padding: 0 0.9rem;
+    border: 1px solid rgba(251, 246, 238, 0.3);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--papel);
+    font: inherit;
+    font-family: system-ui, sans-serif;
+  }
+
+  input:focus-visible {
+    outline: 2px solid var(--acento);
+    outline-offset: 2px;
+  }
+
+  button {
+    min-height: 52px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--acento);
+    color: var(--papel);
+    font-family: system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .foot {
+    padding: 2rem clamp(1.1rem, 4vw, 3rem) 3rem;
+    font-family: system-ui, sans-serif;
+    font-size: 0.85rem;
+    color: var(--suave);
+  }
+
+  .mini {
+    font-size: 0.75rem;
+  }
+
+  @media (min-width: 880px) {
+    .hero {
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+
+    .carta-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+    }
+
+    .local {
+      grid-template-columns: 1.2fr 0.8fr;
+    }
+
+    form {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    button {
+      grid-column: span 2;
+      justify-self: start;
+      padding: 0 2.4rem;
+    }
+  }
+</style>

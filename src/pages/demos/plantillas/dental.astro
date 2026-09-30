@@ -1,0 +1,586 @@
+---
+import DemoLayout from '../../../layouts/DemoLayout.astro';
+
+/* En salud manda la confianza: nombres, titulación, precios claros y una
+   primera visita fácil de pedir. Nada de promesas médicas. */
+const tratamientos = [
+  {
+    nombre: 'Revisión y limpieza',
+    texto: 'Exploración completa, radiografía si hace falta y limpieza con ultrasonidos.',
+    desde: '39 €',
+  },
+  {
+    nombre: 'Ortodoncia invisible',
+    texto: 'Estudio 3D, plan de tratamiento y férulas. Revisiones cada seis semanas.',
+    desde: '2.400 €',
+  },
+  {
+    nombre: 'Implantes',
+    texto: 'Implante de titanio, pilar y corona. Garantía por escrito de diez años.',
+    desde: '850 €',
+  },
+  {
+    nombre: 'Estética dental',
+    texto: 'Blanqueamiento en clínica o carillas, con prueba previa en tu boca.',
+    desde: '290 €',
+  },
+];
+
+const equipo = [
+  { nombre: 'Dra. Elena Sarabia', rol: 'Directora clínica · Odontología general', num: 'col. 28001234' },
+  { nombre: 'Dr. Iván Prats', rol: 'Cirugía e implantes', num: 'col. 28005678' },
+  { nombre: 'Marta Liébana', rol: 'Higienista dental', num: 'col. 28009012' },
+];
+
+const seguros = ['Adeslas', 'Sanitas', 'DKV', 'Asisa', 'Mapfre'];
+
+const preguntas = [
+  {
+    q: '¿La primera visita tiene coste?',
+    a: 'No. La primera visita incluye exploración, radiografía panorámica y presupuesto cerrado por escrito.',
+  },
+  {
+    q: '¿Se puede financiar?',
+    a: 'Sí, hasta en 12 meses sin intereses, y a más plazo con financiera. Se firma antes de empezar y sin sorpresas.',
+  },
+  {
+    q: '¿Atendéis urgencias?',
+    a: 'Reservamos huecos cada día para dolor agudo. Llama por la mañana y te damos hora ese mismo día.',
+  },
+];
+---
+
+<DemoLayout
+  title="Clínica Dental Aranda · odontología en Madrid"
+  description="Plantilla de ejemplo: web para clínica dental con tratamientos, equipo, seguros y primera visita."
+>
+  <div class="site">
+    <header class="top">
+      <a class="brand" href="#inicio">
+        <span class="mark" aria-hidden="true"></span>
+        Clínica Aranda
+      </a>
+      <nav aria-label="Principal">
+        <a href="#tratamientos">Tratamientos</a>
+        <a href="#equipo">Equipo</a>
+        <a href="#preguntas">Preguntas</a>
+      </nav>
+      <a class="btn small" href="#cita">Primera visita</a>
+    </header>
+
+    <section class="hero" id="inicio">
+      <div>
+        <p class="eyebrow">Odontología general y estética · Madrid</p>
+        <h1>Te explicamos qué tienes antes de tocarte nada.</h1>
+        <p class="lead">
+          Diagnóstico con imagen, presupuesto cerrado por escrito y tú decides. Sin paquetes
+          que no has pedido ni tratamientos que puedan esperar.
+        </p>
+        <div class="hero-actions">
+          <a class="btn" href="#cita">Pedir primera visita</a>
+          <a class="btn ghost" href="#tratamientos">Ver tratamientos</a>
+        </div>
+      </div>
+      <ul class="pruebas">
+        <li><strong>18 años</strong><span>en el barrio</span></li>
+        <li><strong>4,9/5</strong><span>en 320 reseñas</span></li>
+        <li><strong>10 años</strong><span>de garantía en implantes</span></li>
+      </ul>
+    </section>
+
+    <section class="tratamientos" id="tratamientos">
+      <h2>Tratamientos</h2>
+      <div class="grid">
+        {
+          tratamientos.map((t) => (
+            <article class="card">
+              <h3>{t.nombre}</h3>
+              <p>{t.texto}</p>
+              <p class="desde">
+                desde <strong>{t.desde}</strong>
+              </p>
+            </article>
+          ))
+        }
+      </div>
+      <p class="nota">
+        Los precios son orientativos: el definitivo sale del estudio de tu caso y se entrega
+        por escrito antes de empezar.
+      </p>
+    </section>
+
+    <section class="equipo" id="equipo">
+      <h2>Quién te atiende</h2>
+      <div class="personas">
+        {
+          equipo.map((p) => (
+            <div class="persona">
+              <span class="avatar" aria-hidden="true">
+                {p.nombre
+                  .split(' ')
+                  .filter((w) => !w.includes('.'))
+                  .slice(0, 2)
+                  .map((w) => w[0])
+                  .join('')}
+              </span>
+              <div>
+                <strong>{p.nombre}</strong>
+                <span>{p.rol}</span>
+                <span class="col">{p.num}</span>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+      <div class="seguros">
+        <p>Trabajamos con:</p>
+        <ul>
+          {seguros.map((s) => <li>{s}</li>)}
+        </ul>
+      </div>
+    </section>
+
+    <section class="preguntas" id="preguntas">
+      <h2>Preguntas frecuentes</h2>
+      <div class="faq">
+        {
+          preguntas.map((p) => (
+            <details>
+              <summary>{p.q}</summary>
+              <p>{p.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="cita" id="cita">
+      <div class="cita-inner">
+        <h2>Primera visita</h2>
+        <p>Rellena y te llamamos para darte hora. También puedes llamar al 910 000 000.</p>
+        <form>
+          <label>
+            Nombre
+            <input type="text" placeholder="Nombre y apellidos" required />
+          </label>
+          <label>
+            Teléfono
+            <input type="tel" placeholder="600 000 000" required />
+          </label>
+          <label class="ancho">
+            Motivo
+            <textarea rows="3" placeholder="Revisión, dolor, ortodoncia…"></textarea>
+          </label>
+          <button type="button">Solicitar cita</button>
+        </form>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <p>Clínica Dental Aranda · Calle Alcalá 200, Madrid · 910 000 000</p>
+      <p class="mini">Plantilla de ejemplo. Los datos, precios y profesionales son ficticios.</p>
+    </footer>
+  </div>
+</DemoLayout>
+
+<style>
+  .site {
+    --azul: #1b5f9e;
+    --azul-claro: #3f8fd6;
+    --fondo: #f7fafc;
+    --fondo-2: #eaf2f8;
+    --tinta: #12212e;
+    --suave: #5a6b7a;
+
+    background: var(--fondo);
+    color: var(--tinta);
+    font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    padding-bottom: 3rem;
+  }
+
+  .top {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 0.9rem clamp(1.1rem, 4vw, 3rem);
+    background: rgba(247, 250, 252, 0.95);
+    border-bottom: 1px solid rgba(18, 33, 46, 0.1);
+    backdrop-filter: blur(8px);
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 700;
+    font-size: 1.08rem;
+    text-decoration: none;
+  }
+
+  .mark {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--azul-claro), var(--azul));
+  }
+
+  .top nav {
+    display: none;
+    gap: 1.4rem;
+  }
+
+  .top nav a {
+    font-size: 0.92rem;
+    color: var(--suave);
+    text-decoration: none;
+  }
+
+  .top nav a:hover {
+    color: var(--azul);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 1.4rem;
+    border-radius: 10px;
+    background: var(--azul);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+  }
+
+  .btn.small {
+    min-height: 42px;
+    padding: 0 1.1rem;
+    font-size: 0.88rem;
+  }
+
+  .btn.ghost {
+    background: #fff;
+    border: 1px solid rgba(18, 33, 46, 0.18);
+    color: var(--tinta);
+  }
+
+  section {
+    padding: clamp(2.4rem, 6vw, 4.5rem) clamp(1.1rem, 4vw, 3rem);
+  }
+
+  .hero {
+    display: grid;
+    gap: 2.2rem;
+  }
+
+  .eyebrow {
+    margin: 0 0 0.9rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--azul-claro);
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(1.9rem, 4.4vw, 3rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    max-width: 20ch;
+  }
+
+  .lead {
+    max-width: 52ch;
+    color: var(--suave);
+    line-height: 1.65;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 1.6rem;
+  }
+
+  .pruebas {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    align-content: start;
+  }
+
+  .pruebas li {
+    display: grid;
+    gap: 0.15rem;
+    padding: 1rem 1.2rem;
+    border-radius: 12px;
+    background: #fff;
+    border: 1px solid rgba(18, 33, 46, 0.08);
+  }
+
+  .pruebas strong {
+    font-size: 1.35rem;
+    color: var(--azul);
+  }
+
+  .pruebas span {
+    color: var(--suave);
+    font-size: 0.86rem;
+  }
+
+  h2 {
+    margin: 0 0 1.6rem;
+    font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+    letter-spacing: -0.01em;
+  }
+
+  .grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .card {
+    display: grid;
+    gap: 0.6rem;
+    align-content: start;
+    padding: 1.4rem;
+    border-radius: 14px;
+    background: #fff;
+    border: 1px solid rgba(18, 33, 46, 0.08);
+  }
+
+  .card h3 {
+    margin: 0;
+    font-size: 1.08rem;
+  }
+
+  .card p {
+    margin: 0;
+    color: var(--suave);
+    line-height: 1.6;
+  }
+
+  .desde {
+    color: var(--tinta) !important;
+    font-size: 0.92rem;
+  }
+
+  .desde strong {
+    color: var(--azul);
+    font-size: 1.1rem;
+  }
+
+  .nota {
+    margin: 1.6rem 0 0;
+    max-width: 60ch;
+    color: var(--suave);
+    font-size: 0.88rem;
+  }
+
+  .equipo {
+    background: var(--fondo-2);
+  }
+
+  .personas {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .persona {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    border-radius: 12px;
+    background: #fff;
+    border: 1px solid rgba(18, 33, 46, 0.08);
+  }
+
+  .avatar {
+    display: grid;
+    place-items: center;
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--azul-claro), var(--azul));
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .persona div {
+    display: grid;
+  }
+
+  .persona span {
+    color: var(--suave);
+    font-size: 0.86rem;
+  }
+
+  .col {
+    font-size: 0.78rem !important;
+  }
+
+  .seguros {
+    margin-top: 2rem;
+  }
+
+  .seguros p {
+    margin: 0 0 0.7rem;
+    color: var(--suave);
+    font-size: 0.9rem;
+  }
+
+  .seguros ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .seguros li {
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid rgba(18, 33, 46, 0.12);
+    font-size: 0.85rem;
+  }
+
+  .faq {
+    display: grid;
+    gap: 0.7rem;
+    max-width: 52rem;
+  }
+
+  details {
+    border: 1px solid rgba(18, 33, 46, 0.1);
+    border-radius: 12px;
+    background: #fff;
+  }
+
+  summary {
+    padding: 1rem 1.2rem;
+    min-height: 48px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  details p {
+    margin: 0;
+    padding: 0 1.2rem 1.1rem;
+    color: var(--suave);
+    line-height: 1.6;
+  }
+
+  .cita {
+    background: var(--azul);
+    color: #fff;
+  }
+
+  .cita-inner {
+    max-width: 46rem;
+  }
+
+  .cita p {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  form {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.6rem;
+  }
+
+  label {
+    display: grid;
+    gap: 0.4rem;
+    font-size: 0.86rem;
+  }
+
+  input,
+  textarea {
+    min-height: 48px;
+    padding: 0.8rem 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font: inherit;
+  }
+
+  input:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+
+  button {
+    min-height: 52px;
+    border: 0;
+    border-radius: 10px;
+    background: #fff;
+    color: var(--azul);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .foot {
+    padding: 2rem clamp(1.1rem, 4vw, 3rem) 3rem;
+    color: var(--suave);
+    font-size: 0.86rem;
+  }
+
+  .mini {
+    font-size: 0.76rem;
+  }
+
+  @media (min-width: 760px) {
+    .top nav {
+      display: flex;
+    }
+
+    .hero {
+      grid-template-columns: 1.3fr 0.7fr;
+      align-items: center;
+    }
+
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .personas {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .persona {
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    form {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ancho,
+    button {
+      grid-column: span 2;
+    }
+
+    button {
+      justify-self: start;
+      padding: 0 2.4rem;
+    }
+  }
+</style>
