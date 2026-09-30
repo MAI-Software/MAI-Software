@@ -1,5 +1,6 @@
 ---
 import DemoLayout from '../../../layouts/DemoLayout.astro';
+import { withBase } from '../../../lib/base';
 
 /* Plantilla de clínica dental. Aquí lo que vende es la confianza: nombres y
    números de colegiado, precios y financiación por escrito, y una primera
@@ -140,15 +141,16 @@ const preguntas = [
         </ul>
       </div>
 
-      <div class="hero-art" aria-hidden="true">
-        <div class="sala">
-          <span class="luz"></span>
-          <span class="sillon"></span>
-          <span class="brazo"></span>
-          <span class="mesa"></span>
-        </div>
-        <p class="art-note">Aquí irían tus fotos</p>
-      </div>
+      <figure class="hero-art">
+        <img
+          src={withBase('/demos/dental.webp')}
+          alt=""
+          width="1200"
+          height="900"
+          fetchpriority="high"
+        />
+        <figcaption>Render de ejemplo · aquí irían tus fotos</figcaption>
+      </figure>
     </section>
 
     <section class="tratamientos" id="tratamientos">
@@ -589,70 +591,30 @@ const preguntas = [
     font-size: 0.84rem;
   }
 
-  /* Gabinete dibujado en CSS mientras no haya fotos de la clínica */
+  /* Render propio hecho en Blender; se sustituye por fotos de la clínica */
   .hero-art {
     position: relative;
-    aspect-ratio: 4 / 3.4;
+    margin: 0;
     border-radius: 22px;
     overflow: hidden;
-    background: linear-gradient(160deg, #dcebf7 0%, #a9cbe8 50%, #6ba3d0 100%);
+    box-shadow: 0 24px 48px rgba(18, 33, 46, 0.2);
   }
 
-  .sala {
-    position: absolute;
-    inset: 0;
+  .hero-art img {
+    width: 100%;
+    height: auto;
+    display: block;
   }
 
-  .luz {
+  .hero-art figcaption {
     position: absolute;
-    top: 12%;
-    left: 56%;
-    width: 26%;
-    aspect-ratio: 1.6;
-    border-radius: 14px;
-    background: radial-gradient(circle at 50% 60%, #fff, #dbe9f4);
-    box-shadow: 0 0 60px rgba(255, 255, 255, 0.8);
-  }
-
-  .brazo {
-    position: absolute;
-    top: 22%;
-    left: 52%;
-    width: 6px;
-    height: 26%;
-    background: rgba(255, 255, 255, 0.7);
-    rotate: 18deg;
-    transform-origin: top;
-  }
-
-  .sillon {
-    position: absolute;
-    left: 12%;
-    bottom: 14%;
-    width: 62%;
-    height: 34%;
-    border-radius: 999px 999px 26px 26px;
-    background: linear-gradient(160deg, #3f8fd6, #1b5f9e);
-    box-shadow: 0 18px 36px rgba(12, 45, 76, 0.35);
-  }
-
-  .mesa {
-    position: absolute;
-    right: 8%;
-    bottom: 16%;
-    width: 22%;
-    height: 16%;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.85);
-  }
-
-  .art-note {
-    position: absolute;
-    right: 0.9rem;
-    bottom: 0.7rem;
-    margin: 0;
+    right: 0.75rem;
+    bottom: 0.65rem;
+    padding: 0.28rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(18, 33, 46, 0.6);
+    color: #fff;
     font-size: 0.72rem;
-    color: rgba(255, 255, 255, 0.9);
   }
 
   .eyebrow {

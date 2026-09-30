@@ -1,5 +1,6 @@
 ---
 import DemoLayout from '../../../layouts/DemoLayout.astro';
+import { withBase } from '../../../lib/base';
 
 /* Plantilla de restaurante. El orden no es decorativo: quien entra quiere
    ver qué se come y cuánto cuesta, saber si está abierto y reservar. Por eso
@@ -190,12 +191,16 @@ const galeria = ['La sala', 'La brasa', 'La barra', 'El patio'];
         </ul>
       </div>
 
-      <div class="hero-art" aria-hidden="true">
-        <div class="plate plate-a"><span></span></div>
-        <div class="plate plate-b"><span></span></div>
-        <div class="plate plate-c"><span></span></div>
-        <p class="art-note">Aquí irían tus fotos</p>
-      </div>
+      <figure class="hero-art">
+        <img
+          src={withBase('/demos/restaurante.webp')}
+          alt=""
+          width="1200"
+          height="900"
+          fetchpriority="high"
+        />
+        <figcaption>Render de ejemplo · aquí irían tus fotos</figcaption>
+      </figure>
     </section>
 
     <section class="menu-dia" id="menu-dia">
@@ -637,79 +642,31 @@ const galeria = ['La sala', 'La brasa', 'La barra', 'El patio'];
     color: var(--suave);
   }
 
-  /* Bodegón de platos: hasta que lleguen fotos reales, esto sugiere mesa */
+  /* Render propio hecho en Blender; se sustituye por fotos del local */
   .hero-art {
     position: relative;
-    display: grid;
-    place-items: center;
-    aspect-ratio: 4 / 3.4;
-    border-radius: 22px;
-    background:
-      radial-gradient(80% 70% at 70% 20%, rgba(255, 255, 255, 0.35), transparent 60%),
-      linear-gradient(150deg, #e8cfae 0%, #c99a63 55%, #8d5f34 100%);
-    overflow: hidden;
-  }
-
-  .plate {
-    position: absolute;
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-    background: radial-gradient(circle at 38% 32%, #fff 0%, #f3e8d6 55%, #dcc7a6 100%);
-    box-shadow: 0 22px 44px rgba(60, 35, 12, 0.32);
-  }
-
-  .plate span {
-    border-radius: 50%;
-  }
-
-  .plate-a {
-    width: 54%;
-    aspect-ratio: 1;
-    top: 12%;
-    left: 8%;
-  }
-
-  .plate-a span {
-    width: 62%;
-    aspect-ratio: 1;
-    background: radial-gradient(circle at 40% 35%, #d8a34e, #a8641f 70%, #7c4413);
-  }
-
-  .plate-b {
-    width: 40%;
-    aspect-ratio: 1;
-    right: 7%;
-    top: 26%;
-  }
-
-  .plate-b span {
-    width: 60%;
-    aspect-ratio: 1;
-    background: radial-gradient(circle at 45% 40%, #7fa25f, #48622f);
-  }
-
-  .plate-c {
-    width: 34%;
-    aspect-ratio: 1;
-    bottom: 8%;
-    left: 34%;
-  }
-
-  .plate-c span {
-    width: 58%;
-    aspect-ratio: 1;
-    background: radial-gradient(circle at 42% 38%, #f0e0c2, #c9a06a);
-  }
-
-  .art-note {
-    position: absolute;
-    right: 0.9rem;
-    bottom: 0.7rem;
     margin: 0;
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 24px 50px rgba(60, 35, 12, 0.28);
+  }
+
+  .hero-art img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .hero-art figcaption {
+    position: absolute;
+    right: 0.75rem;
+    bottom: 0.65rem;
+    padding: 0.28rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(36, 26, 19, 0.6);
+    color: var(--papel);
     font-family: system-ui, sans-serif;
     font-size: 0.72rem;
-    color: rgba(255, 255, 255, 0.85);
   }
 
   /* --- Menú del día --- */

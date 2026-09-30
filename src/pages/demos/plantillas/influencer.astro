@@ -1,6 +1,7 @@
 ---
 import '@fontsource-variable/space-grotesk';
 import DemoLayout from '../../../layouts/DemoLayout.astro';
+import { withBase } from '../../../lib/base';
 
 /* Plantilla vertical tipo "enlace en la biografía": se consume entera con el
    pulgar, así que todo va en una columna y cada bloque es un objetivo grande.
@@ -44,9 +45,14 @@ const formatos = [
 >
   <main class="page">
     <header class="hero">
-      <div class="cover" aria-hidden="true">
-        <span class="glow glow-1"></span>
-        <span class="glow glow-2"></span>
+      <div class="cover">
+        <img
+          src={withBase('/demos/influencer.webp')}
+          alt=""
+          width="1400"
+          height="788"
+          fetchpriority="high"
+        />
       </div>
       <div class="avatar" aria-hidden="true">NF</div>
       <h1>Noa Ferrán</h1>
@@ -266,26 +272,11 @@ const formatos = [
     border-bottom-right-radius: 28px;
   }
 
-  .glow {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(38px);
-  }
-
-  .glow-1 {
-    width: 60%;
-    aspect-ratio: 1;
-    left: -10%;
-    top: -40%;
-    background: rgba(255, 61, 139, 0.55);
-  }
-
-  .glow-2 {
-    width: 55%;
-    aspect-ratio: 1;
-    right: -8%;
-    top: -20%;
-    background: rgba(139, 91, 255, 0.5);
+  /* Render propio hecho en Blender detrás del avatar */
+  .cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   .avatar {
