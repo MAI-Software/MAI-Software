@@ -8,8 +8,8 @@ featured: false
 published: true
 year: 2026
 status: "En desarrollo"
-cover: "/projects/slime-abyss/cover.webp"
-coverAlt: "The blue Slime Abyss slime racing down wooden rails in a mine cart, deep in the dark of the abyss"
+cover: "/projects/slime-abyss/cover.webp?v=2"
+coverAlt: "Slime Abyss menu: the game logo on the left and the blue slime sitting on the rug in its room, with the menu buttons on the right"
 gallery: []
 demoUrl: "https://slime-abyss.pages.dev/"
 technologies:

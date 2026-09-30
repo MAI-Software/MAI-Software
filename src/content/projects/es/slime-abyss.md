@@ -8,8 +8,8 @@ featured: false
 published: true
 year: 2026
 status: "En desarrollo"
-cover: "/projects/slime-abyss/cover.webp"
-coverAlt: "El limo azul de Slime Abyss baja a toda velocidad en una vagoneta por unos raíles de madera, en la oscuridad del abismo"
+cover: "/projects/slime-abyss/cover.webp?v=2"
+coverAlt: "Menú de Slime Abyss: el logotipo del juego a la izquierda y el limo azul sobre la alfombra de su habitación, con los botones del menú a la derecha"
 gallery: []
 demoUrl: "https://slime-abyss.pages.dev/"
 technologies:
