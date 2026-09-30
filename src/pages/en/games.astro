@@ -3,6 +3,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProjectArchive from '../../components/projects/ProjectArchive.astro';
 import { company } from '../../data/company';
 import { getCategory } from '../../data/categories';
+import { categoryFaqs } from '../../data/faqs';
+import { categoryAbout } from '../../data/category-copy';
 import { getProjects } from '../../lib/projects';
 import { useTranslations, projectsPath, homePath } from '../../i18n/utils';
 
@@ -15,11 +17,23 @@ const crumbs = [
   { name: t('nav.projects'), path: projectsPath(locale) },
   { name: category.label[locale] },
 ];
+const faqs = categoryFaqs['game'];
+const faqSchema = [
+  {
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question[locale],
+      acceptedAnswer: { '@type': 'Answer', text: faq.answer[locale] },
+    })),
+  },
+];
 ---
 
 <BaseLayout
   locale={locale}
   breadcrumbs={crumbs}
+  schema={faqSchema}
   title={`${category.label.en} — ${company.name}`}
   description={category.intro.en}
   alternatePath="/videojuegos"
@@ -27,6 +41,8 @@ const crumbs = [
   <ProjectArchive
     locale={locale}
     breadcrumbs={crumbs}
+    about={categoryAbout['game'][locale]}
+    faqs={faqs}
     title={category.label.en}
     intro={category.intro.en}
     projects={projects}

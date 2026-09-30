@@ -1,0 +1,123 @@
+---
+import type { Locale } from '../../data/company';
+import type { Faq } from '../../data/faqs';
+import { useTranslations } from '../../i18n/utils';
+import { highlightTitle } from '../../lib/highlight';
+
+interface Props {
+  locale: Locale;
+  faqs: Faq[];
+  /** Admite *palabra* para resaltarla. */
+  title?: string;
+}
+
+const { locale, faqs, title } = Astro.props;
+const t = useTranslations(locale);
+const heading = title ?? t('faq.title');
+---
+
+{
+  faqs.length > 0 && (
+    <section class="section section-line faq">
+      <div class="container">
+        <h2 set:html={highlightTitle(heading)} data-reveal />
+
+        <div class="faq-list" data-reveal-group>
+          {faqs.map((faq) => (
+            <details class="faq-item" data-reveal>
+              <summary>
+                <span>{faq.question[locale]}</span>
+                <span class="faq-mark" aria-hidden="true" />
+              </summary>
+              <p>{faq.answer[locale]}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .faq h2 {
+    margin-bottom: clamp(var(--space-5), 4vw, var(--space-7));
+    max-width: 22ch;
+  }
+
+  .faq-list {
+    display: grid;
+    gap: var(--space-3);
+    max-width: var(--container-reading);
+  }
+
+  .faq-item {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--card);
+    transition: border-color var(--duration-base) var(--ease-standard);
+  }
+
+  .faq-item[open],
+  .faq-item:hover {
+    border-color: var(--line-strong);
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    /* La fila entera es el objetivo de toque: 44px de sobra */
+    padding: var(--space-4) var(--space-5);
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* Cruz que gira a menos al abrir: dice si hay algo debajo sin depender del color */
+  .faq-mark {
+    position: relative;
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+  }
+
+  .faq-mark::before,
+  .faq-mark::after {
+    content: '';
+    position: absolute;
+    inset: 50% 0 auto 0;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--cyan);
+    transition: rotate var(--duration-base) var(--ease-standard);
+  }
+
+  .faq-mark::after {
+    rotate: 90deg;
+  }
+
+  .faq-item[open] .faq-mark::after {
+    rotate: 0deg;
+  }
+
+  .faq-item p {
+    margin: 0;
+    padding: 0 var(--space-5) var(--space-5);
+    color: var(--text-muted);
+    max-width: 62ch;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq-mark::before,
+    .faq-mark::after {
+      transition: none;
+    }
+  }
+</style>

@@ -21,6 +21,8 @@ export const ui = {
       'Creamos webs, herramientas, SaaS y videojuegos para que una idea deje de quedarse en la cabeza y empiece a existir.',
     'skip.main': 'Saltar al contenido',
     'nav.breadcrumb': 'Ruta de navegación',
+    'faq.title': 'Preguntas *frecuentes*.',
+    'archive.about': 'Sobre esta disciplina',
     'nav.projects': 'Proyectos',
     'carousel.prev': 'Anterior',
     /* Los juegos se publican y se siguen tocando: mejor decirlo. */
@@ -212,6 +214,8 @@ export const ui = {
       'We design, build and maintain our own digital products: games, calculators, SaaS tools and websites. Everything here is published and in use.',
     'skip.main': 'Skip to content',
     'nav.breadcrumb': 'Breadcrumb',
+    'faq.title': 'Frequently asked *questions*.',
+    'archive.about': 'About this discipline',
     'nav.projects': 'Projects',
     'carousel.prev': 'Previous',
     'feed.games.note':

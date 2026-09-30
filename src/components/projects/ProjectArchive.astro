@@ -7,6 +7,8 @@ import { categories } from '../../data/categories';
 import ProjectPreview from './ProjectPreview.astro';
 import { highlightTitle } from '../../lib/highlight';
 import Breadcrumbs from '../global/Breadcrumbs.astro';
+import FaqList from '../global/FaqList.astro';
+import type { Faq } from '../../data/faqs';
 
 interface Props {
   locale: Locale;
@@ -17,9 +19,21 @@ interface Props {
   activeCategory?: CategoryId;
   /** Migas con rutas ya resueltas. */
   breadcrumbs?: { name: string; path?: string }[];
+  /** Párrafos de contexto bajo el listado; el catálogo va primero. */
+  about?: string[];
+  faqs?: Faq[];
 }
 
-const { locale, title, intro, projects, activeCategory, breadcrumbs = [] } = Astro.props;
+const {
+  locale,
+  title,
+  intro,
+  projects,
+  activeCategory,
+  breadcrumbs = [],
+  about = [],
+  faqs = [],
+} = Astro.props;
 const t = useTranslations(locale);
 
 const filters = [
@@ -73,9 +87,37 @@ const filters = [
       )
     }
   </div>
-</section>
+
+    {
+      about.length > 0 && (
+        <div class="archive-about" data-reveal>
+          <h2>{t('archive.about')}</h2>
+          {about.map((paragraph) => (
+            <p>{paragraph}</p>
+          ))}
+        </div>
+      )
+    }
+  </section>
+
+<FaqList locale={locale} faqs={faqs} />
 
 <style>
+  .archive-about {
+    display: grid;
+    gap: var(--space-4);
+    max-width: var(--container-reading);
+    margin-top: clamp(var(--space-7), 6vw, var(--space-9));
+  }
+
+  .archive-about h2 {
+    font-size: var(--font-size-xl);
+  }
+
+  .archive-about p {
+    color: var(--text-muted);
+  }
+
   .archive-head {
     display: grid;
     gap: var(--space-5);
