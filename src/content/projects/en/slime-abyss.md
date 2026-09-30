@@ -9,7 +9,7 @@ published: true
 year: 2026
 status: "En desarrollo"
 cover: "/projects/slime-abyss/cover.webp"
-coverAlt: "The blue Slime Abyss slime shooting out of a cannon with a fairground-ride face, the treasure chest behind it and the game logo on the left"
+coverAlt: "The blue Slime Abyss slime racing down wooden rails in a mine cart, deep in the dark of the abyss"
 gallery: []
 demoUrl: "https://slime-abyss.pages.dev/"
 technologies:
