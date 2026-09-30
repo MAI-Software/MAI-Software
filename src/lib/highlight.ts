@@ -9,12 +9,9 @@ const escapeHtml = (value: string) => value.replace(/[&<>"]/g, (c) => ESCAPES[c]
 
 /**
  * Marca la palabra fuerte de un titular. En el texto se escribe entre
- * asteriscos (`Distintas formas de *crear*`).
- *
- * Por defecto se resalta con tipografía —la palabra se estrecha y engorda
- * usando el eje de anchura de Bricolage—, no con color. El degradado se
- * reserva para el hero y la llamada final: repetido en cada sección era el
- * tópico visual de web generada con IA.
+ * asteriscos (`Distintas formas de *crear*`) y sale con el degradado de
+ * marca. Igual en todas las secciones: se probó un énfasis tipográfico solo
+ * para los titulares de sección y rompía la unidad de la página.
  *
  * `lastWordFallback` resalta la última palabra cuando no hay asteriscos:
  * lo usa el hero, que se comportaba así antes de existir la marca.
@@ -22,7 +19,7 @@ const escapeHtml = (value: string) => value.replace(/[&<>"]/g, (c) => ESCAPES[c]
 export function highlightTitle(
   title: string,
   lastWordFallback = false,
-  className: 'accent-word' | 'grad-text' = 'accent-word',
+  className: 'grad-text' | 'accent-word' = 'grad-text',
 ): string {
   // Un salto de línea en el texto corta el titular ahí
   const br = (value: string) => value.replace(/\n/g, '<br />');

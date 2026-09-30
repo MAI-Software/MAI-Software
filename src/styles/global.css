@@ -1184,29 +1184,4 @@ button {
   translate: 0 -50%;
 }
 
-/* --- Palabra fuerte de un titular -----------------------------------
-   Se estrecha y engorda con el eje de anchura de la tipografía. Destaca
-   por forma, no por color, así que funciona igual para quien no distingue
-   el degradado y no repite el tópico del degradado violeta-azul. */
-.accent-word {
-  font-stretch: 75%;
-  font-weight: 800;
-  letter-spacing: -0.015em;
-  /* Un trazo bajo la palabra, no la palabra pintada: se ve el énfasis
-     aunque no se distinga el color y no imita el degradado del hero. */
-  text-decoration: underline;
-  text-decoration-color: var(--cyan);
-  text-decoration-thickness: 3px;
-  text-underline-offset: 0.14em;
-  text-decoration-skip-ink: none;
-}
 
-@supports not (font-stretch: 78%) {
-  .accent-word {
-    font-weight: 800;
-    text-decoration: underline;
-    text-decoration-color: var(--cyan);
-    text-decoration-thickness: 2px;
-    text-underline-offset: 0.18em;
-  }
-}
