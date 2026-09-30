@@ -19,8 +19,11 @@ export const ui = {
     'hero.title': 'De la idea a tus *manos*',
     'hero.text':
       'Creamos webs, herramientas, SaaS y videojuegos para que una idea deje de quedarse en la cabeza y empiece a existir.',
-    'hero.prev': 'Proyecto anterior',
-    'hero.next': 'Proyecto siguiente',
+    'carousel.prev': 'Anterior',
+    /* Los juegos se publican y se siguen tocando: mejor decirlo. */
+    'feed.games.note':
+      'Todos nuestros juegos están en desarrollo activo: contenido, equilibrio y pantallas pueden cambiar de una versión a otra.',
+    'carousel.next': 'Siguiente',
     'cta.explore': 'Ver proyectos',
     'cta.talk': 'Cuéntanos tu idea',
     'cta.contact': 'Hablemos',
@@ -51,7 +54,7 @@ export const ui = {
 
     'featured.label': 'Proyecto destacado',
     'feed.games.eyebrow': 'Videojuegos',
-    'feed.games.title': 'Tres que ya puedes *jugar*.',
+    'feed.games.title': 'Listos para *jugar*.',
     'feed.games.all': 'Ver todos los videojuegos',
     'feed.software.eyebrow': 'Trabajo reciente',
     'feed.software.title': 'Webs y *software*.',
@@ -207,8 +210,10 @@ export const ui = {
     'hero.title': 'We turn ideas into unforgettable products',
     'hero.text':
       'We design, build and maintain our own digital products: games, calculators, SaaS tools and websites. Everything here is published and in use.',
-    'hero.prev': 'Previous project',
-    'hero.next': 'Next project',
+    'carousel.prev': 'Previous',
+    'feed.games.note':
+      'All of our games are in active development: content, balance and screens may change from one version to the next.',
+    'carousel.next': 'Next',
     'cta.explore': 'Explore projects',
     'cta.talk': "Let's talk about your project",
     'cta.contact': "Let's talk",
@@ -236,7 +241,7 @@ export const ui = {
 
     'featured.label': 'Featured project',
     'feed.games.eyebrow': 'Games',
-    'feed.games.title': 'Three you can *play* right now.',
+    'feed.games.title': 'Ready to *play*.',
     'feed.games.all': 'View all games',
     'feed.software.eyebrow': 'Recent work',
     'feed.software.title': 'Webs and *software*.',

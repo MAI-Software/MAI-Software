@@ -1104,3 +1104,61 @@ button {
     transform: none !important;
   }
 }
+
+/* --- Flechas de carrusel ---------------------------------------------
+   Mismas en la pila del hero y en las filas de proyectos: disco oscuro
+   para que se lean también sobre portadas claras. */
+.carousel-nav {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 1px solid var(--glass-line);
+  border-radius: var(--radius-pill);
+  background: rgba(4, 5, 11, 0.55);
+  box-shadow: var(--glass-sheen);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  color: var(--color-white);
+  cursor: pointer;
+  opacity: 0.8;
+  transition:
+    opacity var(--duration-base) var(--ease-standard),
+    background-color var(--duration-base) var(--ease-standard),
+    border-color var(--duration-base) var(--ease-standard),
+    scale var(--duration-base) var(--ease-standard);
+}
+
+.carousel-nav svg {
+  width: 1.3rem;
+  height: 1.3rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.carousel-nav:hover,
+.carousel-nav:focus-visible {
+  opacity: 1;
+  background: rgba(4, 5, 11, 0.78);
+  border-color: var(--glass-line-hover);
+  scale: 1.06;
+}
+
+.carousel-nav:active {
+  scale: 0.94;
+}
+
+/* Al final del recorrido la flecha sigue ahí, pero apagada */
+.carousel-nav:disabled {
+  opacity: 0.22;
+  cursor: default;
+  scale: 1;
+}
+
+.carousel-nav[hidden] {
+  display: none;
+}

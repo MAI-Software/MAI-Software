@@ -23,7 +23,7 @@ const projects = featured
 
 const t = useTranslations(locale);
 // La portada enseña una fila de cada cosa, no el archivo entero
-const games = all.filter((p) => p.data.category === 'game').slice(0, 3);
+const games = all.filter((p) => p.data.category === 'game');
 const software = all.filter((p) => p.data.category !== 'game').slice(0, 3);
 ---
 
@@ -44,6 +44,8 @@ const software = all.filter((p) => p.data.category !== 'game').slice(0, 3);
         title={t('feed.games.title')}
         ctaLabel={t('feed.games.all')}
         ctaHref={getCategory('game').path[locale]}
+        carousel
+        note={t('feed.games.note')}
       />
     )
   }

@@ -3,6 +3,7 @@ import type { CollectionEntry } from 'astro:content';
 import type { Locale } from '../../data/company';
 import ProjectPreview from '../projects/ProjectPreview.astro';
 import { highlightTitle } from '../../lib/highlight';
+import { useTranslations } from '../../i18n/utils';
 
 interface Props {
   projects: CollectionEntry<'projects'>[];
@@ -12,9 +13,23 @@ interface Props {
   title: string;
   ctaLabel: string;
   ctaHref: string;
+  /** Fila que se desplaza en horizontal en vez de partirse en rejilla */
+  carousel?: boolean;
+  /** Aviso bajo la fila: solo tiene sentido con carrusel */
+  note?: string;
 }
 
-const { projects, locale, eyebrow, title, ctaLabel, ctaHref } = Astro.props;
+const {
+  projects,
+  locale,
+  eyebrow,
+  title,
+  ctaLabel,
+  ctaHref,
+  carousel = false,
+  note,
+} = Astro.props;
+const t = useTranslations(locale);
 ---
 
 <section class="section section-line">
@@ -27,11 +42,93 @@ const { projects, locale, eyebrow, title, ctaLabel, ctaHref } = Astro.props;
       <a href={ctaHref} class="link-editorial">{ctaLabel}</a>
     </div>
 
-    <div class="feed-grid" data-reveal-group>
-      {projects.map((project) => <ProjectPreview project={project} locale={locale} />)}
-    </div>
+    {
+      carousel ? (
+        <div class="feed-carousel" data-carousel>
+          <div class="feed-track" data-carousel-track data-reveal-group>
+            {projects.map((project) => (
+              <ProjectPreview project={project} locale={locale} />
+            ))}
+          </div>
+
+          <button
+            type="button"
+            class="carousel-nav feed-nav feed-prev"
+            data-carousel-step="-1"
+            aria-label={t('carousel.prev')}
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m14.5 5-7 7 7 7" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            class="carousel-nav feed-nav feed-next"
+            data-carousel-step="1"
+            aria-label={t('carousel.next')}
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m9.5 5 7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      ) : (
+        <div class="feed-grid" data-reveal-group>
+          {projects.map((project) => (
+            <ProjectPreview project={project} locale={locale} />
+          ))}
+        </div>
+      )
+    }
+
+    {note && <p class="feed-note">{note}</p>}
   </div>
 </section>
+
+<script>
+  /**
+   * Carrusel horizontal: las flechas mueven el carro una tarjeta y el
+   * navegador se encarga del desplazamiento y del gesto táctil. Si todo
+   * cabe en pantalla las flechas desaparecen: no hay nada que recorrer.
+   */
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  for (const carousel of document.querySelectorAll<HTMLElement>('[data-carousel]')) {
+    const track = carousel.querySelector<HTMLElement>('[data-carousel-track]');
+    const buttons = carousel.querySelectorAll<HTMLButtonElement>('[data-carousel-step]');
+    if (!track) continue;
+
+    const cardWidth = () => {
+      const card = track.firstElementChild;
+      const gap = Number.parseFloat(getComputedStyle(track).columnGap) || 0;
+      return card ? card.getBoundingClientRect().width + gap : track.clientWidth;
+    };
+
+    const sync = () => {
+      // Margen de un píxel: los navegadores redondean el scroll máximo
+      const max = track.scrollWidth - track.clientWidth - 1;
+      const overflows = max > 1;
+      for (const button of buttons) {
+        button.hidden = !overflows;
+        const step = Number(button.dataset.carouselStep);
+        button.disabled = step < 0 ? track.scrollLeft <= 1 : track.scrollLeft >= max;
+      }
+    };
+
+    for (const button of buttons) {
+      button.addEventListener('click', () => {
+        track.scrollBy({
+          left: cardWidth() * Number(button.dataset.carouselStep),
+          behavior: reduced ? 'auto' : 'smooth',
+        });
+      });
+    }
+
+    track.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    sync();
+  }
+</script>
 
 <style>
   .feed-head {
@@ -52,15 +149,72 @@ const { projects, locale, eyebrow, title, ctaLabel, ctaHref } = Astro.props;
     gap: var(--space-4);
   }
 
+  /* --- Fila horizontal --- */
+  .feed-carousel {
+    position: relative;
+  }
+
+  .feed-track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: min(82vw, 21rem);
+    gap: var(--space-4);
+    overflow-x: auto;
+    /* Sin hueco para la sombra de las tarjetas el scroll la recorta */
+    padding-block: 0.4rem;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    overscroll-behavior-inline: contain;
+  }
+
+  .feed-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .feed-track > :global(*) {
+    scroll-snap-align: start;
+  }
+
+  .feed-nav {
+    position: absolute;
+    top: 50%;
+    translate: 0 -50%;
+    z-index: 5;
+  }
+
+  .feed-prev {
+    left: -0.6rem;
+  }
+
+  .feed-next {
+    right: -0.6rem;
+  }
+
+  .feed-note {
+    margin-top: var(--space-4);
+    max-width: 62ch;
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+  }
+
   @media (min-width: 700px) {
     .feed-grid {
       grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Mismo ancho de tarjeta que en la rejilla: dos y media a la vista */
+    .feed-track {
+      grid-auto-columns: calc((100% - var(--space-4)) / 2);
     }
   }
 
   @media (min-width: 1060px) {
     .feed-grid {
       grid-template-columns: repeat(3, 1fr);
+    }
+
+    .feed-track {
+      grid-auto-columns: calc((100% - var(--space-4) * 2) / 3);
     }
   }
 </style>

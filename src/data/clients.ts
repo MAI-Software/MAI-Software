@@ -34,6 +34,19 @@ export const clientSites: ClientSite[] = [
     },
   },
   {
+    name: 'Federación Andaluza de Reiki',
+    url: 'https://federacionandaluzadereiki.com/',
+    tagline: {
+      es: 'Web de la federación: qué es el Reiki, niveles de formación, código ético y contacto.',
+      en: 'Site for the federation: what Reiki is, training levels, code of ethics and contact.',
+    },
+    image: '/clients/federacion-andaluza-reiki.webp',
+    imageAlt: {
+      es: 'Portada de la Federación Andaluza de Reiki',
+      en: 'Federación Andaluza de Reiki home page',
+    },
+  },
+  {
     name: 'Daniel Calvo Molina',
     url: 'https://dani-entrenador-personal.pages.dev/',
     tagline: {

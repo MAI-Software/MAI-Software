@@ -73,12 +73,12 @@ const previews = projects.slice(0, 6);
            las flechas dan control sin bajar a la sección de proyectos. */
         previews.length > 1 && (
           <Fragment>
-            <button type="button" class="stack-nav stack-prev" data-stack-step="-1" aria-label={t('hero.prev')}>
+            <button type="button" class="carousel-nav stack-nav stack-prev" data-stack-step="-1" aria-label={t('carousel.prev')}>
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="m14.5 5-7 7 7 7" />
               </svg>
             </button>
-            <button type="button" class="stack-nav stack-next" data-stack-step="1" aria-label={t('hero.next')}>
+            <button type="button" class="carousel-nav stack-nav stack-next" data-stack-step="1" aria-label={t('carousel.next')}>
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="m9.5 5 7 7-7 7" />
               </svg>
@@ -208,48 +208,6 @@ const previews = projects.slice(0, 6);
     top: 50%;
     translate: 0 -50%;
     z-index: 20;
-    display: grid;
-    place-items: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    padding: 0;
-    border: 1px solid var(--glass-line);
-    border-radius: var(--radius-pill);
-    /* Base oscura, no solo cristal: las portadas claras se comían la flecha */
-    background: rgba(4, 5, 11, 0.55);
-    box-shadow: var(--glass-sheen);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-    color: var(--color-white);
-    cursor: pointer;
-    opacity: 0.8;
-    transition:
-      opacity var(--duration-base) var(--ease-standard),
-      background-color var(--duration-base) var(--ease-standard),
-      border-color var(--duration-base) var(--ease-standard),
-      scale var(--duration-base) var(--ease-standard);
-  }
-
-  .stack-nav svg {
-    width: 1.3rem;
-    height: 1.3rem;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  .stack-nav:hover,
-  .stack-nav:focus-visible {
-    opacity: 1;
-    background: rgba(4, 5, 11, 0.75);
-    border-color: var(--glass-line-hover);
-    scale: 1.06;
-  }
-
-  .stack-nav:active {
-    scale: 0.94;
   }
 
   .stack-prev {
