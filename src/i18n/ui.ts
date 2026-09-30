@@ -19,6 +19,7 @@ export const ui = {
     'hero.title': 'De la idea a tus *manos*',
     'hero.text':
       'Creamos webs, herramientas, SaaS y videojuegos para que una idea deje de quedarse en la cabeza y empiece a existir.',
+    'skip.main': 'Saltar al contenido',
     'carousel.prev': 'Anterior',
     /* Los juegos se publican y se siguen tocando: mejor decirlo. */
     'feed.games.note':
@@ -206,6 +207,7 @@ export const ui = {
     'hero.title': 'We turn ideas into unforgettable products',
     'hero.text':
       'We design, build and maintain our own digital products: games, calculators, SaaS tools and websites. Everything here is published and in use.',
+    'skip.main': 'Skip to content',
     'carousel.prev': 'Previous',
     'feed.games.note':
       'All of our games are in active development: content, balance and screens may change from one version to the next.',

@@ -857,7 +857,7 @@ button {
 /* Botón compacto para sitios con poco aire, como las tarjetas de proyecto.
    Mantiene los 40px de alto mínimo para seguir siendo cómodo de pulsar. */
 .btn-sm {
-  min-height: 40px;
+  min-height: 44px;
   padding: 0 var(--space-4);
   font-size: var(--font-size-xs);
   letter-spacing: 0.04em;
@@ -891,6 +891,7 @@ button {
 
 /* Enlace editorial con flecha */
 .link-editorial {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
@@ -901,6 +902,8 @@ button {
   text-decoration: none;
   padding-bottom: 3px;
   border-bottom: 1px solid var(--line-strong);
+  /* El subrayado mide 27px de alto; el dedo necesita 44 */
+  -webkit-tap-highlight-color: transparent;
   transition:
     color var(--duration-base) var(--ease-standard),
     border-color var(--duration-base) var(--ease-standard);
@@ -1161,4 +1164,43 @@ button {
 
 .carousel-nav[hidden] {
   display: none;
+}
+
+/* --- Saltar al contenido -------------------------------------------- */
+.skip-link {
+  position: fixed;
+  top: var(--space-3);
+  left: var(--space-3);
+  z-index: 1000;
+  padding: 0.75rem 1.1rem;
+  border-radius: var(--radius-md);
+  background: var(--violet);
+  color: var(--color-white);
+  font-family: var(--font-display);
+  font-weight: 600;
+  text-decoration: none;
+  /* Fuera de pantalla hasta que alguien tabula: no molesta con el ratón */
+  translate: 0 calc(-100% - var(--space-5));
+  transition: translate var(--duration-base) var(--ease-standard);
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  translate: 0;
+}
+
+/* Con la cabecera pegada arriba, un salto a #ancla dejaba el título debajo */
+:target,
+#main,
+[id]:is(section, article, div)[id] {
+  scroll-margin-top: calc(var(--header-h) + var(--space-4));
+}
+
+/* El área de toque del enlace editorial llega a 44px sin mover el dibujo */
+.link-editorial::before {
+  content: '';
+  position: absolute;
+  inset: 50% 0 auto 0;
+  height: 44px;
+  translate: 0 -50%;
 }

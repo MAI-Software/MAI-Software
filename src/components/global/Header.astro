@@ -79,15 +79,40 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 </header>
 
 <script>
+  /**
+   * Menú móvil. Abrir no es solo enseñar el panel: mientras está abierto el
+   * foco tiene que entrar en él, Escape tiene que cerrarlo y devolver el foco
+   * al botón, y el fondo no debe seguir desplazándose debajo.
+   */
   const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
   const menu = document.getElementById('mobile-menu');
 
-  toggle?.addEventListener('click', () => {
-    const open = toggle.getAttribute('aria-expanded') === 'true';
-    toggle.setAttribute('aria-expanded', String(!open));
-    if (menu) menu.hidden = open;
-    document.body.classList.toggle('menu-open', !open);
-  });
+  if (toggle && menu) {
+    const isOpen = () => toggle.getAttribute('aria-expanded') === 'true';
+
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      menu.hidden = !open;
+      document.body.classList.toggle('menu-open', open);
+      if (open) menu.querySelector<HTMLElement>('a')?.focus();
+    };
+
+    toggle.addEventListener('click', () => setOpen(!isOpen()));
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape' || !isOpen()) return;
+      setOpen(false);
+      // El foco vuelve de donde salió: si no, se queda flotando en el body
+      toggle.focus();
+    });
+
+    // Un toque fuera del panel también cierra: es lo que espera todo el mundo
+    document.addEventListener('pointerdown', (event) => {
+      const target = event.target as Node;
+      if (!isOpen() || menu.contains(target) || toggle.contains(target)) return;
+      setOpen(false);
+    });
+  }
 </script>
 
 <style>
@@ -118,6 +143,7 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
   }
 
   .logo-link {
+    min-height: 44px;
     display: inline-flex;
     align-items: center;
     flex-shrink: 0;
@@ -182,7 +208,10 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
     letter-spacing: 0.08em;
     color: var(--text-muted);
     text-decoration: none;
-    padding: var(--space-2) var(--space-3);
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 var(--space-3);
     border: 1px solid var(--glass-line);
     border-radius: var(--radius-sm);
     background: var(--glass-btn);
