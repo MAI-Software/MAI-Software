@@ -3,6 +3,7 @@ import type { Locale } from '../../data/company';
 import { clientSites } from '../../data/clients';
 import { useTranslations } from '../../i18n/utils';
 import { withBase } from '../../lib/base';
+import { coverSrcSet } from '../../lib/images';
 import { highlightTitle } from '../../lib/highlight';
 
 interface Props {
@@ -37,6 +38,8 @@ const t = useTranslations(locale);
                   <img
                     class="client-shot"
                     src={withBase(site.image)}
+                    srcset={coverSrcSet(site.image)}
+                    sizes="(min-width: 700px) 27rem, 90vw"
                     alt={site.imageAlt?.[locale] ?? site.name}
                     width="1280"
                     height="800"

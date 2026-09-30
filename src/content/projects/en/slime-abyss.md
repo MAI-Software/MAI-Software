@@ -19,7 +19,7 @@ technologies:
 services:
   - Game design
   - Game development
-seoTitle: "Slime Abyss — 3D liquid slime game | MAI Softwares"
+seoTitle: "Slime Abyss — 3D liquid slime game"
 seoDescription: "Building Slime Abyss: a 3D mobile game with custom liquid physics, where a slime splits and merges again to make its way down an abyss of trap-filled floors."
 layoutVariant: "split-right"
 ---

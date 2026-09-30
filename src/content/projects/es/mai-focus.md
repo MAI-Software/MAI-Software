@@ -19,7 +19,7 @@ technologies:
 services:
   - Diseño de producto
   - Desarrollo web
-seoTitle: "MAI-Focus — Organizador de contenido para TDAH | MAI Softwares"
+seoTitle: "MAI-Focus — Organizador de contenido para TDAH"
 seoDescription: "Desarrollo de MAI-Focus: planificador de producción de contenido para redes sociales en bloques de tiempo, diseñado para personas con TDAH y 100 % local."
 layoutVariant: "split-left"
 ---

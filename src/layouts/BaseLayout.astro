@@ -25,6 +25,10 @@ interface Props {
   ogImage?: string;
   /** Ocultar CTA móvil (p. ej. en la propia página de contacto). */
   hideContactCta?: boolean;
+  /** Nodos extra para el @graph: ficha de producto, FAQ, lo que aporte la página. */
+  schema?: Record<string, unknown>[];
+  /** Migas con rutas ya resueltas; se publican como BreadcrumbList. */
+  breadcrumbs?: { name: string; path?: string }[];
 }
 
 const {
@@ -34,6 +38,8 @@ const {
   alternatePath,
   ogImage = '/social/og-default.jpg',
   hideContactCta = false,
+  schema = [],
+  breadcrumbs = [],
 } = Astro.props;
 
 const t = useTranslations(locale);
@@ -62,6 +68,20 @@ const jsonLd = {
       url: siteRoot,
       inLanguage: ['es', 'en'],
     },
+    ...(breadcrumbs.length > 1
+      ? [
+          {
+            '@type': 'BreadcrumbList',
+            itemListElement: breadcrumbs.map((crumb, index) => ({
+              '@type': 'ListItem',
+              position: index + 1,
+              name: crumb.name,
+              ...(crumb.path ? { item: new URL(crumb.path, Astro.site).toString() } : {}),
+            })),
+          },
+        ]
+      : []),
+    ...schema,
   ],
 };
 ---

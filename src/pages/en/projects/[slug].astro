@@ -7,10 +7,13 @@ import UpcomingNote from '../../../components/projects/UpcomingNote.astro';
 import ProjectNavigation from '../../../components/projects/ProjectNavigation.astro';
 import { company } from '../../../data/company';
 import { getCategory } from '../../../data/categories';
-import { useTranslations, projectsPath, contactPath } from '../../../i18n/utils';
+import { useTranslations, projectsPath, contactPath, homePath } from '../../../i18n/utils';
 import { withBase } from '../../../lib/base';
+import { coverSrcSet } from '../../../lib/images';
 import { getProjects, getProjectNeighbors } from '../../../lib/projects';
 import { highlightTitle } from '../../../lib/highlight';
+import Breadcrumbs from '../../../components/global/Breadcrumbs.astro';
+import { projectSchema } from '../../../lib/schema';
 
 export async function getStaticPaths() {
   const projects = await getProjects('en');
@@ -28,6 +31,24 @@ const category = getCategory(data.category);
 const { Content } = await render(project);
 const isGame = data.category === 'game';
 const { prev, next } = await getProjectNeighbors(locale, data.slug);
+
+// Ruta de la ficha, migas y datos estructurados del producto
+const absolute = (path: string) => new URL(withBase(path), Astro.site).toString();
+const crumbs = [
+  { name: t('nav.home'), path: homePath(locale) },
+  { name: t('nav.projects'), path: projectsPath(locale) },
+  { name: category.label[locale], path: category.path[locale] },
+  { name: data.title },
+];
+const schema = [
+  projectSchema({
+    data,
+    locale,
+    absolute,
+    path: `/en/projects/${data.slug}`,
+    organizationUrl: absolute('/'),
+  }),
+];
 ---
 
 <BaseLayout
@@ -36,13 +57,13 @@ const { prev, next } = await getProjectNeighbors(locale, data.slug);
   description={data.seoDescription || data.excerpt}
   alternatePath={`/proyectos/${data.slug}`}
   ogImage={data.cover}
+  breadcrumbs={crumbs}
+  schema={schema}
 >
   <article class="section project-page">
     <div class="container">
       <header class="project-head">
-        <a href={projectsPath(locale)} class="link-editorial back-link">
-          {t('projects.back')}
-        </a>
+        <Breadcrumbs items={crumbs} label={t('nav.breadcrumb')} />
         <p class="eyebrow">{category.label[locale]}</p>
         <h1>{data.title}</h1>
         <p class="lead">{data.excerpt}</p>
@@ -52,6 +73,8 @@ const { prev, next } = await getProjectNeighbors(locale, data.slug);
       <img
         src={withBase(data.cover)}
         alt={data.coverAlt}
+        srcset={coverSrcSet(data.cover)}
+        sizes="(min-width: 1200px) 1120px, 92vw"
         width="1280"
         height="800"
         class="project-cover"
@@ -119,18 +142,11 @@ const { prev, next } = await getProjectNeighbors(locale, data.slug);
     max-width: 56rem;
   }
 
-  .back-link {
+  .project-head :global(.breadcrumbs) {
     margin-bottom: var(--space-4);
   }
 
-  .back-link::after {
-    content: none;
-  }
 
-  .back-link::before {
-    content: '←';
-    margin-right: var(--space-2);
-  }
 
   .project-head h1 {
     font-size: clamp(var(--font-size-4xl), 5.5vw, var(--font-size-5xl));

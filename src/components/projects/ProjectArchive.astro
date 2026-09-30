@@ -6,6 +6,7 @@ import { useTranslations, projectsPath, contactPath } from '../../i18n/utils';
 import { categories } from '../../data/categories';
 import ProjectPreview from './ProjectPreview.astro';
 import { highlightTitle } from '../../lib/highlight';
+import Breadcrumbs from '../global/Breadcrumbs.astro';
 
 interface Props {
   locale: Locale;
@@ -14,9 +15,11 @@ interface Props {
   projects: CollectionEntry<'projects'>[];
   /** Filtro activo; undefined = "Todos". */
   activeCategory?: CategoryId;
+  /** Migas con rutas ya resueltas. */
+  breadcrumbs?: { name: string; path?: string }[];
 }
 
-const { locale, title, intro, projects, activeCategory } = Astro.props;
+const { locale, title, intro, projects, activeCategory, breadcrumbs = [] } = Astro.props;
 const t = useTranslations(locale);
 
 const filters = [
@@ -32,6 +35,7 @@ const filters = [
 <section class="section archive">
   <div class="container">
     <header class="archive-head" data-reveal>
+      {breadcrumbs.length > 1 && <Breadcrumbs items={breadcrumbs} label={t('nav.breadcrumb')} />}
       <h1 set:html={highlightTitle(title)} />
       <p class="lead">{intro}</p>
 

@@ -18,7 +18,7 @@ technologies:
 services:
   - Diseño de juego
   - Desarrollo de videojuegos
-seoTitle: "Knot It Out — Juego de puzles para desenredar cuerdas | MAI Softwares"
+seoTitle: "Knot It Out — Puzles para desenredar cuerdas"
 seoDescription: "Desarrollo de Knot It Out: juego de puzles en el navegador donde hay que desenredar cables arrastrándolos y cruzándolos por encima o por debajo sin romperlos."
 layoutVariant: "split-left"
 ---

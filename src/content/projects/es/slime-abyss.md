@@ -19,8 +19,8 @@ technologies:
 services:
   - Diseño de juego
   - Desarrollo de videojuegos
-seoTitle: "Slime Abyss — Juego 3D de un limo líquido | MAI Softwares"
-seoDescription: "Desarrollo de Slime Abyss: juego 3D para móvil con física de líquido propia, en el que un limo se divide y se vuelve a juntar para bajar por un abismo de pisos llenos de trampas."
+seoTitle: "Slime Abyss — Juego 3D de un limo líquido"
+seoDescription: "Juego 3D para móvil con física de líquido propia: un limo se divide y se junta para bajar por un abismo de pisos llenos de trampas."
 layoutVariant: "split-right"
 ---
 

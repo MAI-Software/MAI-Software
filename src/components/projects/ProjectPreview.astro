@@ -4,6 +4,7 @@ import type { Locale } from '../../data/company';
 import { getCategory } from '../../data/categories';
 import { useTranslations, projectPath } from '../../i18n/utils';
 import { withBase } from '../../lib/base';
+import { coverSrcSet } from '../../lib/images';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -41,6 +42,8 @@ const isGame = data.category === 'game';
          crece de la tarjeta a la página en vez de cortar a negro. -->
     <img
       src={withBase(data.cover)}
+      srcset={coverSrcSet(data.cover)}
+      sizes="(min-width: 1060px) 30vw, (min-width: 700px) 45vw, 90vw"
       alt={data.coverAlt}
       width="1280"
       height="800"

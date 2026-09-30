@@ -17,8 +17,8 @@ technologies:
 services:
   - Diseño UI/UX
   - Desarrollo web
-seoTitle: "MAI Live Stream — Directos de Twitch, YouTube, Kick y TV | MAI Softwares"
-seoDescription: "Desarrollo de MAI Live Stream: agregador de directos de Twitch, YouTube, Kick y televisión española, con tendencias, creadores y parrilla. Gratis y sin registro."
+seoTitle: "MAI Live Stream — Directos de Twitch, YouTube y Kick"
+seoDescription: "Agregador de directos de Twitch, YouTube, Kick y televisión española, con tendencias, creadores y parrilla. Gratis y sin registro."
 layoutVariant: "split-right"
 ---
 

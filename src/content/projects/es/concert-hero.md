@@ -19,7 +19,7 @@ technologies:
 services:
   - Diseño de juego
   - Desarrollo web
-seoTitle: "Concert Hero — Juego musical de piano para PC | MAI Softwares"
+seoTitle: "Concert Hero — Juego musical de piano para PC"
 seoDescription: "Desarrollo de Concert Hero: juego de ritmo para PC donde el teclado del ordenador es el piano, con octava cromática completa y editor de partituras propio."
 layoutVariant: "split-right"
 ---

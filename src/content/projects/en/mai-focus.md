@@ -19,7 +19,7 @@ technologies:
 services:
   - Product design
   - Web development
-seoTitle: "MAI-Focus — Content planner for ADHD | MAI Softwares"
+seoTitle: "MAI-Focus — Content planner for ADHD"
 seoDescription: "Building MAI-Focus: a time-block planner for social media content production, designed for people with ADHD and fully local."
 layoutVariant: "split-left"
 ---

@@ -1,4 +1,5 @@
 // @ts-check
+import { readdirSync, statSync } from 'node:fs';
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
@@ -22,6 +23,29 @@ const SITE_URL =
 
 const BASE = process.env.BASE_PATH ?? (isCloudflare ? '/' : '/MAI-Software');
 
+/*
+ * lastmod del sitemap. Para una ficha se usa la fecha del propio .md, que es
+ * cuando se tocó ese proyecto; para el resto de rutas, la del build. Así el
+ * rastreador distingue lo que ha cambiado de lo que lleva meses igual.
+ */
+const projectDates = new Map();
+try {
+  const dir = new URL('./src/content/projects/es/', import.meta.url);
+  for (const file of readdirSync(dir)) {
+    if (!file.endsWith('.md')) continue;
+    projectDates.set(file.replace(/\.md$/, ''), statSync(new URL(file, dir)).mtime);
+  }
+} catch {
+  // Sin fichas legibles el sitemap sigue saliendo, solo que con la fecha del build
+}
+
+const buildDate = new Date();
+
+const lastmodFor = (url) => {
+  const match = url.match(/\/(?:proyectos|projects)\/([^/]+)\/?$/);
+  return (match && projectDates.get(match[1])) || buildDate;
+};
+
 export default defineConfig({
   site: SITE_URL,
   base: BASE,
@@ -40,6 +64,10 @@ export default defineConfig({
       i18n: {
         defaultLocale: 'es',
         locales: { es: 'es', en: 'en' },
+      },
+      serialize(item) {
+        item.lastmod = lastmodFor(item.url);
+        return item;
       },
     }),
   ],

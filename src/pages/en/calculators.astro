@@ -4,20 +4,29 @@ import ProjectArchive from '../../components/projects/ProjectArchive.astro';
 import { company } from '../../data/company';
 import { getCategory } from '../../data/categories';
 import { getProjects } from '../../lib/projects';
+import { useTranslations, projectsPath, homePath } from '../../i18n/utils';
 
 const locale = 'en';
 const category = getCategory('calc');
 const projects = await getProjects(locale, 'calc');
+const t = useTranslations(locale);
+const crumbs = [
+  { name: t('nav.home'), path: homePath(locale) },
+  { name: t('nav.projects'), path: projectsPath(locale) },
+  { name: category.label[locale] },
+];
 ---
 
 <BaseLayout
   locale={locale}
+  breadcrumbs={crumbs}
   title={`Tax and payroll calculators — ${company.name}`}
   description={category.intro.en}
   alternatePath="/calculadoras"
 >
   <ProjectArchive
     locale={locale}
+    breadcrumbs={crumbs}
     title={category.label.en}
     intro={category.intro.en}
     projects={projects}

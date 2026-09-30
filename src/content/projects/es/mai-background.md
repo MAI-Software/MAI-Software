@@ -19,8 +19,8 @@ technologies:
 services:
   - Diseño UI/UX
   - Desarrollo PWA
-seoTitle: "MAI-Background — Quitar el fondo de un vídeo en el navegador | MAI Softwares"
-seoDescription: "Desarrollo de MAI-Background: recorta personas en vídeo y cambia el fondo por transparencia, color, desenfoque, imagen u otro vídeo. Local, sin subidas y gratis."
+seoTitle: "MAI-Background — Quitar el fondo de un vídeo"
+seoDescription: "MAI-Background: recorta personas en vídeo y cambia el fondo por transparencia, color, desenfoque, imagen u otro vídeo. Sin subidas."
 layoutVariant: "split-left"
 ---
 

@@ -20,8 +20,8 @@ services:
   - UI/UX design
   - Web development
   - Content and SEO
-seoTitle: "CalcuNeto — Spanish net salary calculator | MAI Softwares"
-seoDescription: "Development of CalcuNeto, a net salary calculator for Spain: in-browser calculation, income tax and social security breakdown, and the real cost to the employer."
+seoTitle: "CalcuNeto — Spanish net salary calculator"
+seoDescription: "CalcuNeto: net salary calculator for Spain, with income tax and social security breakdown and the real cost to the employer."
 layoutVariant: "split-left"
 ---
 

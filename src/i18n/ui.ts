@@ -20,6 +20,8 @@ export const ui = {
     'hero.text':
       'Creamos webs, herramientas, SaaS y videojuegos para que una idea deje de quedarse en la cabeza y empiece a existir.',
     'skip.main': 'Saltar al contenido',
+    'nav.breadcrumb': 'Ruta de navegación',
+    'nav.projects': 'Proyectos',
     'carousel.prev': 'Anterior',
     /* Los juegos se publican y se siguen tocando: mejor decirlo. */
     'feed.games.note':
@@ -185,6 +187,7 @@ export const ui = {
     'notfound.title': 'Página no encontrada',
     'notfound.text': 'La página que buscas no existe o ha cambiado de dirección.',
     'notfound.back': 'Volver al inicio',
+    'notfound.exits': 'O sigue por aquí',
 
     'footer.rights': 'Todos los derechos reservados.',
     'footer.explore': 'Lo que hacemos',
@@ -208,6 +211,8 @@ export const ui = {
     'hero.text':
       'We design, build and maintain our own digital products: games, calculators, SaaS tools and websites. Everything here is published and in use.',
     'skip.main': 'Skip to content',
+    'nav.breadcrumb': 'Breadcrumb',
+    'nav.projects': 'Projects',
     'carousel.prev': 'Previous',
     'feed.games.note':
       'All of our games are in active development: content, balance and screens may change from one version to the next.',
@@ -366,6 +371,7 @@ export const ui = {
     'notfound.title': 'Page not found',
     'notfound.text': "The page you're looking for doesn't exist or has moved.",
     'notfound.back': 'Back to home',
+    'notfound.exits': 'Or carry on here',
 
     'footer.rights': 'All rights reserved.',
     'footer.explore': 'What we do',

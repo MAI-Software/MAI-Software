@@ -18,7 +18,7 @@ technologies:
 services:
   - Game design
   - Game development
-seoTitle: "Knot It Out — Rope untangling puzzle game | MAI Softwares"
+seoTitle: "Knot It Out — Rope untangling puzzle game"
 seoDescription: "Building Knot It Out: a browser puzzle game where you untangle cables by dragging them and crossing them over or under themselves without breaking them."
 layoutVariant: "split-left"
 ---

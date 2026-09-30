@@ -17,7 +17,7 @@ technologies:
 services:
   - UI/UX design
   - Web development
-seoTitle: "MAI Live Stream — Twitch, YouTube, Kick and TV in one place | MAI Softwares"
+seoTitle: "MAI Live Stream — Twitch, YouTube, Kick and TV"
 seoDescription: "Development of MAI Live Stream: an aggregator for Twitch, YouTube, Kick and Spanish television, with trends, creators and the TV schedule. Free, no sign-up."
 layoutVariant: "split-right"
 ---

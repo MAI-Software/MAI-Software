@@ -4,20 +4,29 @@ import ProjectArchive from '../components/projects/ProjectArchive.astro';
 import { company } from '../data/company';
 import { getCategory } from '../data/categories';
 import { getProjects } from '../lib/projects';
+import { useTranslations, projectsPath, homePath } from '../i18n/utils';
 
 const locale = 'es';
 const category = getCategory('calc');
 const projects = await getProjects(locale, 'calc');
+const t = useTranslations(locale);
+const crumbs = [
+  { name: t('nav.home'), path: homePath(locale) },
+  { name: t('nav.projects'), path: projectsPath(locale) },
+  { name: category.label[locale] },
+];
 ---
 
 <BaseLayout
   locale={locale}
+  breadcrumbs={crumbs}
   title="Calculadoras y herramientas online | MAI Softwares"
   description="Descubre calculadoras y herramientas online creadas por MAI Softwares para convertir cálculos complejos en respuestas claras y rápidas."
   alternatePath="/en/calculators"
 >
   <ProjectArchive
     locale={locale}
+    breadcrumbs={crumbs}
     title="Hacemos fácil entender lo *difícil*."
     intro="Creamos herramientas que transforman números, fórmulas y decisiones complejas en respuestas claras que puedes obtener en segundos."
     projects={projects}

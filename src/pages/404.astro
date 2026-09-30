@@ -1,11 +1,23 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { company } from '../data/company';
-import { useTranslations, homePath } from '../i18n/utils';
+import { categories } from '../data/categories';
+import { useTranslations, homePath, projectsPath, contactPath } from '../i18n/utils';
 
 // 404 compartida: Cloudflare Pages sirve /404.html para cualquier ruta no encontrada.
 const locale = 'es';
 const t = useTranslations(locale);
+
+/* Quien cae aquí venía buscando algo. En vez de un callejón sin salida, las
+   puertas principales del sitio: el catálogo, cada disciplina y el contacto. */
+const exits = [
+  { label: t('nav.projects'), href: projectsPath(locale) },
+  ...categories.map((category) => ({
+    label: category.label[locale],
+    href: category.path[locale],
+  })),
+  { label: t('cta.contact'), href: contactPath(locale) },
+];
 ---
 
 <BaseLayout
@@ -20,6 +32,21 @@ const t = useTranslations(locale);
       <h1>{t('notfound.title')}</h1>
       <p class="lead">{t('notfound.text')}</p>
       <a href={homePath(locale)} class="btn btn-primary">{t('notfound.back')}</a>
+
+      <nav class="notfound-exits" aria-label={t('notfound.exits')}>
+        <p class="eyebrow">{t('notfound.exits')}</p>
+        <ul>
+          {
+            exits.map((exit) => (
+              <li>
+                <a href={exit.href} class="filter-pill">
+                  {exit.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
     </div>
   </section>
 </BaseLayout>
@@ -42,5 +69,20 @@ const t = useTranslations(locale);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+  }
+
+  .notfound-exits {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  .notfound-exits ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
 </style>

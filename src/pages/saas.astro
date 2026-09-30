@@ -4,20 +4,29 @@ import ProjectArchive from '../components/projects/ProjectArchive.astro';
 import { company } from '../data/company';
 import { getCategory } from '../data/categories';
 import { getProjects } from '../lib/projects';
+import { useTranslations, projectsPath, homePath } from '../i18n/utils';
 
 const locale = 'es';
 const category = getCategory('saas');
 const projects = await getProjects(locale, 'saas');
+const t = useTranslations(locale);
+const crumbs = [
+  { name: t('nav.home'), path: homePath(locale) },
+  { name: t('nav.projects'), path: projectsPath(locale) },
+  { name: category.label[locale] },
+];
 ---
 
 <BaseLayout
   locale={locale}
+  breadcrumbs={crumbs}
   title="Desarrollo SaaS y herramientas digitales | MAI Softwares"
   description="Explora herramientas SaaS y aplicaciones web creadas por MAI Softwares para simplificar procesos y resolver problemas reales."
   alternatePath="/en/saas"
 >
   <ProjectArchive
     locale={locale}
+    breadcrumbs={crumbs}
     title="Ideas que *trabajan* contigo."
     intro="Herramientas digitales creadas para resolver tareas reales, simplificar procesos y convertir problemas cotidianos en experiencias mucho más fáciles."
     projects={projects}

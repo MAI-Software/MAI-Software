@@ -4,20 +4,29 @@ import ProjectArchive from '../../components/projects/ProjectArchive.astro';
 import { company } from '../../data/company';
 import { getCategory } from '../../data/categories';
 import { getProjects } from '../../lib/projects';
+import { useTranslations, projectsPath, homePath } from '../../i18n/utils';
 
 const locale = 'en';
 const category = getCategory('game');
 const projects = await getProjects(locale, 'game');
+const t = useTranslations(locale);
+const crumbs = [
+  { name: t('nav.home'), path: homePath(locale) },
+  { name: t('nav.projects'), path: projectsPath(locale) },
+  { name: category.label[locale] },
+];
 ---
 
 <BaseLayout
   locale={locale}
+  breadcrumbs={crumbs}
   title={`${category.label.en} — ${company.name}`}
   description={category.intro.en}
   alternatePath="/videojuegos"
 >
   <ProjectArchive
     locale={locale}
+    breadcrumbs={crumbs}
     title={category.label.en}
     intro={category.intro.en}
     projects={projects}

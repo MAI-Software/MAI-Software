@@ -4,6 +4,7 @@ import type { Locale } from '../../data/company';
 import { getCategory } from '../../data/categories';
 import { useTranslations, projectsPath, projectPath } from '../../i18n/utils';
 import { withBase } from '../../lib/base';
+import { coverSrcSet } from '../../lib/images';
 import { highlightTitle } from '../../lib/highlight';
 
 interface Props {
@@ -52,6 +53,8 @@ const previews = projects.slice(0, 6);
                 </span>
                 <img
                   src={withBase(p.data.cover)}
+                  srcset={coverSrcSet(p.data.cover)}
+                  sizes="46vw"
                   alt={p.data.coverAlt}
                   width="1280"
                   height="800"

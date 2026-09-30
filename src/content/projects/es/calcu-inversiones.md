@@ -21,8 +21,8 @@ services:
   - Diseño UI/UX
   - Desarrollo web
   - Contenido y SEO
-seoTitle: "Calcu-Inversiones — Simulador de interés compuesto y carteras | MAI Softwares"
-seoDescription: "Desarrollo de un simulador de inversiones: interés compuesto, inflación y reparto entre renta fija, acciones, oro y bitcoin. Gratis, sin registro y con el código abierto."
+seoTitle: "Calcu-Inversiones — Simulador de interés compuesto"
+seoDescription: "Simulador de inversiones: interés compuesto, inflación y reparto entre renta fija, acciones, oro y bitcoin. Gratis y sin registro."
 layoutVariant: "split-right"
 ---
 

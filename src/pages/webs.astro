@@ -4,20 +4,29 @@ import ProjectArchive from '../components/projects/ProjectArchive.astro';
 import { company } from '../data/company';
 import { getCategory } from '../data/categories';
 import { getProjects } from '../lib/projects';
+import { useTranslations, projectsPath, homePath } from '../i18n/utils';
 
 const locale = 'es';
 const category = getCategory('web');
 const projects = await getProjects(locale, 'web');
+const t = useTranslations(locale);
+const crumbs = [
+  { name: t('nav.home'), path: homePath(locale) },
+  { name: t('nav.projects'), path: projectsPath(locale) },
+  { name: category.label[locale] },
+];
 ---
 
 <BaseLayout
   locale={locale}
+  breadcrumbs={crumbs}
   title="Diseño y desarrollo web | MAI Softwares"
   description="Webs rápidas, claras y cuidadas desarrolladas por MAI Softwares para proyectos, negocios e ideas que necesitan una presencia digital propia."
   alternatePath="/en/webs"
 >
   <ProjectArchive
     locale={locale}
+    breadcrumbs={crumbs}
     title="Ideas que encuentran su lugar en la *web*."
     intro="Diseñamos y desarrollamos webs rápidas, claras y cuidadas para que proyectos, negocios e ideas puedan presentarse como merecen."
     projects={projects}

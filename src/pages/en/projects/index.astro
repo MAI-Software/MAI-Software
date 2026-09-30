@@ -2,22 +2,28 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import ProjectArchive from '../../../components/projects/ProjectArchive.astro';
 import { company } from '../../../data/company';
-import { useTranslations } from '../../../i18n/utils';
+import { useTranslations, homePath } from '../../../i18n/utils';
 import { getProjects } from '../../../lib/projects';
 
 const locale = 'en';
 const t = useTranslations(locale);
+const crumbs = [
+  { name: t('nav.home'), path: homePath(locale) },
+  { name: t('nav.projects') },
+];
 const projects = await getProjects(locale);
 ---
 
 <BaseLayout
   locale={locale}
+  breadcrumbs={crumbs}
   title={`All projects — ${company.name}`}
   description={t('projects.intro')}
   alternatePath="/proyectos"
 >
   <ProjectArchive
     locale={locale}
+    breadcrumbs={crumbs}
     title={t('projects.title')}
     intro={t('projects.intro')}
     projects={projects}
