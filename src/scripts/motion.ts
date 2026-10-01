@@ -389,107 +389,95 @@ function setupParticles() {
   let wordBox = { x: 0, y: 0, w: 0, h: 0 };
 
   /* --- El logotipo como molde ---
-     Antes la palabra se redibujaba con la tipografía y se pintaba encima una
-     imagen: se notaba el pegote. Ahora se leen los píxeles del propio
-     logotipo de la web, y cada pétalo se queda con el color exacto del píxel
-     que le toca. El resultado formado es el logotipo, letra por letra. */
-  type LogoPixel = { x: number; y: number; c: Rgb; a: number };
-  let logoPixels: LogoPixel[] = [];
+     El molde es el logotipo en alta resolución (1600 px de ancho). Se muestrea
+     a la medida exacta que va a ocupar en pantalla —un píxel de muestreo por
+     píxel de dispositivo—, así el trazo sale con el mismo filo que el
+     logotipo de la cabecera y no con el de una imagen ampliada. */
+  let logoImg: HTMLImageElement | null = null;
+  let logoData: ImageData | null = null;
   let logoW = 1;
   let logoH = 1;
+  /** Cuántos píxeles del muestreo tienen tinta. */
+  let logoInk = 0;
 
-  const readLogo = (img: HTMLImageElement) => {
+  const muestrearLogo = (anchoPx: number) => {
+    if (!logoImg) return;
+    const aw = logoImg.naturalWidth || 1;
+    const ah = logoImg.naturalHeight || 1;
+    const ancho = Math.max(120, Math.min(aw, Math.round(anchoPx)));
+    const alto = Math.max(1, Math.round((ancho * ah) / aw));
+    if (logoData && logoW === ancho && logoH === alto) return;
+
     const off = document.createElement('canvas');
-    // Resolución de muestreo: suficiente para el filo de las letras
-    // 760 px de ancho: suficiente para celdas de 2-3 px en pantallas grandes
-    const scale = Math.min(1, 760 / (img.naturalWidth || 760));
-    off.width = Math.max(1, Math.round((img.naturalWidth || 398) * scale));
-    off.height = Math.max(1, Math.round((img.naturalHeight || 160) * scale));
+    off.width = ancho;
+    off.height = alto;
     const octx = off.getContext('2d', { willReadFrequently: true });
     if (!octx) return;
-    octx.drawImage(img, 0, 0, off.width, off.height);
+    octx.drawImage(logoImg, 0, 0, ancho, alto);
 
-    let data: Uint8ClampedArray;
     try {
-      data = octx.getImageData(0, 0, off.width, off.height).data;
+      logoData = octx.getImageData(0, 0, ancho, alto);
     } catch {
-      return; // lienzo contaminado: sin palabra, pero los pétalos siguen
+      logoData = null; // lienzo contaminado: sin palabra, pero siguen los pétalos
+      return;
     }
 
-    const pixels: LogoPixel[] = [];
-    let minX = off.width;
-    let maxX = 0;
-    let minY = off.height;
-    let maxY = 0;
-    for (let y = 0; y < off.height; y++) {
-      for (let x = 0; x < off.width; x++) {
-        const i = (y * off.width + x) * 4;
-        const alfa = data[i + 3]!;
-        // Hasta las motas del borde cuentan: su transparencia es el antialias
-        if (alfa < 20) continue;
-        pixels.push({ x, y, c: [data[i]!, data[i + 1]!, data[i + 2]!], a: alfa / 255 });
-        if (x < minX) minX = x;
-        if (x > maxX) maxX = x;
-        if (y < minY) minY = y;
-        if (y > maxY) maxY = y;
-      }
-    }
-    if (pixels.length === 0) return;
-
-    logoW = maxX - minX || 1;
-    logoH = maxY - minY || 1;
-    logoPixels = pixels.map((px) => ({ x: px.x - minX, y: px.y - minY, c: px.c, a: px.a }));
+    logoW = ancho;
+    logoH = alto;
+    logoInk = 0;
+    const d = logoData.data;
+    for (let i = 3; i < d.length; i += 4) if (d[i]! >= 20) logoInk++;
   };
 
-  /** Escala del logotipo en pantalla y cuánta tinta ocupa, en píxeles. */
+  /** Tamaño que ocupa la palabra en pantalla y cuánta tinta tiene. */
   const wordScale = () => {
-    if (logoPixels.length === 0) return { scale: 0, ink: 0 };
-    const scale = Math.min((w * 0.52) / logoW, (h * 0.34) / logoH);
-    return { scale, ink: logoPixels.length * scale * scale };
+    if (!logoImg) return { scale: 0, ink: 0, ancho: 0, alto: 0 };
+    const aw = logoImg.naturalWidth || 1;
+    const ah = logoImg.naturalHeight || 1;
+    const ancho = Math.min(w * 0.52, h * 0.34 * (aw / ah));
+    const alto = (ancho * ah) / aw;
+    const scale = logoW > 0 ? ancho / logoW : 0;
+    return { scale, ink: logoInk * scale * scale, ancho, alto };
   };
 
-  /** Reparte `count` destinos por el trazo del logotipo, con color y alfa. */
+  /** Reparte `count` destinos por el trazo, con el color de cada píxel. */
   function wordTargets(count: number): {
     points: { x: number; y: number; c: Rgb; a: number }[];
     cell: number;
   } {
-    if (logoPixels.length === 0 || count <= 0) return { points: [], cell: 10 };
+    const vacio = { points: [] as { x: number; y: number; c: Rgb; a: number }[], cell: 4 };
+    if (!logoData || logoInk === 0 || count <= 0) return vacio;
 
-    const { scale } = wordScale();
-    const left = (w - logoW * scale) / 2;
-    const top = (h - logoH * scale) / 2;
-    wordBox = { x: left, y: top, w: logoW * scale, h: logoH * scale };
+    const { scale, ancho, alto } = wordScale();
+    if (scale <= 0) return vacio;
 
-    /* Un pétalo por celda: el paso sale de repartir el área pintada entre
-       los pétalos disponibles, así se cubre el trazo sin amontonar. */
-    const step = Math.max(1, Math.sqrt(logoPixels.length / count));
-    const vistos = new Set<number>();
-    const elegidos: LogoPixel[] = [];
-    for (const px of logoPixels) {
-      const cx = Math.floor(px.x / step);
-      const cy = Math.floor(px.y / step);
-      const clave = cy * 8192 + cx;
-      if (vistos.has(clave)) continue;
-      vistos.add(clave);
-      elegidos.push(px);
+    const left = (w - ancho) / 2;
+    const top = (h - alto) / 2;
+    wordBox = { x: left, y: top, w: ancho, h: alto };
+
+    const paso = Math.max(1, Math.sqrt(logoInk / count));
+    const d = logoData.data;
+    const points: { x: number; y: number; c: Rgb; a: number }[] = [];
+    for (let y = 0; y < logoH; y += paso) {
+      const fy = Math.min(logoH - 1, Math.round(y));
+      for (let x = 0; x < logoW; x += paso) {
+        const fx = Math.min(logoW - 1, Math.round(x));
+        const i = (fy * logoW + fx) * 4;
+        const a = d[i + 3]!;
+        if (a < 20) continue;
+        points.push({
+          x: left + fx * scale,
+          y: top + fy * scale,
+          c: [d[i]!, d[i + 1]!, d[i + 2]!],
+          a: a / 255,
+        });
+      }
     }
-    if (elegidos.length === 0) return { points: [], cell: 10 };
+    if (points.length === 0) return vacio;
 
-    /* Reparto a zancadas: coger los `count` primeros dejaría sin formar la
-       mitad de abajo del logotipo cuando sobran celdas. */
-    const points = Array.from({ length: count }, (_, i) => {
-      const px = elegidos[Math.floor((i * elegidos.length) / count) % elegidos.length]!;
-      return {
-        x: left + px.x * scale,
-        y: top + px.y * scale,
-        c: px.c,
-        a: px.a,
-      };
-    });
-
-    /* 1.3: con celdas de dos o tres píxeles, pegarlas justo deja una
-       rejilla de líneas finas entre ellas. Solapadas, el trazo es macizo. */
-    return { points, cell: Math.max(1.2, step * scale * 1.3) };
+    /* 1.25: con celdas de dos o tres píxeles, pegarlas justo deja una rejilla
+       de líneas finas entre ellas. Solapadas, el trazo es macizo. */
+    return { points, cell: Math.max(1.2, paso * scale * 1.25) };
   }
 
   /** Cuántos pétalos aguanta el aparato sin despeinarse. */
@@ -506,41 +494,55 @@ function setupParticles() {
     return Math.min(1600, Math.max(320, count));
   }
 
-  /** Vuelca la palabra entera, celda a celda, en un lienzo aparte. */
+  /** Vuelca la palabra entera en un lienzo aparte, celda a celda.
+      Dos píxeles de dispositivo por celda: a ese tamaño el mosaico deja de
+      verse y queda el filo del logotipo. Se pinta una vez por medida. */
   const pintarPalabra = () => {
     wordCanvas = null;
-    if (logoPixels.length === 0) return;
+    if (!logoData || logoInk === 0) return;
 
-    // Una celda por píxel del logotipo: el detalle máximo que da el molde
-    const { points, cell } = wordTargets(logoPixels.length);
-    if (points.length === 0 || wordBox.w <= 0) return;
+    const { scale, ancho, alto } = wordScale();
+    if (scale <= 0 || ancho <= 0) return;
+
+    wordBox = { x: (w - ancho) / 2, y: (h - alto) / 2, w: ancho, h: alto };
 
     const lienzo = document.createElement('canvas');
-    lienzo.width = Math.max(1, Math.round(wordBox.w * dpr));
-    lienzo.height = Math.max(1, Math.round(wordBox.h * dpr));
+    lienzo.width = Math.max(1, Math.round(ancho * dpr));
+    lienzo.height = Math.max(1, Math.round(alto * dpr));
     const lctx = lienzo.getContext('2d');
     if (!lctx) return;
-    lctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    // Mismo agrupado por color que en vivo: un fillStyle por grupo
-    const cubos = new Map<string, { x: number; y: number }[]>();
-    for (const pt of points) {
-      const r = Math.round(pt.c[0] / 12) * 12;
-      const g = Math.round(pt.c[1] / 12) * 12;
-      const b = Math.round(pt.c[2] / 12) * 12;
-      const a = Math.max(0.15, Math.round(pt.a * 8) / 8);
-      const clave = `rgba(${r}, ${g}, ${b}, ${a})`;
-      const lista = cubos.get(clave);
-      const punto = { x: pt.x - wordBox.x, y: pt.y - wordBox.y };
-      if (lista) lista.push(punto);
-      else cubos.set(clave, [punto]);
+    /* Se trabaja en píxeles de dispositivo: una celda cada dos, del tamaño
+       de dos, para que se toquen sin rejilla. */
+    const d = logoData.data;
+    const porPixel = (ancho * dpr) / logoW;
+    const lado = Math.max(1, 2 * porPixel);
+    const cubos = new Map<string, number[]>();
+
+    for (let y = 0; y < logoH; y += 2) {
+      for (let x = 0; x < logoW; x += 2) {
+        const i = (y * logoW + x) * 4;
+        const a = d[i + 3]!;
+        if (a < 20) continue;
+        const r = Math.round(d[i]! / 20) * 20;
+        const g = Math.round(d[i + 1]! / 20) * 20;
+        const b = Math.round(d[i + 2]! / 20) * 20;
+        const al = Math.max(0.12, Math.round((a / 255) * 8) / 8);
+        const clave = `rgba(${r}, ${g}, ${b}, ${al})`;
+        const lista = cubos.get(clave);
+        if (lista) lista.push(i);
+        else cubos.set(clave, [i]);
+      }
     }
 
-    const mitad = cell / 2;
     for (const [estilo, lista] of cubos) {
       lctx.fillStyle = estilo;
       lctx.beginPath();
-      for (const punto of lista) lctx.rect(punto.x - mitad, punto.y - mitad, cell, cell);
+      for (const i of lista) {
+        const px = (i / 4) % logoW;
+        const py = Math.floor(i / 4 / logoW);
+        lctx.rect(px * porPixel - lado / 2, py * porPixel - lado / 2, lado, lado);
+      }
       lctx.fill();
     }
 
@@ -581,6 +583,10 @@ function setupParticles() {
     /* Tamaño de celda: por debajo de tres píxeles el mosaico deja de verse
        como mosaico y la palabra se lee como tipografía. De ahí sale cuántas
        motas hacen falta, no al revés. */
+    /* El molde se muestrea a la medida exacta en píxeles de dispositivo:
+       ni de más (gasto) ni de menos (filo de imagen ampliada). */
+    muestrearLogo(Math.min(1600, Math.round(w * 0.52 * dpr)));
+
     /* Las motas que vuelan son las justas para que se vea el viaje; el filo
        de la palabra lo pone el lienzo guardado, no ellas. */
     const lado = finePointer ? 3.4 : 4.6;
@@ -841,15 +847,13 @@ function setupParticles() {
      URL, así sale de la caché— y, cuando se puede leer, se reconstruyen los
      destinos. Hasta entonces los pétalos vuelan sueltos. */
   const cargarLogo = () => {
-    const enCabecera = document.querySelector<HTMLImageElement>('.logo-link img');
-    const src = enCabecera?.currentSrc || `${import.meta.env.BASE_URL}brand/logo-light.webp`;
     const img = new Image();
     img.decoding = 'async';
-    img.src = src;
+    img.src = `${import.meta.env.BASE_URL}brand/logo-hires.webp`;
 
     const listo = () => {
-      readLogo(img);
-      if (logoPixels.length > 0 && w > 0) build();
+      logoImg = img;
+      if (w > 0) build();
     };
 
     if (img.complete && img.naturalWidth > 0) listo();
