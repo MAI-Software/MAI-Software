@@ -2,7 +2,9 @@
 import '@fontsource-variable/bricolage-grotesque/wdth.css';
 import '@fontsource-variable/ibm-plex-sans';
 import displayWoff2 from '@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wdth-normal.woff2?url';
-import bodyWoff2 from '@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-latin-standard-normal.woff2?url';
+// El fichero que de verdad pide la hoja de estilos es el del eje de peso;
+// precargar el 'standard' descargaba uno que nadie usaba
+import bodyWoff2 from '@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-latin-wght-normal.woff2?url';
 import '../styles/tokens.css';
 import '../styles/global.css';
 import '../styles/typography.css';

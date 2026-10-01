@@ -353,7 +353,31 @@ function setupParticles() {
     ry: number;
   };
 
+  /* El polvo fino es lo que hace legible la palabra: muchas motas pequeñas,
+     una por celda del logotipo, con su color y su transparencia. Solo existe
+     mientras la palabra está formada, así que no tiene física: va de su sitio
+     de salida a su destino interpolando. */
+  type Mota = {
+    sx: number;
+    sy: number;
+    tx: number;
+    ty: number;
+    /** Retraso de entrada, para que la palabra cuaje en vez de aparecer. */
+    delay: number;
+  };
+
   let petals: Petal[] = [];
+  let motas: Mota[] = [];
+  /* La palabra al máximo detalle, pintada una sola vez: una celda por píxel
+     del logotipo. Son decenas de miles de celdas, demasiadas para repintar a
+     60 fps, pero el resultado no cambia nunca, así que se guarda y se vuelca.
+     No es "una imagen encima": es el destino final de las motas, con sus
+     mismos colores y su misma rejilla. */
+  let wordCanvas: HTMLCanvasElement | null = null;
+  /* Dibujar mota a mota cambiando el color cada vez es lo que mata el
+     rendimiento. Se agrupan por color y transparencia redondeados: un
+     fillStyle y un solo trazado por grupo. */
+  let grupos: { estilo: string; indices: number[] }[] = [];
   let w = 0;
   let h = 0;
   /* Lado de la celda en píxeles de pantalla. Formados, cada pétalo pinta un
@@ -369,7 +393,7 @@ function setupParticles() {
      imagen: se notaba el pegote. Ahora se leen los píxeles del propio
      logotipo de la web, y cada pétalo se queda con el color exacto del píxel
      que le toca. El resultado formado es el logotipo, letra por letra. */
-  type LogoPixel = { x: number; y: number; c: Rgb };
+  type LogoPixel = { x: number; y: number; c: Rgb; a: number };
   let logoPixels: LogoPixel[] = [];
   let logoW = 1;
   let logoH = 1;
@@ -377,7 +401,8 @@ function setupParticles() {
   const readLogo = (img: HTMLImageElement) => {
     const off = document.createElement('canvas');
     // Resolución de muestreo: suficiente para el filo de las letras
-    const scale = Math.min(1, 460 / (img.naturalWidth || 460));
+    // 760 px de ancho: suficiente para celdas de 2-3 px en pantallas grandes
+    const scale = Math.min(1, 760 / (img.naturalWidth || 760));
     off.width = Math.max(1, Math.round((img.naturalWidth || 398) * scale));
     off.height = Math.max(1, Math.round((img.naturalHeight || 160) * scale));
     const octx = off.getContext('2d', { willReadFrequently: true });
@@ -399,8 +424,10 @@ function setupParticles() {
     for (let y = 0; y < off.height; y++) {
       for (let x = 0; x < off.width; x++) {
         const i = (y * off.width + x) * 4;
-        if (data[i + 3]! < 140) continue;
-        pixels.push({ x, y, c: [data[i]!, data[i + 1]!, data[i + 2]!] });
+        const alfa = data[i + 3]!;
+        // Hasta las motas del borde cuentan: su transparencia es el antialias
+        if (alfa < 20) continue;
+        pixels.push({ x, y, c: [data[i]!, data[i + 1]!, data[i + 2]!], a: alfa / 255 });
         if (x < minX) minX = x;
         if (x > maxX) maxX = x;
         if (y < minY) minY = y;
@@ -411,30 +438,37 @@ function setupParticles() {
 
     logoW = maxX - minX || 1;
     logoH = maxY - minY || 1;
-    logoPixels = pixels.map((px) => ({ x: px.x - minX, y: px.y - minY, c: px.c }));
+    logoPixels = pixels.map((px) => ({ x: px.x - minX, y: px.y - minY, c: px.c, a: px.a }));
   };
 
-  /** Reparte `count` destinos por el trazo del logotipo, con su color. */
+  /** Escala del logotipo en pantalla y cuánta tinta ocupa, en píxeles. */
+  const wordScale = () => {
+    if (logoPixels.length === 0) return { scale: 0, ink: 0 };
+    const scale = Math.min((w * 0.52) / logoW, (h * 0.34) / logoH);
+    return { scale, ink: logoPixels.length * scale * scale };
+  };
+
+  /** Reparte `count` destinos por el trazo del logotipo, con color y alfa. */
   function wordTargets(count: number): {
-    points: { x: number; y: number; c: Rgb }[];
+    points: { x: number; y: number; c: Rgb; a: number }[];
     cell: number;
   } {
-    if (logoPixels.length === 0) return { points: [], cell: 10 };
+    if (logoPixels.length === 0 || count <= 0) return { points: [], cell: 10 };
 
-    const scale = Math.min((w * 0.52) / logoW, (h * 0.34) / logoH);
+    const { scale } = wordScale();
     const left = (w - logoW * scale) / 2;
     const top = (h - logoH * scale) / 2;
     wordBox = { x: left, y: top, w: logoW * scale, h: logoH * scale };
 
     /* Un pétalo por celda: el paso sale de repartir el área pintada entre
        los pétalos disponibles, así se cubre el trazo sin amontonar. */
-    const step = Math.max(1, Math.round(Math.sqrt(logoPixels.length / count)));
+    const step = Math.max(1, Math.sqrt(logoPixels.length / count));
     const vistos = new Set<number>();
     const elegidos: LogoPixel[] = [];
     for (const px of logoPixels) {
       const cx = Math.floor(px.x / step);
       const cy = Math.floor(px.y / step);
-      const clave = cy * 4096 + cx;
+      const clave = cy * 8192 + cx;
       if (vistos.has(clave)) continue;
       vistos.add(clave);
       elegidos.push(px);
@@ -449,11 +483,13 @@ function setupParticles() {
         x: left + px.x * scale,
         y: top + px.y * scale,
         c: px.c,
+        a: px.a,
       };
     });
 
-    // 1.12: las celdas se solapan un poco y el trazo sale macizo
-    return { points, cell: Math.max(2, step * scale * 1.12) };
+    /* 1.3: con celdas de dos o tres píxeles, pegarlas justo deja una
+       rejilla de líneas finas entre ellas. Solapadas, el trazo es macizo. */
+    return { points, cell: Math.max(1.2, step * scale * 1.3) };
   }
 
   /** Cuántos pétalos aguanta el aparato sin despeinarse. */
@@ -469,6 +505,47 @@ function setupParticles() {
 
     return Math.min(1600, Math.max(320, count));
   }
+
+  /** Vuelca la palabra entera, celda a celda, en un lienzo aparte. */
+  const pintarPalabra = () => {
+    wordCanvas = null;
+    if (logoPixels.length === 0) return;
+
+    // Una celda por píxel del logotipo: el detalle máximo que da el molde
+    const { points, cell } = wordTargets(logoPixels.length);
+    if (points.length === 0 || wordBox.w <= 0) return;
+
+    const lienzo = document.createElement('canvas');
+    lienzo.width = Math.max(1, Math.round(wordBox.w * dpr));
+    lienzo.height = Math.max(1, Math.round(wordBox.h * dpr));
+    const lctx = lienzo.getContext('2d');
+    if (!lctx) return;
+    lctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    // Mismo agrupado por color que en vivo: un fillStyle por grupo
+    const cubos = new Map<string, { x: number; y: number }[]>();
+    for (const pt of points) {
+      const r = Math.round(pt.c[0] / 12) * 12;
+      const g = Math.round(pt.c[1] / 12) * 12;
+      const b = Math.round(pt.c[2] / 12) * 12;
+      const a = Math.max(0.15, Math.round(pt.a * 8) / 8);
+      const clave = `rgba(${r}, ${g}, ${b}, ${a})`;
+      const lista = cubos.get(clave);
+      const punto = { x: pt.x - wordBox.x, y: pt.y - wordBox.y };
+      if (lista) lista.push(punto);
+      else cubos.set(clave, [punto]);
+    }
+
+    const mitad = cell / 2;
+    for (const [estilo, lista] of cubos) {
+      lctx.fillStyle = estilo;
+      lctx.beginPath();
+      for (const punto of lista) lctx.rect(punto.x - mitad, punto.y - mitad, cell, cell);
+      lctx.fill();
+    }
+
+    wordCanvas = lienzo;
+  };
 
   const build = () => {
     dpr = Math.min(window.devicePixelRatio || 1, finePointer ? 2 : 1.5);
@@ -501,19 +578,54 @@ function setupParticles() {
       ry: 0,
     })).map((petal) => ({ ...petal, vx: petal.bvx, vy: petal.bvy }));
 
-    /* Emparejar por posición horizontal evita que los pétalos se crucen de
-       lado a lado al juntarse; el trazo se forma sin remolinos. */
-    const { points, cell } = wordTargets(petals.length);
-    cellPx = cell;
-    const targets = points.sort((a, b) => a.x - b.x);
-    const order = petals.map((_, i) => i).sort((a, b) => petals[a]!.x - petals[b]!.x);
+    /* Tamaño de celda: por debajo de tres píxeles el mosaico deja de verse
+       como mosaico y la palabra se lee como tipografía. De ahí sale cuántas
+       motas hacen falta, no al revés. */
+    /* Las motas que vuelan son las justas para que se vea el viaje; el filo
+       de la palabra lo pone el lienzo guardado, no ellas. */
+    const lado = finePointer ? 3.4 : 4.6;
+    const techo = finePointer ? 6000 : 1800;
+    const { ink } = wordScale();
+    const necesarias = Math.min(techo, Math.round(ink / (lado * lado)));
 
+    const { points, cell } = wordTargets(necesarias);
+    cellPx = cell;
+    pintarPalabra();
+
+    motas = points.map((pt) => ({
+      sx: Math.random() * w,
+      sy: Math.random() * h,
+      tx: pt.x,
+      ty: pt.y,
+      delay: Math.random() * 0.22,
+    }));
+
+    /* Un fillStyle por grupo: color redondeado a 16 niveles y alfa a 5.
+       Con esto, 12.000 motas se pintan en un centenar de llamadas. */
+    const cubos = new Map<string, number[]>();
+    points.forEach((pt, i) => {
+      const r = Math.round(pt.c[0] / 16) * 16;
+      const g = Math.round(pt.c[1] / 16) * 16;
+      const b = Math.round(pt.c[2] / 16) * 16;
+      const a = Math.max(0.2, Math.round(pt.a * 5) / 5);
+      const clave = `rgba(${r}, ${g}, ${b}, ${a})`;
+      const lista = cubos.get(clave);
+      if (lista) lista.push(i);
+      else cubos.set(clave, [i]);
+    });
+    grupos = Array.from(cubos, ([estilo, indices]) => ({ estilo, indices }));
+
+    /* Los pétalos siguen su vida y acompañan a la palabra como brillo: se
+       reparten por el trazo a zancadas para no amontonarse. */
+    const targets = points.length > 0 ? points : [];
+    const order = petals.map((_, i) => i).sort((a, b) => petals[a]!.x - petals[b]!.x);
     order.forEach((petalIndex, i) => {
       const petal = petals[petalIndex]!;
-      const target = targets[i];
+      const target = targets.length
+        ? targets[Math.floor((i * targets.length) / petals.length) % targets.length]!
+        : undefined;
       petal.tx = target ? target.x : petal.x;
       petal.ty = target ? target.y : petal.y;
-      // El color sale del píxel del logotipo que le toca, no de un degradado
       petal.word = target ? target.c : petal.free;
     });
   };
@@ -555,11 +667,45 @@ function setupParticles() {
     ctx.clearRect(0, 0, w, h);
 
     /* `form` va por detrás de `gather`: los pétalos primero llegan a su sitio
-       y solo al final se cuadran y se encienden. Así la palabra "cuaja" en
-       vez de aparecer de golpe. */
-    const form = Math.min(1, Math.max(0, (gather - 0.45) / 0.45));
+       y solo al final cuaja la palabra. */
+    const form = Math.min(1, Math.max(0, (gather - 0.4) / 0.5));
     const suave = form * form * (3 - 2 * form);
 
+    /* El lienzo entra cuando las motas ya casi han llegado: primero se ve el
+       viaje, después el trazo termina de cerrarse. */
+    const nitidez = Math.min(1, Math.max(0, (suave - 0.25) / 0.6));
+    if (wordCanvas && suave > 0.02) {
+      ctx.globalAlpha = nitidez * nitidez;
+      ctx.drawImage(wordCanvas, wordBox.x, wordBox.y, wordBox.w, wordBox.h);
+    }
+
+    // --- Las motas que viajan ---
+    if (suave > 0.004 && motas.length > 0) {
+      const lado = cellPx;
+      const mitad = lado / 2;
+      /* Las motas llevan el viaje; cuando el trazo fino ya está, se apagan
+         para no engordarle los cantos con sus celdas grandes. */
+      ctx.globalAlpha = suave * (1 - nitidez * 0.88);
+
+      for (const grupo of grupos) {
+        ctx.fillStyle = grupo.estilo;
+        ctx.beginPath();
+        for (const i of grupo.indices) {
+          const m = motas[i]!;
+          // Cada mota arranca con su retraso: el trazo se va rellenando
+          const t = Math.min(1, Math.max(0, (suave - m.delay) / (1 - m.delay)));
+          const e = t * t * (3 - 2 * t);
+          const x = m.sx + (m.tx - m.sx) * e;
+          const y = m.sy + (m.ty - m.sy) * e;
+          /* Sin cuadrar a píxel: a este tamaño el suavizado del canvas une
+             las celdas, y redondear volvía a abrir la rejilla. */
+          ctx.rect(x - mitad, y - mitad, lado, lado);
+        }
+        ctx.fill();
+      }
+    }
+
+    // --- Los pétalos ---
     for (const p of petals) {
       const x = p.x + p.rx;
       const y = p.y + p.ry;
@@ -570,20 +716,14 @@ function setupParticles() {
       const b = p.free[2] + (p.word[2] - p.free[2]) * suave;
       ctx.fillStyle = `rgb(${r | 0}, ${g | 0}, ${b | 0})`;
 
-      // Sueltos son polvo tenue; formados, trazo sólido
-      ctx.globalAlpha = p.a * twinkle * (1 - suave) + suave * 0.95;
-
-      const ancho = p.r * 1.9 + (cellPx - p.r * 1.9) * suave;
-      const alto = p.r * 0.85 + (cellPx - p.r * 0.85) * suave;
+      /* Formados se apagan: el trazo lo pone el polvo fino y los pétalos
+         solo le dan vida por encima. */
+      ctx.globalAlpha = p.a * twinkle * (1 - suave * 0.55);
 
       ctx.beginPath();
-      if (suave < 0.5 || !rounded) {
-        ctx.ellipse(x, y, ancho, alto, p.angle * (1 - suave), 0, Math.PI * 2);
-      } else {
-        // Celdas cuadradas que se tocan: sin ellas la letra sale punteada
-        const radio = Math.min(ancho, alto) * (0.5 - 0.34 * suave);
-        ctx.roundRect(x - ancho / 2, y - alto / 2, ancho, alto, radio);
-      }
+      const ancho = p.r * (1.9 - suave * 1.0);
+      const alto = p.r * (0.85 + suave * 0.05);
+      ctx.ellipse(x, y, ancho, alto, p.angle * (1 - suave), 0, Math.PI * 2);
       ctx.fill();
     }
 
