@@ -1,7 +1,6 @@
 ---
 import '@fontsource-variable/space-grotesk';
 import DemoLayout from '../../../layouts/DemoLayout.astro';
-import { withBase } from '../../../lib/base';
 
 /* Plantilla vertical tipo "enlace en la biografía": se consume entera con el
    pulgar, así que todo va en una columna y cada bloque es un objetivo grande.
@@ -46,13 +45,12 @@ const formatos = [
   <main class="page">
     <header class="hero">
       <div class="cover">
-        <img
-          src={withBase('/demos/influencer.webp')}
-          alt=""
-          width="1400"
-          height="788"
-          fetchpriority="high"
-        />
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="5" width="18" height="14" rx="2" />
+          <circle cx="8.5" cy="10" r="1.6" />
+          <path d="m4 17 5-4.5 3.5 3L16 12l4 4" />
+        </svg>
+        <span>Tu portada aquí · 1400 × 500</span>
       </div>
       <div class="avatar" aria-hidden="true">NF</div>
       <h1>Noa Ferrán</h1>
@@ -96,8 +94,12 @@ const formatos = [
           videos.map((video, i) => (
             <li>
               <a href="#marcas">
-                <span class={`thumb thumb-${i + 1}`} aria-hidden="true">
-                  <span class="play" />
+                <span class="thumb">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="3" y="5" width="18" height="14" rx="2" />
+                    <circle cx="8.5" cy="10" r="1.6" />
+                    <path d="m4 17 5-4.5 3.5 3L16 12l4 4" />
+                  </svg>
                   <span class="time">{video.time}</span>
                 </span>
                 <span class="video-text">
@@ -272,11 +274,31 @@ const formatos = [
     border-bottom-right-radius: 28px;
   }
 
-  /* Render propio hecho en Blender detrás del avatar */
-  .cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  /* Hueco de portada: dice qué imagen va y con qué medidas */
+  .cover {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 0.4rem;
+    border: 2px dashed rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .cover svg {
+    width: 28px;
+    height: 28px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.8;
+  }
+
+  .cover span {
+    font-size: 0.76rem;
   }
 
   .avatar {
@@ -480,25 +502,21 @@ const formatos = [
     display: grid;
     place-items: center;
     aspect-ratio: 16 / 10;
+    border: 1px dashed rgba(255, 255, 255, 0.2);
     border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--muted);
   }
 
-  .thumb-1 {
-    background: linear-gradient(140deg, #3d2b6b, #16172b);
-  }
-  .thumb-2 {
-    background: linear-gradient(140deg, #6b2b4a, #16172b);
-  }
-  .thumb-3 {
-    background: linear-gradient(140deg, #2b4d6b, #16172b);
-  }
-
-  .play {
-    width: 0;
-    height: 0;
-    border-left: 14px solid rgba(255, 255, 255, 0.92);
-    border-top: 9px solid transparent;
-    border-bottom: 9px solid transparent;
+  .thumb svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.7;
   }
 
   .time {

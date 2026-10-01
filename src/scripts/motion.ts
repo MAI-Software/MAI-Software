@@ -320,29 +320,15 @@ function setupParticles() {
 
   type Rgb = [number, number, number];
 
-  // Los tres colores de marca, para los pétalos sueltos
+  /* Los pétalos sueltos llevan los colores del logotipo, incluido el blanco
+     de la M: así, cuando se juntan, no hace falta "cambiarles" el color, solo
+     terminar de colocarlos. */
   const FREE_COLORS: Rgb[] = [
     [98, 66, 252],
     [56, 130, 251],
     [16, 200, 252],
+    [235, 240, 255],
   ];
-
-  // El degradado del logotipo, de violeta a cian de izquierda a derecha
-  const WORD_STOPS: Rgb[] = [
-    [98, 66, 252],
-    [56, 130, 251],
-    [16, 200, 252],
-  ];
-
-  const gradientAt = (t: number): Rgb => {
-    const clamped = Math.min(1, Math.max(0, t));
-    const span = 1 / (WORD_STOPS.length - 1);
-    const i = Math.min(WORD_STOPS.length - 2, Math.floor(clamped / span));
-    const k = (clamped - i * span) / span;
-    const a = WORD_STOPS[i]!;
-    const b = WORD_STOPS[i + 1]!;
-    return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k, a[2] + (b[2] - a[2]) * k];
-  };
 
   type Petal = {
     x: number;
@@ -375,118 +361,113 @@ function setupParticles() {
      maciza en vez de punteada. */
   let cellPx = 10;
   let dpr = 1;
-  /* La palabra nítida, rasterizada una sola vez con la tipografía real.
-     Los pétalos son el polvo que la acompaña; el trazo limpio lo pone esta
-     imagen, no la suma de partículas. */
-  let wordImage: HTMLCanvasElement | null = null;
+  /** Rectángulo que ocupa la palabra en pantalla; lo usa la dispersión. */
   let wordBox = { x: 0, y: 0, w: 0, h: 0 };
 
-  /* La forma sale de la tipografía real: se dibuja "MAI" en un lienzo aparte
-     y se leen los píxeles pintados. */
-  function wordTargets(count: number): { points: { x: number; y: number }[]; cell: number } {
-    const empty = { points: [] as { x: number; y: number }[], cell: 10 };
+  /* --- El logotipo como molde ---
+     Antes la palabra se redibujaba con la tipografía y se pintaba encima una
+     imagen: se notaba el pegote. Ahora se leen los píxeles del propio
+     logotipo de la web, y cada pétalo se queda con el color exacto del píxel
+     que le toca. El resultado formado es el logotipo, letra por letra. */
+  type LogoPixel = { x: number; y: number; c: Rgb };
+  let logoPixels: LogoPixel[] = [];
+  let logoW = 1;
+  let logoH = 1;
+
+  const readLogo = (img: HTMLImageElement) => {
     const off = document.createElement('canvas');
+    // Resolución de muestreo: suficiente para el filo de las letras
+    const scale = Math.min(1, 460 / (img.naturalWidth || 460));
+    off.width = Math.max(1, Math.round((img.naturalWidth || 398) * scale));
+    off.height = Math.max(1, Math.round((img.naturalHeight || 160) * scale));
     const octx = off.getContext('2d', { willReadFrequently: true });
-    if (!octx) return empty;
+    if (!octx) return;
+    octx.drawImage(img, 0, 0, off.width, off.height);
 
-    off.width = 900;
-    off.height = 360;
+    let data: Uint8ClampedArray;
+    try {
+      data = octx.getImageData(0, 0, off.width, off.height).data;
+    } catch {
+      return; // lienzo contaminado: sin palabra, pero los pétalos siguen
+    }
 
-    octx.fillStyle = '#fff';
-    octx.textAlign = 'center';
-    octx.textBaseline = 'middle';
-    octx.font = `700 260px 'Space Grotesk Variable', 'Space Grotesk', system-ui, sans-serif`;
-    octx.fillText('MAI', off.width / 2, off.height / 2);
-
-    const { data } = octx.getImageData(0, 0, off.width, off.height);
-    const filled = (x: number, y: number) => data[(y * off.width + x) * 4 + 3]! > 160;
-
-    // Rectángulo real de las letras: el texto no llena el lienzo
+    const pixels: LogoPixel[] = [];
     let minX = off.width;
     let maxX = 0;
     let minY = off.height;
     let maxY = 0;
-    let area = 0;
-    for (let y = 0; y < off.height; y += 2) {
-      for (let x = 0; x < off.width; x += 2) {
-        if (!filled(x, y)) continue;
-        area += 4;
+    for (let y = 0; y < off.height; y++) {
+      for (let x = 0; x < off.width; x++) {
+        const i = (y * off.width + x) * 4;
+        if (data[i + 3]! < 140) continue;
+        pixels.push({ x, y, c: [data[i]!, data[i + 1]!, data[i + 2]!] });
         if (x < minX) minX = x;
         if (x > maxX) maxX = x;
         if (y < minY) minY = y;
         if (y > maxY) maxY = y;
       }
     }
-    if (area === 0) return empty;
+    if (pixels.length === 0) return;
 
-    const gridStep = Math.max(2, Math.round(Math.sqrt(area / count)));
-    const cells: { x: number; y: number }[] = [];
-    for (let y = minY; y <= maxY; y += gridStep) {
-      for (let x = minX; x <= maxX; x += gridStep) {
-        if (filled(x, y)) cells.push({ x, y });
-      }
+    logoW = maxX - minX || 1;
+    logoH = maxY - minY || 1;
+    logoPixels = pixels.map((px) => ({ x: px.x - minX, y: px.y - minY, c: px.c }));
+  };
+
+  /** Reparte `count` destinos por el trazo del logotipo, con su color. */
+  function wordTargets(count: number): {
+    points: { x: number; y: number; c: Rgb }[];
+    cell: number;
+  } {
+    if (logoPixels.length === 0) return { points: [], cell: 10 };
+
+    const scale = Math.min((w * 0.52) / logoW, (h * 0.34) / logoH);
+    const left = (w - logoW * scale) / 2;
+    const top = (h - logoH * scale) / 2;
+    wordBox = { x: left, y: top, w: logoW * scale, h: logoH * scale };
+
+    /* Un pétalo por celda: el paso sale de repartir el área pintada entre
+       los pétalos disponibles, así se cubre el trazo sin amontonar. */
+    const step = Math.max(1, Math.round(Math.sqrt(logoPixels.length / count)));
+    const vistos = new Set<number>();
+    const elegidos: LogoPixel[] = [];
+    for (const px of logoPixels) {
+      const cx = Math.floor(px.x / step);
+      const cy = Math.floor(px.y / step);
+      const clave = cy * 4096 + cx;
+      if (vistos.has(clave)) continue;
+      vistos.add(clave);
+      elegidos.push(px);
     }
-    if (cells.length === 0) return empty;
+    if (elegidos.length === 0) return { points: [], cell: 10 };
 
-    const glyphW = maxX - minX || 1;
-    const glyphH = maxY - minY || 1;
-    const scale = Math.min((w * 0.54) / glyphW, (h * 0.34) / glyphH);
-    const left = (w - glyphW * scale) / 2;
-    const top = (h - glyphH * scale) / 2;
-
+    /* Reparto a zancadas: coger los `count` primeros dejaría sin formar la
+       mitad de abajo del logotipo cuando sobran celdas. */
     const points = Array.from({ length: count }, (_, i) => {
-      const cell = cells[i % cells.length]!;
+      const px = elegidos[Math.floor((i * elegidos.length) / count) % elegidos.length]!;
       return {
-        x: left + (cell.x - minX) * scale,
-        y: top + (cell.y - minY) * scale,
+        x: left + px.x * scale,
+        y: top + px.y * scale,
+        c: px.c,
       };
     });
 
-    /* Se recorta el trazo a su rectángulo y se guarda a resolución de
-       pantalla: así la palabra sale con el filo de la tipografía. */
-    const box = { x: left, y: top, w: glyphW * scale, h: glyphH * scale };
-    const wc = document.createElement('canvas');
-    wc.width = Math.max(1, Math.round(box.w * dpr));
-    wc.height = Math.max(1, Math.round(box.h * dpr));
-    const wctx = wc.getContext('2d');
-    if (wctx) {
-      wctx.drawImage(
-        off,
-        minX,
-        minY,
-        glyphW,
-        glyphH,
-        0,
-        0,
-        wc.width,
-        wc.height,
-      );
-      // El blanco del muestreo se tiñe con el degradado de marca
-      wctx.globalCompositeOperation = 'source-in';
-      const grad = wctx.createLinearGradient(0, 0, wc.width, 0);
-      grad.addColorStop(0, 'rgb(98, 66, 252)');
-      grad.addColorStop(0.52, 'rgb(56, 130, 251)');
-      grad.addColorStop(1, 'rgb(16, 200, 252)');
-      wctx.fillStyle = grad;
-      wctx.fillRect(0, 0, wc.width, wc.height);
-    }
-    wordImage = wc;
-    wordBox = box;
-
-    return { points, cell: gridStep * scale };
+    // 1.12: las celdas se solapan un poco y el trazo sale macizo
+    return { points, cell: Math.max(2, step * scale * 1.12) };
   }
 
   /** Cuántos pétalos aguanta el aparato sin despeinarse. */
   function petalBudget() {
     const area = w * h;
     const memory = (navigator as { deviceMemory?: number }).deviceMemory ?? 4;
-    let count = Math.round(area / 1400);
+    // Más pétalos que antes: el trazo del logotipo se compone con ellos
+    let count = Math.round(area / 1000);
 
     if (!finePointer) count = Math.round(count * 0.7); // táctil: menos GPU
     if (memory <= 2) count = Math.round(count * 0.5);
     else if (memory <= 4) count = Math.round(count * 0.75);
 
-    return Math.min(1000, Math.max(220, count));
+    return Math.min(1600, Math.max(320, count));
   }
 
   const build = () => {
@@ -527,18 +508,13 @@ function setupParticles() {
     const targets = points.sort((a, b) => a.x - b.x);
     const order = petals.map((_, i) => i).sort((a, b) => petals[a]!.x - petals[b]!.x);
 
-    const xs = targets.map((t) => t.x);
-    const minTx = xs.length ? Math.min(...xs) : 0;
-    const maxTx = xs.length ? Math.max(...xs) : 1;
-    const spanTx = maxTx - minTx || 1;
-
     order.forEach((petalIndex, i) => {
       const petal = petals[petalIndex]!;
       const target = targets[i];
       petal.tx = target ? target.x : petal.x;
       petal.ty = target ? target.y : petal.y;
-      // Su color dentro de la palabra depende de dónde cae en el degradado
-      petal.word = gradientAt((petal.tx - minTx) / spanTx);
+      // El color sale del píxel del logotipo que le toca, no de un degradado
+      petal.word = target ? target.c : petal.free;
     });
   };
 
@@ -578,31 +554,36 @@ function setupParticles() {
   const draw = (time: number, gather: number) => {
     ctx.clearRect(0, 0, w, h);
 
-    /* La palabra aparece cuando los pétalos ya están casi en su sitio, así
-       parece que ellos la componen. Translúcida: es fondo, no contenido. */
-    if (wordImage && gather > 0.5) {
-      const reveal = Math.min(1, (gather - 0.5) / 0.35);
-      ctx.globalAlpha = reveal * 0.26;
-      ctx.drawImage(wordImage, wordBox.x, wordBox.y, wordBox.w, wordBox.h);
-    }
+    /* `form` va por detrás de `gather`: los pétalos primero llegan a su sitio
+       y solo al final se cuadran y se encienden. Así la palabra "cuaja" en
+       vez de aparecer de golpe. */
+    const form = Math.min(1, Math.max(0, (gather - 0.45) / 0.45));
+    const suave = form * form * (3 - 2 * form);
 
     for (const p of petals) {
       const x = p.x + p.rx;
       const y = p.y + p.ry;
       const twinkle = 0.85 + 0.15 * Math.sin(time / 3200 + p.phase);
 
-      const r = p.free[0] + (p.word[0] - p.free[0]) * gather;
-      const g = p.free[1] + (p.word[1] - p.free[1]) * gather;
-      const b = p.free[2] + (p.word[2] - p.free[2]) * gather;
+      const r = p.free[0] + (p.word[0] - p.free[0]) * suave;
+      const g = p.free[1] + (p.word[1] - p.free[1]) * suave;
+      const b = p.free[2] + (p.word[2] - p.free[2]) * suave;
       ctx.fillStyle = `rgb(${r | 0}, ${g | 0}, ${b | 0})`;
 
-      // Formados bajan de intensidad: el protagonismo es del trazo limpio
-      ctx.globalAlpha = p.a * twinkle * (1 - gather * 0.35);
+      // Sueltos son polvo tenue; formados, trazo sólido
+      ctx.globalAlpha = p.a * twinkle * (1 - suave) + suave * 0.95;
+
+      const ancho = p.r * 1.9 + (cellPx - p.r * 1.9) * suave;
+      const alto = p.r * 0.85 + (cellPx - p.r * 0.85) * suave;
 
       ctx.beginPath();
-      const long = p.r * (1.9 - gather * 0.9);
-      const short = p.r * (0.85 + gather * 0.15);
-      ctx.ellipse(x, y, long, short, p.angle * (1 - gather), 0, Math.PI * 2);
+      if (suave < 0.5 || !rounded) {
+        ctx.ellipse(x, y, ancho, alto, p.angle * (1 - suave), 0, Math.PI * 2);
+      } else {
+        // Celdas cuadradas que se tocan: sin ellas la letra sale punteada
+        const radio = Math.min(ancho, alto) * (0.5 - 0.34 * suave);
+        ctx.roundRect(x - ancho / 2, y - alto / 2, ancho, alto, radio);
+      }
       ctx.fill();
     }
 
@@ -716,9 +697,27 @@ function setupParticles() {
     else start();
   };
 
-  // La palabra se muestrea con la tipografía de marca: hay que esperarla
-  if (document.fonts?.ready) void document.fonts.ready.then(boot);
-  else boot();
+  /* El molde es el logotipo. Se reutiliza el que ya está en la cabecera —misma
+     URL, así sale de la caché— y, cuando se puede leer, se reconstruyen los
+     destinos. Hasta entonces los pétalos vuelan sueltos. */
+  const cargarLogo = () => {
+    const enCabecera = document.querySelector<HTMLImageElement>('.logo-link img');
+    const src = enCabecera?.currentSrc || `${import.meta.env.BASE_URL}brand/logo-light.webp`;
+    const img = new Image();
+    img.decoding = 'async';
+    img.src = src;
+
+    const listo = () => {
+      readLogo(img);
+      if (logoPixels.length > 0 && w > 0) build();
+    };
+
+    if (img.complete && img.naturalWidth > 0) listo();
+    else img.addEventListener('load', listo, { once: true });
+  };
+
+  boot();
+  cargarLogo();
 
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) stop();
