@@ -1,0 +1,1452 @@
+---
+import DemoLayout from '../../../layouts/DemoLayout.astro';
+
+/* Plantilla de clínica de medicina estética. Es el caso de negocio con más
+   margen de todos los de la lista, así que la página está montada para una
+   sola cosa: que alguien pida una valoración. Precio desde en cada
+   tratamiento, financiación a la vista, equipo con número de colegiado y
+   prueba social por todas partes. Nada de promesas médicas. */
+
+const confianza = [
+  { dato: '12 años', pie: 'abiertos en Valencia' },
+  { dato: '9.400', pie: 'tratamientos realizados' },
+  { dato: '4,9/5', pie: 'en 486 reseñas' },
+  { dato: '3 médicos', pie: 'colegiados en plantilla' },
+];
+
+const tratamientos = [
+  {
+    nombre: 'Ácido hialurónico',
+    zona: 'Labios, surcos, pómulos',
+    texto: 'Relleno reabsorbible para dar volumen o suavizar un surco marcado. Se ve el resultado el mismo día.',
+    desde: '290 €',
+    sesion: '30 min · sin baja',
+    popular: true,
+  },
+  {
+    nombre: 'Toxina botulínica',
+    zona: 'Frente, entrecejo, patas de gallo',
+    texto: 'Relaja el músculo que marca la arruga de expresión. Efecto completo a los 15 días.',
+    desde: '190 €',
+    sesion: '20 min · sin baja',
+  },
+  {
+    nombre: 'Láser de diodo',
+    zona: 'Depilación médica',
+    texto: 'Sesiones espaciadas seis semanas, con enfriamiento para que no duela más de la cuenta.',
+    desde: '45 €',
+    sesion: '15-60 min · por zona',
+  },
+  {
+    nombre: 'Peeling médico',
+    zona: 'Manchas y textura',
+    texto: 'Renueva la capa superficial de la piel. Tres o cuatro días de descamación.',
+    desde: '160 €',
+    sesion: '45 min',
+  },
+  {
+    nombre: 'Hilos tensores',
+    zona: 'Óvalo facial y cuello',
+    texto: 'Reposicionan el tejido sin cirugía. Resultado progresivo durante dos meses.',
+    desde: '690 €',
+    sesion: '60 min · 48 h de reposo',
+  },
+  {
+    nombre: 'Mesoterapia capilar',
+    zona: 'Caída del cabello',
+    texto: 'Infiltraciones con factores de crecimiento. Protocolo de ocho sesiones.',
+    desde: '120 €',
+    sesion: '30 min · por sesión',
+  },
+];
+
+const casos = [
+  { titulo: 'Relleno de surcos', detalle: 'Mujer, 46 años · resultado a los 7 días' },
+  { titulo: 'Perfilado de labios', detalle: 'Mujer, 31 años · resultado inmediato' },
+  { titulo: 'Tratamiento de manchas', detalle: 'Hombre, 52 años · 3 sesiones' },
+];
+
+const tecnologia = [
+  { nombre: 'Láser de diodo 808 nm', nota: 'Con punta de zafiro refrigerada' },
+  { nombre: 'Radiofrecuencia fraccionada', nota: 'Para flacidez y textura' },
+  { nombre: 'Análisis facial 3D', nota: 'Simulación antes de tocar nada' },
+  { nombre: 'Cabina de luz LED', nota: 'Recuperación tras sesión' },
+];
+
+const equipo = [
+  { n: 'Dra. Carla Vidal', r: 'Directora médica · Medicina estética', c: 'col. 46/0012345', e: '14 años · facial avanzado' },
+  { n: 'Dr. Pablo Serrano', r: 'Medicina estética y capilar', c: 'col. 46/0067890', e: '9 años · tricología' },
+  { n: 'Nerea Ávila', r: 'Enfermera especialista', c: 'col. 46/0045612', e: '7 años · láser y cuidados' },
+];
+
+const financiacion = [
+  { importe: '690 €', cuota: '57,50 €/mes', plazo: '12 meses sin intereses' },
+  { importe: '1.200 €', cuota: '100 €/mes', plazo: '12 meses sin intereses' },
+  { importe: '2.400 €', cuota: '66,67 €/mes', plazo: '36 meses con financiera' },
+];
+
+const resenas = [
+  {
+    t: 'Fui con miedo a salir con cara rara y es justo lo contrario: se nota que descansé, no que me hice algo. La doctora me quitó dos cosas del presupuesto que según ella no hacían falta.',
+    a: 'Marta L.',
+    f: 'hace 3 semanas',
+  },
+  {
+    t: 'Llevo dos años haciéndome la depilación aquí. Siempre la misma enfermera, siempre puntual y el precio es el que pone en la web, sin sorpresas.',
+    a: 'Elena P.',
+    f: 'hace 1 mes',
+  },
+  {
+    t: 'Vine por la caída del pelo y me explicaron lo que sí y lo que no iba a conseguir. Agradezco que no me vendieran humo.',
+    a: 'Andrés C.',
+    f: 'hace 2 meses',
+  },
+];
+
+const pasos = [
+  { t: 'Valoración gratuita', d: 'Media hora con un médico, análisis facial y presupuesto cerrado por escrito.' },
+  { t: 'Decides sin prisa', d: 'Te llevas el plan a casa. Ni descuentos que caducan mañana ni llamadas de insistencia.' },
+  { t: 'Sesión', d: 'Con el mismo profesional que te valoró, en consulta y con material de un solo uso.' },
+  { t: 'Revisión incluida', d: 'A los 15 días, para ajustar lo que haga falta sin coste añadido.' },
+];
+
+const preguntas = [
+  {
+    q: '¿La valoración tiene coste?',
+    a: 'No. Incluye análisis facial, plan de tratamiento y presupuesto cerrado por escrito. Si decides no hacer nada, no pagas nada.',
+  },
+  {
+    q: '¿Duele?',
+    a: 'Depende del tratamiento. En rellenos usamos anestesia tópica y producto con lidocaína; en láser, punta refrigerada. Si en algún momento duele más de lo tolerable, se para.',
+  },
+  {
+    q: '¿Cuánto dura el resultado?',
+    a: 'El ácido hialurónico entre 9 y 14 meses según la zona, la toxina entre 4 y 6 meses. Te damos el rango real en la valoración, no el mejor de los casos.',
+  },
+  {
+    q: '¿Se puede financiar?',
+    a: 'Sí: hasta 12 meses sin intereses con la clínica y hasta 36 con financiera. Se firma antes de empezar, con el cuadro de cuotas delante.',
+  },
+  {
+    q: '¿Qué pasa si no me gusta el resultado?',
+    a: 'En la revisión de los 15 días se ajusta lo que se pueda ajustar. El ácido hialurónico, además, es reversible: se disuelve en consulta.',
+  },
+];
+---
+
+<DemoLayout
+  title="Clínica Aurea · medicina estética en Valencia"
+  description="Plantilla de ejemplo: web para clínica de medicina estética con tratamientos, precios, financiación, equipo médico y valoración gratuita."
+>
+  <div class="site">
+    <header class="top">
+      <a class="brand" href="#inicio">
+        <span class="mark" aria-hidden="true"></span>
+        <span class="brand-text">
+          Clínica Aurea
+          <small>Medicina estética · Valencia</small>
+        </span>
+      </a>
+      <nav aria-label="Principal">
+        <a href="#tratamientos">Tratamientos</a>
+        <a href="#casos">Resultados</a>
+        <a href="#equipo">Equipo</a>
+        <a href="#financiacion">Financiación</a>
+        <a href="#preguntas">Preguntas</a>
+      </nav>
+      <div class="top-actions">
+        <a class="tel" href="tel:+34960000000">960 000 000</a>
+        <a class="btn" href="#cita">Valoración gratuita</a>
+      </div>
+    </header>
+
+    <section class="hero" id="inicio">
+      <div class="hero-text">
+        <p class="chip"><span class="dot" aria-hidden="true"></span>Valoración médica sin coste</p>
+        <h1>Que se note que descansas, no que te has hecho algo.</h1>
+        <p class="lead">
+          Medicina estética facial y corporal con médicos colegiados, precio cerrado por
+          escrito y revisión incluida. Si algo no te hace falta, te lo decimos.
+        </p>
+        <div class="hero-actions">
+          <a class="btn big" href="#cita">Pedir valoración gratuita</a>
+          <a class="btn ghost big" href="#tratamientos">Ver tratamientos y precios</a>
+        </div>
+        <p class="hero-nota">Respuesta en menos de 2 horas en horario de clínica</p>
+      </div>
+
+      <div class="hueco hueco-hero">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="5" width="18" height="14" rx="2" />
+          <circle cx="8.5" cy="10" r="1.6" />
+          <path d="m4 17 5-4.5 3.5 3L16 12l4 4" />
+        </svg>
+        <span>Tu foto aquí · consulta o equipo, 1200 × 900</span>
+      </div>
+    </section>
+
+    <section class="confianza" aria-label="La clínica en cifras">
+      {
+        confianza.map((c) => (
+          <div>
+            <strong>{c.dato}</strong>
+            <span>{c.pie}</span>
+          </div>
+        ))
+      }
+    </section>
+
+    <section class="tratamientos" id="tratamientos">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Tratamientos</p>
+          <h2>Con su precio de partida y lo que dura la sesión</h2>
+        </div>
+        <p class="sec-note">
+          El precio final sale de la valoración y se entrega por escrito. Ningún tratamiento
+          se empieza el mismo día de la primera visita.
+        </p>
+      </header>
+
+      <div class="grid">
+        {
+          tratamientos.map((t) => (
+            <article class:list={['card', { destacada: t.popular }]}>
+              {t.popular && <span class="etiqueta">El más pedido</span>}
+              <p class="zona">{t.zona}</p>
+              <h3>{t.nombre}</h3>
+              <p class="card-texto">{t.texto}</p>
+              <p class="card-meta">
+                <span class="desde">
+                  desde <strong>{t.desde}</strong>
+                </span>
+                <span class="sesion">{t.sesion}</span>
+              </p>
+              <a class="card-cta" href="#cita">
+                Pedir valoración <span aria-hidden="true">→</span>
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="casos" id="casos">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Resultados</p>
+          <h2>Antes y después de pacientes reales</h2>
+        </div>
+        <p class="sec-note">
+          Publicados siempre con permiso firmado. Cada caso indica edad y tiempo transcurrido,
+          porque sin eso una foto no dice nada.
+        </p>
+      </header>
+
+      <div class="casos-grid">
+        {
+          casos.map((caso) => (
+            <figure>
+              <div class="par">
+                <div class="hueco hueco-caso">
+                  <span class="etiqueta-foto">Antes</span>
+                </div>
+                <div class="hueco hueco-caso">
+                  <span class="etiqueta-foto">Después</span>
+                </div>
+              </div>
+              <figcaption>
+                <strong>{caso.titulo}</strong>
+                <span>{caso.detalle}</span>
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="proceso">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Cómo funciona</p>
+          <h2>De la valoración a la revisión, sin sorpresas</h2>
+        </div>
+      </header>
+      <ol class="pasos">
+        {
+          pasos.map((p, i) => (
+            <li>
+              <span class="num">{String(i + 1).padStart(2, '0')}</span>
+              <strong>{p.t}</strong>
+              <span>{p.d}</span>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="tecnologia">
+      <div class="tec-grid">
+        <div>
+          <p class="eyebrow">Equipamiento</p>
+          <h2>Con qué se trabaja</h2>
+          <p class="tec-texto">
+            Aparatología con marcado CE y mantenimiento al día. Si un tratamiento necesita
+            una tecnología que no tenemos, te lo decimos y te derivamos.
+          </p>
+        </div>
+        <ul>
+          {
+            tecnologia.map((t) => (
+              <li>
+                <strong>{t.nombre}</strong>
+                <span>{t.nota}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <section class="equipo" id="equipo">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Equipo</p>
+          <h2>Quién te va a tratar, con nombre y colegiado</h2>
+        </div>
+        <p class="sec-note">
+          Te atiende siempre el mismo profesional, desde la valoración hasta la revisión.
+        </p>
+      </header>
+      <div class="personas">
+        {
+          equipo.map((p) => (
+            <div class="persona">
+              <div class="hueco hueco-retrato">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="8.5" r="3.5" />
+                  <path d="M5 20c1.2-3.6 4-5.4 7-5.4s5.8 1.8 7 5.4" />
+                </svg>
+              </div>
+              <strong>{p.n}</strong>
+              <span class="rol">{p.r}</span>
+              <span class="col">{p.c}</span>
+              <span class="exp">{p.e}</span>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="financiacion" id="financiacion">
+      <div class="fin-grid">
+        <div>
+          <p class="eyebrow claro">Financiación</p>
+          <h2>Que el precio no decida por ti</h2>
+          <p class="fin-texto">
+            Hasta 12 meses sin intereses con la propia clínica y hasta 36 con financiera. Sin
+            comisión de apertura y sin penalización si cancelas antes.
+          </p>
+          <ul class="fin-puntos">
+            <li>Respuesta de financiera en el momento</li>
+            <li>Cuadro de cuotas firmado antes de empezar</li>
+            <li>Se puede combinar con bonos de sesiones</li>
+          </ul>
+        </div>
+        <div class="fin-tabla">
+          <p class="fin-titulo">Ejemplos</p>
+          <ul>
+            {
+              financiacion.map((f) => (
+                <li>
+                  <span>{f.importe}</span>
+                  <strong>{f.cuota}</strong>
+                  <small>{f.plazo}</small>
+                </li>
+              ))
+            }
+          </ul>
+          <p class="fin-nota">
+            Ejemplos orientativos sujetos a estudio. TAE 0 % en la modalidad de clínica.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="resenas">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Reseñas</p>
+          <h2>4,9 sobre 5 en 486 reseñas</h2>
+        </div>
+      </header>
+      <div class="resenas-grid">
+        {
+          resenas.map((r) => (
+            <blockquote>
+              <p class="estrellas" aria-label="5 sobre 5">
+                ★★★★★
+              </p>
+              <p>{r.t}</p>
+              <footer>
+                {r.a} · {r.f}
+              </footer>
+            </blockquote>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="regalo">
+      <div class="regalo-caja">
+        <div>
+          <p class="eyebrow">Bono regalo</p>
+          <h2>Regala una sesión, no un objeto más</h2>
+          <p>
+            Lo emitimos por el importe que quieras, sin caducidad y canjeable en cualquier
+            tratamiento. Te lo mandamos en PDF para imprimir o enviar por mensaje.
+          </p>
+        </div>
+        <a class="btn" href="#cita">Quiero un bono regalo</a>
+      </div>
+    </section>
+
+    <section class="preguntas" id="preguntas">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Preguntas frecuentes</p>
+          <h2>Lo que preguntáis antes de venir</h2>
+        </div>
+      </header>
+      <div class="faq">
+        {
+          preguntas.map((p, i) => (
+            <details open={i === 0}>
+              <summary>{p.q}</summary>
+              <p>{p.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="cita" id="cita">
+      <div class="cita-grid">
+        <div>
+          <p class="eyebrow claro">Valoración gratuita</p>
+          <h2>Media hora con un médico, sin compromiso</h2>
+          <p class="cita-texto">
+            Déjanos tus datos y te llamamos para darte hora, normalmente el mismo día. Si
+            prefieres, llama tú o escríbenos por WhatsApp.
+          </p>
+          <a class="tel-grande" href="tel:+34960000000">960 000 000</a>
+          <div class="donde">
+            <p><strong>Calle de la Paz 18, Valencia</strong></p>
+            <p>Lunes a viernes 10:00 – 20:30 · Sábados 10:00 – 14:00</p>
+            <p>Metro Colón · Parking concertado a 80 m</p>
+          </div>
+        </div>
+
+        <form>
+          <label>
+            Nombre
+            <input type="text" placeholder="Nombre y apellidos" required />
+          </label>
+          <label>
+            Teléfono
+            <input type="tel" placeholder="600 000 000" required />
+          </label>
+          <label class="ancho">
+            Qué te interesa
+            <select>
+              {tratamientos.map((t) => <option>{t.nombre}</option>)}
+              <option>No lo tengo claro, quiero que me asesoren</option>
+            </select>
+          </label>
+          <label class="ancho">
+            Cuándo te viene bien
+            <span class="chips">
+              <span>Mañanas</span>
+              <span>Mediodía</span>
+              <span>Tardes</span>
+              <span>Sábado</span>
+            </span>
+          </label>
+          <label class="ancho">
+            Algo que debamos saber
+            <textarea rows="3" placeholder="Tratamientos previos, alergias, medicación…"></textarea>
+          </label>
+          <button type="button">Pedir valoración gratuita</button>
+          <p class="form-nota">
+            Te llamamos para confirmar. Tus datos no se usan para publicidad.
+          </p>
+        </form>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <div>
+        <p class="foot-brand">Clínica Aurea</p>
+        <p>Calle de la Paz 18, Valencia · 960 000 000 · hola@clinicaaurea.es</p>
+        <p class="mini-legal">
+          Centro sanitario autorizado nº 00000. Los tratamientos médicos requieren valoración
+          previa y no garantizan un resultado concreto.
+        </p>
+      </div>
+      <p class="mini">Plantilla de ejemplo. Nombres, precios, profesionales y reseñas son ficticios.</p>
+    </footer>
+
+    <div class="barra-movil">
+      <a class="btn ghost" href="tel:+34960000000">Llamar</a>
+      <a class="btn" href="#cita">Valoración gratis</a>
+    </div>
+  </div>
+</DemoLayout>
+
+<style>
+  .site {
+    --tinta: #1d1724;
+    --oro: #b08b4f;
+    --oro-claro: #d8bb86;
+    --crema: #faf7f3;
+    --crema-2: #f1ebe3;
+    --suave: #6d6477;
+    --linea: rgba(29, 23, 36, 0.12);
+
+    background: var(--crema);
+    color: var(--tinta);
+    font-family: 'Optima', 'Avenir Next', system-ui, sans-serif;
+    padding-bottom: 5.5rem;
+  }
+
+  .top {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 0.85rem clamp(1.1rem, 4vw, 3.5rem);
+    background: rgba(250, 247, 243, 0.95);
+    border-bottom: 1px solid var(--linea);
+    backdrop-filter: blur(10px);
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    text-decoration: none;
+  }
+
+  .mark {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(140deg, var(--oro-claro), var(--oro));
+  }
+
+  .brand-text {
+    display: grid;
+    font-size: 1.08rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 1.15;
+  }
+
+  .brand-text small {
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--suave);
+  }
+
+  .top nav {
+    display: none;
+    gap: 1.4rem;
+    font-size: 0.92rem;
+  }
+
+  .top nav a {
+    color: var(--suave);
+    text-decoration: none;
+  }
+
+  .top nav a:hover {
+    color: var(--oro);
+  }
+
+  .top-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .tel {
+    display: none;
+    font-size: 0.92rem;
+    color: var(--suave);
+    text-decoration: none;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 0 1.3rem;
+    border-radius: 999px;
+    background: var(--tinta);
+    color: var(--crema);
+    font-size: 0.93rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.15s ease, background-color 0.15s ease;
+  }
+
+  .btn:hover {
+    transform: translateY(-1px);
+    background: #2c2335;
+  }
+
+  .btn.ghost {
+    background: transparent;
+    border: 1px solid var(--linea);
+    color: var(--tinta);
+  }
+
+  .btn.big {
+    min-height: 54px;
+    padding: 0 1.9rem;
+    font-size: 1rem;
+  }
+
+  section {
+    padding: clamp(2.6rem, 6vw, 4.5rem) clamp(1.1rem, 4vw, 3.5rem);
+  }
+
+  /* --- Portada --- */
+  .hero {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 1.2rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    background: rgba(176, 139, 79, 0.14);
+    color: #8a6a35;
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--oro);
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(2rem, 4.4vw, 3.3rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    max-width: 17ch;
+  }
+
+  .lead {
+    max-width: 50ch;
+    color: var(--suave);
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 1.8rem;
+  }
+
+  .hero-nota {
+    margin: 1rem 0 0;
+    font-size: 0.85rem;
+    color: var(--suave);
+  }
+
+  /* --- Huecos de imagen --- */
+  .hueco {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 0.5rem;
+    aspect-ratio: 4 / 3;
+    border: 2px dashed rgba(29, 23, 36, 0.22);
+    border-radius: 18px;
+    background: rgba(29, 23, 36, 0.035);
+    color: var(--suave);
+    text-align: center;
+  }
+
+  .hueco svg {
+    width: 32px;
+    height: 32px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.7;
+  }
+
+  .hueco span {
+    font-size: 0.8rem;
+  }
+
+  .hueco-caso {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    border-radius: 14px;
+  }
+
+  .etiqueta-foto {
+    position: absolute;
+    top: 0.6rem;
+    left: 0.6rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(29, 23, 36, 0.75);
+    color: var(--crema);
+    font-size: 0.7rem;
+  }
+
+  .hueco-retrato {
+    aspect-ratio: 1;
+    width: 72px;
+    border-radius: 50%;
+    border-width: 1px;
+    margin-bottom: 0.7rem;
+  }
+
+  .hueco-retrato svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  /* --- Cifras --- */
+  .confianza {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    padding-block: 0;
+  }
+
+  .confianza div {
+    display: grid;
+    gap: 0.15rem;
+    padding: 1.1rem 1.3rem;
+    border-radius: 14px;
+    background: #fff;
+    border: 1px solid var(--linea);
+  }
+
+  .confianza strong {
+    font-size: 1.5rem;
+    color: var(--oro);
+  }
+
+  .confianza span {
+    font-size: 0.85rem;
+    color: var(--suave);
+  }
+
+  /* --- Secciones --- */
+  .eyebrow {
+    margin: 0;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--oro);
+  }
+
+  .eyebrow.claro {
+    color: rgba(250, 247, 243, 0.8);
+  }
+
+  .sec-head {
+    display: grid;
+    gap: 0.7rem;
+    margin-bottom: 2.2rem;
+  }
+
+  h2 {
+    margin: 0.3rem 0 0;
+    font-size: clamp(1.6rem, 3.3vw, 2.3rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    max-width: 24ch;
+  }
+
+  .sec-note {
+    margin: 0;
+    max-width: 48ch;
+    font-size: 0.92rem;
+    color: var(--suave);
+  }
+
+  .grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .card {
+    position: relative;
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+    padding: 1.6rem;
+    border-radius: 18px;
+    background: #fff;
+    border: 1px solid var(--linea);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 36px rgba(29, 23, 36, 0.1);
+  }
+
+  .card.destacada {
+    border-color: var(--oro);
+  }
+
+  .etiqueta {
+    position: absolute;
+    top: -0.7rem;
+    left: 1.6rem;
+    padding: 0.25rem 0.8rem;
+    border-radius: 999px;
+    background: var(--oro);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+
+  .zona {
+    margin: 0;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--suave);
+  }
+
+  .card h3 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+
+  .card-texto {
+    margin: 0;
+    color: var(--suave);
+    line-height: 1.6;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0.3rem 0 0;
+    font-size: 0.88rem;
+    color: var(--suave);
+  }
+
+  .desde strong {
+    font-size: 1.2rem;
+    color: var(--tinta);
+  }
+
+  .sesion {
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    background: var(--crema-2);
+    font-size: 0.76rem;
+  }
+
+  .card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 44px;
+    color: var(--oro);
+    font-weight: 600;
+    font-size: 0.92rem;
+    text-decoration: none;
+  }
+
+  /* --- Casos --- */
+  .casos {
+    background: var(--crema-2);
+  }
+
+  .casos-grid {
+    display: grid;
+    gap: 1.4rem;
+  }
+
+  .casos figure {
+    margin: 0;
+  }
+
+  .par {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+  }
+
+  .casos figcaption {
+    display: grid;
+    gap: 0.15rem;
+    margin-top: 0.8rem;
+  }
+
+  .casos figcaption span {
+    font-size: 0.85rem;
+    color: var(--suave);
+  }
+
+  /* --- Proceso --- */
+  .pasos {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pasos li {
+    display: grid;
+    gap: 0.3rem;
+    padding: 1.3rem;
+    border-radius: 16px;
+    background: #fff;
+    border: 1px solid var(--linea);
+  }
+
+  .num {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: var(--oro);
+  }
+
+  .pasos strong {
+    font-size: 1.05rem;
+  }
+
+  .pasos span:last-child {
+    color: var(--suave);
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+
+  /* --- Tecnología --- */
+  .tecnologia {
+    background: var(--tinta);
+    color: var(--crema);
+  }
+
+  .tecnologia h2 {
+    color: var(--crema);
+  }
+
+  .tec-grid {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .tec-texto {
+    max-width: 44ch;
+    color: rgba(250, 247, 243, 0.78);
+    line-height: 1.7;
+  }
+
+  .tecnologia ul {
+    display: grid;
+    gap: 0.8rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .tecnologia li {
+    display: grid;
+    gap: 0.15rem;
+    padding: 1rem 1.2rem;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .tecnologia li span {
+    font-size: 0.85rem;
+    color: rgba(250, 247, 243, 0.7);
+  }
+
+  /* --- Equipo --- */
+  .personas {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .persona {
+    display: grid;
+    gap: 0.25rem;
+    justify-items: start;
+    padding: 1.5rem;
+    border-radius: 18px;
+    background: #fff;
+    border: 1px solid var(--linea);
+  }
+
+  .rol,
+  .col,
+  .exp {
+    font-size: 0.86rem;
+    color: var(--suave);
+  }
+
+  .col {
+    font-size: 0.78rem;
+  }
+
+  /* --- Financiación --- */
+  .financiacion {
+    background: linear-gradient(130deg, #2a2133 0%, #1d1724 60%);
+    color: var(--crema);
+  }
+
+  .financiacion h2 {
+    color: var(--crema);
+  }
+
+  .fin-grid {
+    display: grid;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .fin-texto {
+    max-width: 46ch;
+    color: rgba(250, 247, 243, 0.82);
+    line-height: 1.7;
+  }
+
+  .fin-puntos {
+    display: grid;
+    gap: 0.5rem;
+    margin: 1.4rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.92rem;
+    color: rgba(250, 247, 243, 0.85);
+  }
+
+  .fin-puntos li::before {
+    content: '✓';
+    margin-right: 0.5rem;
+    color: var(--oro-claro);
+    font-weight: 700;
+  }
+
+  .fin-tabla {
+    padding: 1.6rem;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+  }
+
+  .fin-titulo {
+    margin: 0 0 1rem;
+    font-weight: 600;
+  }
+
+  .fin-tabla ul {
+    display: grid;
+    gap: 0.9rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .fin-tabla li {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.2rem 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  }
+
+  .fin-tabla strong {
+    font-size: 1.15rem;
+    text-align: right;
+    color: var(--oro-claro);
+  }
+
+  .fin-tabla small {
+    grid-column: 1 / -1;
+    font-size: 0.78rem;
+    color: rgba(250, 247, 243, 0.65);
+  }
+
+  .fin-nota {
+    margin: 1.2rem 0 0;
+    font-size: 0.76rem;
+    color: rgba(250, 247, 243, 0.65);
+  }
+
+  /* --- Reseñas --- */
+  .resenas-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  blockquote {
+    margin: 0;
+    padding: 1.6rem;
+    border-radius: 18px;
+    background: #fff;
+    border: 1px solid var(--linea);
+  }
+
+  .estrellas {
+    margin: 0 0 0.6rem;
+    color: var(--oro);
+    letter-spacing: 0.1em;
+  }
+
+  blockquote p {
+    margin: 0;
+    line-height: 1.7;
+  }
+
+  blockquote footer {
+    margin-top: 1rem;
+    font-size: 0.84rem;
+    color: var(--suave);
+  }
+
+  /* --- Bono regalo --- */
+  .regalo {
+    padding-top: 0;
+  }
+
+  .regalo-caja {
+    display: grid;
+    gap: 1.4rem;
+    align-items: center;
+    padding: clamp(1.6rem, 4vw, 2.6rem);
+    border-radius: 22px;
+    background: linear-gradient(120deg, var(--oro) 0%, var(--oro-claro) 100%);
+    color: #2a2133;
+  }
+
+  .regalo-caja .eyebrow {
+    color: rgba(42, 33, 51, 0.7);
+  }
+
+  .regalo-caja h2 {
+    color: #2a2133;
+  }
+
+  .regalo-caja p {
+    margin: 0.6rem 0 0;
+    max-width: 52ch;
+    line-height: 1.65;
+  }
+
+  .regalo-caja .btn {
+    justify-self: start;
+    background: #2a2133;
+    color: var(--crema);
+  }
+
+  /* --- Preguntas --- */
+  .preguntas {
+    background: var(--crema-2);
+  }
+
+  .faq {
+    display: grid;
+    gap: 0.7rem;
+    max-width: 54rem;
+  }
+
+  details {
+    border: 1px solid var(--linea);
+    border-radius: 14px;
+    background: #fff;
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    min-height: 52px;
+    padding: 0.9rem 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  details p {
+    margin: 0;
+    padding: 0 1.2rem 1.1rem;
+    color: var(--suave);
+    line-height: 1.65;
+  }
+
+  /* --- Cita --- */
+  .cita {
+    background: var(--tinta);
+    color: var(--crema);
+  }
+
+  .cita h2 {
+    color: var(--crema);
+  }
+
+  .cita-grid {
+    display: grid;
+    gap: 2.2rem;
+  }
+
+  .cita-texto {
+    max-width: 44ch;
+    color: rgba(250, 247, 243, 0.8);
+    line-height: 1.7;
+  }
+
+  .tel-grande {
+    display: inline-block;
+    margin-top: 1.2rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--crema);
+    text-decoration: none;
+    border-bottom: 2px solid var(--oro);
+  }
+
+  .donde {
+    margin-top: 1.8rem;
+    font-size: 0.92rem;
+    color: rgba(250, 247, 243, 0.75);
+  }
+
+  .donde p {
+    margin: 0.2rem 0;
+  }
+
+  form {
+    display: grid;
+    gap: 1rem;
+    padding: clamp(1.3rem, 3vw, 2rem);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+  }
+
+  label {
+    display: grid;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+  }
+
+  input,
+  textarea,
+  select {
+    min-height: 48px;
+    padding: 0.8rem 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--crema);
+    font: inherit;
+  }
+
+  select option {
+    color: #1d1724;
+  }
+
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline: 2px solid var(--oro-claro);
+    outline-offset: 2px;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .chips span {
+    padding: 0.5rem 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 999px;
+    font-size: 0.88rem;
+    cursor: pointer;
+  }
+
+  button {
+    min-height: 54px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--oro);
+    color: #2a2133;
+    font: inherit;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .form-nota {
+    margin: 0;
+    font-size: 0.8rem;
+    color: rgba(250, 247, 243, 0.7);
+  }
+
+  /* --- Pie --- */
+  .foot {
+    display: grid;
+    gap: 0.8rem;
+    padding: 2.4rem clamp(1.1rem, 4vw, 3.5rem) 2rem;
+    font-size: 0.88rem;
+    color: var(--suave);
+  }
+
+  .foot p {
+    margin: 0;
+  }
+
+  .foot-brand {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--tinta);
+  }
+
+  .mini-legal {
+    margin-top: 0.6rem !important;
+    max-width: 70ch;
+    font-size: 0.76rem;
+  }
+
+  .mini {
+    font-size: 0.76rem;
+  }
+
+  .barra-movil {
+    position: fixed;
+    inset: auto 0 1.9rem 0;
+    z-index: 30;
+    display: flex;
+    gap: 0.6rem;
+    padding: 0.6rem 1rem;
+    background: rgba(250, 247, 243, 0.96);
+    border-top: 1px solid var(--linea);
+    backdrop-filter: blur(10px);
+  }
+
+  .barra-movil .btn {
+    flex: 1;
+  }
+
+  @media (min-width: 880px) {
+    .top nav,
+    .tel {
+      display: flex;
+    }
+
+    .hero {
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+
+    .confianza {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .sec-head {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 2rem;
+    }
+
+    .grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .casos-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .pasos {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .tec-grid {
+      grid-template-columns: 0.9fr 1.1fr;
+    }
+
+    .tecnologia ul {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .personas {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .fin-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .resenas-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .regalo-caja {
+      grid-template-columns: 1fr auto;
+    }
+
+    .cita-grid {
+      grid-template-columns: 0.9fr 1.1fr;
+      align-items: start;
+    }
+
+    form {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ancho,
+    button,
+    .form-nota {
+      grid-column: span 2;
+    }
+
+    .foot {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+    }
+
+    .barra-movil {
+      display: none;
+    }
+  }
+</style>

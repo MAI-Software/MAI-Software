@@ -31,6 +31,37 @@ const audiencia = [
   { label: '45 o más', valor: 6 },
 ];
 
+const campanas = [
+  { marca: 'Tebra Fit', dato: '+40 % en ventas', nota: 'Vídeo dedicado + 3 historias' },
+  { marca: 'Lumen Audio', dato: '18.400 clics', nota: 'Mención integrada de 90 s' },
+  { marca: 'Casa Pérez', dato: '2.100 códigos', nota: 'Campaña de 4 semanas' },
+];
+
+const comoTrabajo = [
+  { t: 'Me cuentas el producto', d: 'Y te digo en 48 h si encaja con lo que ve mi gente. Si no encaja, te lo digo.' },
+  { t: 'Guion consensuado', d: 'Lo escribo yo, lo revisas tú. Nada de leer un texto que no es mío.' },
+  { t: 'Publicación y datos', d: 'Te paso las métricas reales a los 7 y a los 30 días, con capturas.' },
+];
+
+const dudasMarca = [
+  {
+    q: '¿Cuánto tardas en publicar?',
+    a: 'Entre 10 y 20 días desde que recibo el producto, según el formato. Si tienes una fecha de lanzamiento, dímela y te confirmo si llego.',
+  },
+  {
+    q: '¿Puedo revisar el contenido antes?',
+    a: 'Sí: guion antes de grabar y montaje antes de publicar. Lo que no acepto es que me reescriban las frases, porque entonces se nota y no funciona.',
+  },
+  {
+    q: '¿Qué datos me pasas después?',
+    a: 'Visualizaciones, retención, clics al enlace y códigos usados, a los 7 y a los 30 días, con capturas de la plataforma.',
+  },
+  {
+    q: '¿Trabajas con exclusividad?',
+    a: 'Puedo comprometerme a no promocionar marcas del mismo sector durante un plazo pactado. Eso se presupuesta aparte.',
+  },
+];
+
 const formatos = [
   { t: 'Vídeo integrado', d: 'Mención de 60-90 s dentro de un vídeo del canal.', p: 'desde 900 €' },
   { t: 'Vídeo dedicado', d: 'Pieza completa sobre el producto, guion consensuado.', p: 'desde 2.200 €' },
@@ -169,6 +200,36 @@ const formatos = [
     </section>
 
     <section class="block">
+      <h2>Campañas recientes</h2>
+      <ul class="campanas">
+        {
+          campanas.map((c) => (
+            <li>
+              <span class="campana-marca">{c.marca}</span>
+              <strong>{c.dato}</strong>
+              <span class="campana-nota">{c.nota}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="block">
+      <h2>Cómo trabajo con marcas</h2>
+      <ol class="pasos">
+        {
+          comoTrabajo.map((p, i) => (
+            <li>
+              <span class="num">{String(i + 1).padStart(2, '0')}</span>
+              <strong>{p.t}</strong>
+              <span>{p.d}</span>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="block">
       <h2>Formatos y tarifas</h2>
       <ul class="formatos">
         {
@@ -186,6 +247,20 @@ const formatos = [
       <p class="nota">
         Packs a medida para campañas de más de un mes. Facturo como autónoma con IVA.
       </p>
+    </section>
+
+    <section class="block">
+      <h2>Dudas de las marcas</h2>
+      <div class="faq">
+        {
+          dudasMarca.map((d, i) => (
+            <details open={i === 0}>
+              <summary>{d.q}</summary>
+              <p>{d.a}</p>
+            </details>
+          ))
+        }
+      </div>
     </section>
 
     <section class="block contact" id="marcas">
@@ -707,6 +782,101 @@ const formatos = [
     margin: 1rem 0 0;
     font-size: 0.82rem;
     color: var(--muted);
+  }
+
+  /* --- Campañas y método --- */
+  .campanas {
+    display: grid;
+    gap: 0.7rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .campanas li {
+    display: grid;
+    gap: 0.15rem;
+    padding: 1.1rem 1.2rem;
+    border-radius: 16px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+
+  .campana-marca {
+    font-size: 0.74rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .campanas strong {
+    font-size: 1.35rem;
+    color: var(--accent);
+  }
+
+  .campana-nota {
+    font-size: 0.84rem;
+    color: var(--muted);
+  }
+
+  .pasos {
+    display: grid;
+    gap: 0.7rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pasos li {
+    display: grid;
+    gap: 0.25rem;
+    padding: 1.1rem 1.2rem;
+    border-radius: 16px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+
+  .num {
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: var(--accent-2);
+  }
+
+  .pasos span:last-child {
+    font-size: 0.86rem;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  /* --- Dudas --- */
+  .faq {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  details {
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--surface);
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    min-height: 52px;
+    padding: 0.85rem 1.15rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+  }
+
+  details p {
+    margin: 0;
+    padding: 0 1.15rem 1.05rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
   }
 
   /* --- Contacto --- */

@@ -39,19 +39,49 @@ export const demoTemplates: DemoTemplate[] = [
     accent: '#ff3d8b',
   },
   {
-    slug: 'restaurante',
-    name: { es: 'Web para restaurante', en: 'Restaurant website' },
-    sector: { es: 'Hostelería', en: 'Hospitality' },
+    slug: 'estetica',
+    name: { es: 'Web para clínica estética', en: 'Aesthetic clinic website' },
+    sector: { es: 'Medicina estética', en: 'Aesthetic medicine' },
     pitch: {
-      es: 'Carta, horarios, cómo llegar y reserva. Lo que la gente busca en el móvil a las nueve de la noche, sin PDF que no se pueda leer ni menú escondido en una foto.',
-      en: 'Menu, opening hours, directions and booking. What people look for on their phone at nine in the evening, with no unreadable PDF and no menu hidden inside a photo.',
+      es: 'La más completa de la lista, porque es donde más se juega: tratamientos con precio de partida, antes y después, equipo médico colegiado, financiación con cuotas y valoración gratuita a un clic.',
+      en: 'The most complete of the set, because it is where most is at stake: treatments with a starting price, before and after, licensed medical team, financing with instalments and a free consultation one click away.',
     },
     highlights: {
-      es: ['Carta por secciones, siempre legible', 'Horarios y cómo llegar', 'Reserva por teléfono o formulario'],
-      en: ['Menu by section, always legible', 'Hours and directions', 'Booking by phone or form'],
+      es: ['Precios y financiación a la vista', 'Antes y después con permiso', 'Valoración gratuita en dos pasos'],
+      en: ['Prices and financing up front', 'Before and after with consent', 'Free consultation in two steps'],
     },
     format: 'desktop',
-    accent: '#e0793a',
+    accent: '#b08b4f',
+  },
+  {
+    slug: 'dental',
+    name: { es: 'Web para clínica dental', en: 'Dental clinic website' },
+    sector: { es: 'Salud', en: 'Health' },
+    pitch: {
+      es: 'La que genera confianza: tratamientos explicados en cristiano, el equipo con nombre y titulación, financiación clara y una primera visita fácil de pedir.',
+      en: 'The one that builds trust: treatments explained in plain words, the team with names and credentials, clear financing and a first visit that is easy to book.',
+    },
+    highlights: {
+      es: ['Tratamientos explicados sin tecnicismos', 'Equipo, titulación y seguros', 'Primera visita y financiación'],
+      en: ['Treatments explained without jargon', 'Team, credentials and insurers', 'First visit and financing'],
+    },
+    format: 'desktop',
+    accent: '#3f8fd6',
+  },
+  {
+    slug: 'abogados',
+    name: { es: 'Web para despacho de abogados', en: 'Law firm website' },
+    sector: { es: 'Servicios jurídicos', en: 'Legal services' },
+    pitch: {
+      es: 'Quien busca abogado tiene un problema y prisa: teléfono de guardia arriba, áreas de práctica con casos concretos, resultados con cifras y honorarios explicados antes de llamar.',
+      en: 'Someone looking for a lawyer has a problem and no time: emergency line on top, practice areas with concrete cases, results with figures and fees explained before the call.',
+    },
+    highlights: {
+      es: ['Guardia 24 h en cabecera', 'Honorarios en tres formatos', 'Resultados con cifras y plazos'],
+      en: ['24 h line in the header', 'Fees in three formats', 'Results with figures and timelines'],
+    },
+    format: 'desktop',
+    accent: '#8c2f39',
   },
   {
     slug: 'masajes',
@@ -69,19 +99,19 @@ export const demoTemplates: DemoTemplate[] = [
     accent: '#6f9c76',
   },
   {
-    slug: 'dental',
-    name: { es: 'Web para clínica dental', en: 'Dental clinic website' },
-    sector: { es: 'Salud', en: 'Health' },
+    slug: 'restaurante',
+    name: { es: 'Web para restaurante', en: 'Restaurant website' },
+    sector: { es: 'Hostelería', en: 'Hospitality' },
     pitch: {
-      es: 'La que genera confianza: tratamientos explicados en cristiano, el equipo con nombre y titulación, financiación clara y una primera visita fácil de pedir.',
-      en: 'The one that builds trust: treatments explained in plain words, the team with names and credentials, clear financing and a first visit that is easy to book.',
+      es: 'Carta, horarios, cómo llegar y reserva. Lo que la gente busca en el móvil a las nueve de la noche, sin PDF que no se pueda leer ni menú escondido en una foto.',
+      en: 'Menu, opening hours, directions and booking. What people look for on their phone at nine in the evening, with no unreadable PDF and no menu hidden inside a photo.',
     },
     highlights: {
-      es: ['Tratamientos explicados sin tecnicismos', 'Equipo, titulación y seguros', 'Primera visita y financiación'],
-      en: ['Treatments explained without jargon', 'Team, credentials and insurers', 'First visit and financing'],
+      es: ['Carta por secciones, siempre legible', 'Horarios y cómo llegar', 'Reserva por teléfono o formulario'],
+      en: ['Menu by section, always legible', 'Hours and directions', 'Booking by phone or form'],
     },
     format: 'desktop',
-    accent: '#3f8fd6',
+    accent: '#e0793a',
   },
 ];
 

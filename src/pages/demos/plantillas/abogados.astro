@@ -1,0 +1,1314 @@
+---
+import DemoLayout from '../../../layouts/DemoLayout.astro';
+
+/* Plantilla de despacho de abogados. Quien busca abogado tiene un problema y
+   prisa: la página empieza por el teléfono y por decir en qué casos se puede
+   ayudar, no por la historia del despacho. Honorarios explicados, porque la
+   duda de "cuánto me va a costar" es la que frena la llamada. */
+
+const urgencias = '900 000 000';
+
+const confianza = [
+  { dato: '1998', pie: 'año de fundación' },
+  { dato: '2.400+', pie: 'procedimientos llevados' },
+  { dato: '9 abogados', pie: 'colegiados en plantilla' },
+  { dato: '24 h', pie: 'guardia para detenidos' },
+];
+
+const areas = [
+  {
+    nombre: 'Derecho laboral',
+    texto: 'Despidos, reclamaciones de cantidad, acoso, incapacidades y expedientes de regulación.',
+    casos: ['Despido improcedente', 'Reclamación de nóminas', 'Baja por accidente laboral'],
+    destacada: true,
+  },
+  {
+    nombre: 'Familia y herencias',
+    texto: 'Divorcios de mutuo acuerdo y contenciosos, custodia, pensiones, testamentos y particiones.',
+    casos: ['Divorcio', 'Modificación de medidas', 'Aceptación de herencia'],
+  },
+  {
+    nombre: 'Penal',
+    texto: 'Asistencia al detenido, delitos contra la seguridad vial, lesiones y delitos económicos.',
+    casos: ['Juicio rápido', 'Alcoholemia', 'Denuncia por lesiones'],
+  },
+  {
+    nombre: 'Bancario y consumo',
+    texto: 'Cláusulas abusivas, tarjetas revolving, hipotecas multidivisa y reclamaciones a aerolíneas.',
+    casos: ['Revolving', 'Gastos de hipoteca', 'Cancelación de vuelo'],
+  },
+  {
+    nombre: 'Civil y arrendamientos',
+    texto: 'Impagos de alquiler, desahucios, comunidades de propietarios y reclamaciones entre particulares.',
+    casos: ['Impago de alquiler', 'Vicios en la obra', 'Reclamación de deuda'],
+  },
+  {
+    nombre: 'Mercantil y empresa',
+    texto: 'Constitución de sociedades, contratos, morosidad, concursos y defensa de administradores.',
+    casos: ['Contrato mercantil', 'Reclamación a cliente moroso', 'Concurso de acreedores'],
+  },
+];
+
+const resultados = [
+  {
+    titulo: 'Despido declarado improcedente',
+    detalle: 'Indemnización de 38.400 € más salarios de tramitación. Juzgado de lo Social nº 4.',
+    plazo: '7 meses',
+  },
+  {
+    titulo: 'Tarjeta revolving anulada',
+    detalle: 'Devolución de 11.230 € en intereses por usura. Sentencia firme.',
+    plazo: '11 meses',
+  },
+  {
+    titulo: 'Custodia compartida',
+    detalle: 'Modificación de medidas con informe psicosocial favorable.',
+    plazo: '9 meses',
+  },
+];
+
+const honorarios = [
+  {
+    nombre: 'Primera consulta',
+    precio: 'Gratuita',
+    nota: '45 minutos, presencial o por videollamada',
+    detalle: ['Estudio de la documentación', 'Viabilidad real del caso', 'Presupuesto por escrito'],
+  },
+  {
+    nombre: 'Precio cerrado',
+    precio: 'desde 450 €',
+    nota: 'Para asuntos con recorrido previsible',
+    detalle: ['Divorcio de mutuo acuerdo', 'Reclamaciones de consumo', 'Contratos y herencias'],
+    destacado: true,
+  },
+  {
+    nombre: 'Cuota por resultado',
+    precio: '% pactado',
+    nota: 'Solo en reclamaciones de cantidad',
+    detalle: ['Sin provisión de fondos', 'Se cobra si se gana', 'Porcentaje firmado antes'],
+  },
+];
+
+const equipo = [
+  { n: 'Elisa Narváez', r: 'Socia directora · Laboral', c: 'col. 12.345 ICAM', e: '24 años de ejercicio' },
+  { n: 'Tomás Bermejo', r: 'Penal y procesal', c: 'col. 18.902 ICAM', e: '16 años · turno de guardia' },
+  { n: 'Lucía Ferrer', r: 'Familia y sucesiones', c: 'col. 21.773 ICAM', e: '11 años · mediación' },
+  { n: 'Ignacio Ruano', r: 'Bancario y consumo', c: 'col. 24.118 ICAM', e: '8 años · litigación masiva' },
+];
+
+const pasos = [
+  { t: 'Nos cuentas el caso', d: 'Por teléfono o en consulta. Trae lo que tengas: contratos, cartas, mensajes.' },
+  { t: 'Te decimos si hay caso', d: 'Con franqueza. Si no lo vemos viable, te lo decimos y no cobramos la consulta.' },
+  { t: 'Presupuesto por escrito', d: 'Honorarios, plazos previsibles y qué gastos adicionales puede haber.' },
+  { t: 'Llevamos el asunto', d: 'Con un abogado asignado al que puedes llamar, no una centralita.' },
+];
+
+const resenas = [
+  {
+    t: 'Me explicaron en la primera visita que mi caso era difícil y qué podíamos sacar de forma realista. Al final salió bien, pero lo que agradezco es que no me vendieran una fantasía.',
+    a: 'J. Martínez',
+    f: 'Google · hace 1 mes',
+  },
+  {
+    t: 'Llevaban el divorcio de una amiga y por eso vine. Trato cercano, presupuesto cerrado y cero sustos en la factura.',
+    a: 'Patricia S.',
+    f: 'Google · hace 2 meses',
+  },
+  {
+    t: 'Llamé un domingo por una detención y me contestó un abogado de verdad en diez minutos.',
+    a: 'Familia R.',
+    f: 'Google · hace 4 meses',
+  },
+];
+
+const preguntas = [
+  {
+    q: '¿La primera consulta es gratis de verdad?',
+    a: 'Sí, 45 minutos sin coste y sin compromiso. Si decidimos no llevar tu caso, tampoco pagas nada.',
+  },
+  {
+    q: '¿Cuánto va a costarme el asunto?',
+    a: 'Depende del tipo de procedimiento, pero en la primera visita te entregamos un presupuesto por escrito con el precio cerrado o el porcentaje pactado. Nada se empieza sin tu firma.',
+  },
+  {
+    q: '¿Cuánto tarda un juicio?',
+    a: 'En laboral, entre 6 y 12 meses según el juzgado; en civil puede ir a año y medio. Te damos el plazo realista de tu partido judicial, no el ideal.',
+  },
+  {
+    q: '¿Tengo derecho a justicia gratuita?',
+    a: 'Si tus ingresos están por debajo del umbral legal, sí, y te ayudamos a tramitarlo aunque el asunto no acabe en este despacho.',
+  },
+  {
+    q: '¿Atendéis fuera de Madrid?',
+    a: 'Llevamos asuntos en toda España con desplazamiento a vistas. Las reuniones pueden ser por videollamada y la documentación va firmada digitalmente.',
+  },
+];
+---
+
+<DemoLayout
+  title="Narváez & Bermejo Abogados · Madrid"
+  description="Plantilla de ejemplo: web para despacho de abogados con áreas de práctica, honorarios, equipo colegiado y primera consulta gratuita."
+>
+  <div class="site">
+    <div class="aviso-urgente">
+      <span>Guardia 24 h para detenidos</span>
+      <a href={`tel:+34${urgencias.replace(/\s/g, '')}`}>{urgencias}</a>
+    </div>
+
+    <header class="top">
+      <a class="brand" href="#inicio">
+        <span class="mark" aria-hidden="true">N<i>&</i>B</span>
+        <span class="brand-text">
+          Narváez &amp; Bermejo
+          <small>Abogados · Madrid</small>
+        </span>
+      </a>
+      <nav aria-label="Principal">
+        <a href="#areas">Áreas</a>
+        <a href="#resultados">Resultados</a>
+        <a href="#honorarios">Honorarios</a>
+        <a href="#equipo">Equipo</a>
+        <a href="#preguntas">Preguntas</a>
+      </nav>
+      <a class="btn" href="#consulta">Consulta gratuita</a>
+    </header>
+
+    <section class="hero" id="inicio">
+      <div class="hero-text">
+        <p class="chip">Primera consulta sin coste · respuesta el mismo día</p>
+        <h1>Te decimos si tienes caso antes de cobrarte nada.</h1>
+        <p class="lead">
+          Despacho multidisciplinar en Madrid desde 1998. Laboral, familia, penal, bancario y
+          empresa, con presupuesto cerrado por escrito y un abogado asignado al que puedes
+          llamar.
+        </p>
+        <div class="hero-actions">
+          <a class="btn big" href="#consulta">Pedir consulta gratuita</a>
+          <a class="btn ghost big" href={`tel:+34${urgencias.replace(/\s/g, '')}`}>
+            Llamar ahora
+          </a>
+        </div>
+        <ul class="hero-areas">
+          <li>Despidos</li>
+          <li>Divorcios</li>
+          <li>Herencias</li>
+          <li>Revolving</li>
+          <li>Alcoholemias</li>
+          <li>Desahucios</li>
+        </ul>
+      </div>
+
+      <div class="hueco hueco-hero">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="5" width="18" height="14" rx="2" />
+          <circle cx="8.5" cy="10" r="1.6" />
+          <path d="m4 17 5-4.5 3.5 3L16 12l4 4" />
+        </svg>
+        <span>Tu foto aquí · el despacho o el equipo, 1200 × 900</span>
+      </div>
+    </section>
+
+    <section class="confianza" aria-label="El despacho en cifras">
+      {
+        confianza.map((c) => (
+          <div>
+            <strong>{c.dato}</strong>
+            <span>{c.pie}</span>
+          </div>
+        ))
+      }
+    </section>
+
+    <section class="areas" id="areas">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Áreas de práctica</p>
+          <h2>En qué podemos ayudarte</h2>
+        </div>
+        <p class="sec-note">
+          Si tu asunto no encaja en ninguna, llámanos igual: te decimos quién lo lleva, aunque
+          no seamos nosotros.
+        </p>
+      </header>
+
+      <div class="grid">
+        {
+          areas.map((a) => (
+            <article class:list={['card', { destacada: a.destacada }]}>
+              <h3>{a.nombre}</h3>
+              <p class="card-texto">{a.texto}</p>
+              <ul class="casos-lista">
+                {a.casos.map((c) => (
+                  <li>{c}</li>
+                ))}
+              </ul>
+              <a class="card-cta" href="#consulta">
+                Consultar mi caso <span aria-hidden="true">→</span>
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="resultados" id="resultados">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Resultados</p>
+          <h2>Asuntos resueltos, con cifras y plazos</h2>
+        </div>
+        <p class="sec-note">
+          Datos anonimizados. Un resultado anterior no garantiza el mismo desenlace en otro
+          procedimiento.
+        </p>
+      </header>
+      <div class="resultados-grid">
+        {
+          resultados.map((r) => (
+            <div class="resultado">
+              <p class="plazo">{r.plazo}</p>
+              <strong>{r.titulo}</strong>
+              <span>{r.detalle}</span>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="honorarios" id="honorarios">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Honorarios</p>
+          <h2>Lo que cuesta, dicho antes de empezar</h2>
+        </div>
+        <p class="sec-note">
+          Tres formas de cobrar según el asunto. La que te toque se firma antes de mover un
+          papel.
+        </p>
+      </header>
+
+      <div class="planes">
+        {
+          honorarios.map((h) => (
+            <div class:list={['plan', { destacado: h.destacado }]}>
+              {h.destacado && <span class="etiqueta">La más habitual</span>}
+              <p class="plan-nombre">{h.nombre}</p>
+              <p class="plan-precio">{h.precio}</p>
+              <p class="plan-nota">{h.nota}</p>
+              <ul>
+                {h.detalle.map((d) => (
+                  <li>{d}</li>
+                ))}
+              </ul>
+              <a class="btn ghost" href="#consulta">
+                Preguntar por esto
+              </a>
+            </div>
+          ))
+        }
+      </div>
+      <p class="aviso-honorarios">
+        Los gastos de procurador, peritos y tasas, cuando los haya, van aparte y se detallan
+        en el presupuesto.
+      </p>
+    </section>
+
+    <section class="proceso">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Cómo trabajamos</p>
+          <h2>Cuatro pasos y ninguna sorpresa en la factura</h2>
+        </div>
+      </header>
+      <ol class="pasos">
+        {
+          pasos.map((p, i) => (
+            <li>
+              <span class="num">{String(i + 1).padStart(2, '0')}</span>
+              <strong>{p.t}</strong>
+              <span>{p.d}</span>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="equipo" id="equipo">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Equipo</p>
+          <h2>Quién lleva tu asunto, con nombre y colegiado</h2>
+        </div>
+      </header>
+      <div class="personas">
+        {
+          equipo.map((p) => (
+            <div class="persona">
+              <div class="hueco hueco-retrato">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="8.5" r="3.5" />
+                  <path d="M5 20c1.2-3.6 4-5.4 7-5.4s5.8 1.8 7 5.4" />
+                </svg>
+              </div>
+              <strong>{p.n}</strong>
+              <span class="rol">{p.r}</span>
+              <span class="col">{p.c}</span>
+              <span class="exp">{p.e}</span>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="resenas">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Opiniones</p>
+          <h2>4,8 sobre 5 en 210 reseñas</h2>
+        </div>
+      </header>
+      <div class="resenas-grid">
+        {
+          resenas.map((r) => (
+            <blockquote>
+              <p class="estrellas" aria-label="5 sobre 5">
+                ★★★★★
+              </p>
+              <p>{r.t}</p>
+              <footer>
+                {r.a} · {r.f}
+              </footer>
+            </blockquote>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="preguntas" id="preguntas">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Preguntas frecuentes</p>
+          <h2>Lo que se pregunta antes de llamar</h2>
+        </div>
+      </header>
+      <div class="faq">
+        {
+          preguntas.map((p, i) => (
+            <details open={i === 0}>
+              <summary>{p.q}</summary>
+              <p>{p.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="consulta" id="consulta">
+      <div class="consulta-grid">
+        <div>
+          <p class="eyebrow claro">Primera consulta</p>
+          <h2>45 minutos, sin coste y sin compromiso</h2>
+          <p class="consulta-texto">
+            Cuéntanos qué ha pasado y te llamamos hoy mismo en horario de despacho. Si es una
+            urgencia penal, llama directamente a la guardia.
+          </p>
+          <a class="tel-grande" href={`tel:+34${urgencias.replace(/\s/g, '')}`}>{urgencias}</a>
+          <div class="donde">
+            <p><strong>Calle Serrano 92, 3º, Madrid</strong></p>
+            <p>Lunes a jueves 9:00 – 19:00 · Viernes 9:00 – 15:00</p>
+            <p>Metro Núñez de Balboa · Reuniones por videollamada</p>
+          </div>
+        </div>
+
+        <form>
+          <label>
+            Nombre
+            <input type="text" placeholder="Nombre y apellidos" required />
+          </label>
+          <label>
+            Teléfono
+            <input type="tel" placeholder="600 000 000" required />
+          </label>
+          <label class="ancho">
+            Tipo de asunto
+            <select>
+              {areas.map((a) => <option>{a.nombre}</option>)}
+              <option>No sé en qué área encaja</option>
+            </select>
+          </label>
+          <label class="ancho">
+            ¿Hay plazo o fecha señalada?
+            <span class="chips">
+              <span>No lo sé</span>
+              <span>Esta semana</span>
+              <span>Este mes</span>
+              <span>Ya tengo juicio</span>
+            </span>
+          </label>
+          <label class="ancho">
+            Cuéntanos qué ha pasado
+            <textarea rows="4" placeholder="Lo esencial: qué ocurrió, cuándo y qué documentos tienes"></textarea>
+          </label>
+          <button type="button">Pedir consulta gratuita</button>
+          <p class="form-nota">
+            Lo que nos cuentes está amparado por el secreto profesional desde el primer
+            contacto.
+          </p>
+        </form>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <div>
+        <p class="foot-brand">Narváez &amp; Bermejo Abogados</p>
+        <p>Calle Serrano 92, 3º, Madrid · 900 000 000 · despacho@narvaezbermejo.es</p>
+        <p class="mini-legal">
+          Despacho inscrito en el Ilustre Colegio de Abogados de Madrid. La información de
+          esta web es orientativa y no constituye asesoramiento jurídico.
+        </p>
+      </div>
+      <p class="mini">Plantilla de ejemplo. Nombres, cifras, resultados y reseñas son ficticios.</p>
+    </footer>
+
+    <div class="barra-movil">
+      <a class="btn ghost" href={`tel:+34${urgencias.replace(/\s/g, '')}`}>Llamar</a>
+      <a class="btn" href="#consulta">Consulta gratis</a>
+    </div>
+  </div>
+</DemoLayout>
+
+<style>
+  .site {
+    --tinta: #16202c;
+    --azul: #1b3a5c;
+    --burdeos: #8c2f39;
+    --papel: #f7f6f3;
+    --papel-2: #ecebe6;
+    --suave: #5c6673;
+    --linea: rgba(22, 32, 44, 0.14);
+
+    background: var(--papel);
+    color: var(--tinta);
+    font-family: 'Charter', 'Iowan Old Style', Georgia, serif;
+    padding-bottom: 5.5rem;
+  }
+
+  .aviso-urgente {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 0.5rem 1rem;
+    background: var(--burdeos);
+    color: #fff;
+    font-family: system-ui, sans-serif;
+    font-size: 0.85rem;
+  }
+
+  .aviso-urgente a {
+    font-weight: 700;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  }
+
+  .top {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 0.85rem clamp(1.1rem, 4vw, 3.5rem);
+    background: rgba(247, 246, 243, 0.96);
+    border-bottom: 1px solid var(--linea);
+    backdrop-filter: blur(10px);
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    text-decoration: none;
+  }
+
+  .mark {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 6px;
+    background: var(--azul);
+    color: var(--papel);
+    font-size: 0.86rem;
+    letter-spacing: 0.02em;
+  }
+
+  .mark i {
+    font-style: normal;
+    opacity: 0.7;
+  }
+
+  .brand-text {
+    display: grid;
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.15;
+  }
+
+  .brand-text small {
+    font-family: system-ui, sans-serif;
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--suave);
+  }
+
+  .top nav {
+    display: none;
+    gap: 1.4rem;
+    font-family: system-ui, sans-serif;
+    font-size: 0.9rem;
+  }
+
+  .top nav a {
+    color: var(--suave);
+    text-decoration: none;
+  }
+
+  .top nav a:hover {
+    color: var(--azul);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 0 1.3rem;
+    border-radius: 4px;
+    background: var(--azul);
+    color: var(--papel);
+    font-family: system-ui, sans-serif;
+    font-size: 0.93rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.15s ease, background-color 0.15s ease;
+  }
+
+  .btn:hover {
+    transform: translateY(-1px);
+    background: #16304c;
+  }
+
+  .btn.ghost {
+    background: transparent;
+    border: 1px solid var(--linea);
+    color: var(--tinta);
+  }
+
+  .btn.big {
+    min-height: 54px;
+    padding: 0 1.9rem;
+    font-size: 1rem;
+  }
+
+  section {
+    padding: clamp(2.6rem, 6vw, 4.5rem) clamp(1.1rem, 4vw, 3.5rem);
+  }
+
+  .hero {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .chip {
+    display: inline-block;
+    margin: 0 0 1.2rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 4px;
+    background: rgba(27, 58, 92, 0.1);
+    color: var(--azul);
+    font-family: system-ui, sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(2rem, 4.4vw, 3.3rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    max-width: 18ch;
+  }
+
+  .lead {
+    max-width: 52ch;
+    color: var(--suave);
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 1.8rem;
+  }
+
+  .hero-areas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 2rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-family: system-ui, sans-serif;
+  }
+
+  .hero-areas li {
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--linea);
+    border-radius: 4px;
+    font-size: 0.82rem;
+    color: var(--suave);
+  }
+
+  /* --- Huecos de imagen --- */
+  .hueco {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 0.5rem;
+    aspect-ratio: 4 / 3;
+    border: 2px dashed rgba(22, 32, 44, 0.22);
+    border-radius: 6px;
+    background: rgba(22, 32, 44, 0.035);
+    color: var(--suave);
+    font-family: system-ui, sans-serif;
+    text-align: center;
+  }
+
+  .hueco svg {
+    width: 32px;
+    height: 32px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.7;
+  }
+
+  .hueco span {
+    font-size: 0.8rem;
+  }
+
+  .hueco-retrato {
+    aspect-ratio: 1;
+    width: 72px;
+    border-radius: 50%;
+    border-width: 1px;
+    margin-bottom: 0.7rem;
+  }
+
+  .hueco-retrato svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .confianza {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    padding-block: 0;
+  }
+
+  .confianza div {
+    display: grid;
+    gap: 0.15rem;
+    padding: 1.1rem 1.3rem;
+    border-left: 3px solid var(--azul);
+    background: #fff;
+  }
+
+  .confianza strong {
+    font-size: 1.5rem;
+  }
+
+  .confianza span {
+    font-family: system-ui, sans-serif;
+    font-size: 0.85rem;
+    color: var(--suave);
+  }
+
+  .eyebrow {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--burdeos);
+  }
+
+  .eyebrow.claro {
+    color: rgba(247, 246, 243, 0.75);
+  }
+
+  .sec-head {
+    display: grid;
+    gap: 0.7rem;
+    margin-bottom: 2.2rem;
+  }
+
+  h2 {
+    margin: 0.3rem 0 0;
+    font-size: clamp(1.6rem, 3.3vw, 2.3rem);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    max-width: 24ch;
+  }
+
+  .sec-note {
+    margin: 0;
+    max-width: 48ch;
+    font-family: system-ui, sans-serif;
+    font-size: 0.9rem;
+    color: var(--suave);
+  }
+
+  .grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .card {
+    display: grid;
+    gap: 0.6rem;
+    align-content: start;
+    padding: 1.6rem;
+    background: #fff;
+    border: 1px solid var(--linea);
+    border-top: 3px solid var(--azul);
+  }
+
+  .card.destacada {
+    border-top-color: var(--burdeos);
+  }
+
+  .card h3 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+
+  .card-texto {
+    margin: 0;
+    color: var(--suave);
+    line-height: 1.65;
+  }
+
+  .casos-lista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0.2rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-family: system-ui, sans-serif;
+  }
+
+  .casos-lista li {
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    background: var(--papel-2);
+    font-size: 0.76rem;
+    color: var(--suave);
+  }
+
+  .card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 44px;
+    font-family: system-ui, sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--azul);
+    text-decoration: none;
+  }
+
+  .resultados {
+    background: var(--papel-2);
+  }
+
+  .resultados-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .resultado {
+    display: grid;
+    gap: 0.35rem;
+    padding: 1.5rem;
+    background: #fff;
+    border: 1px solid var(--linea);
+  }
+
+  .plazo {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--burdeos);
+  }
+
+  .resultado strong {
+    font-size: 1.1rem;
+  }
+
+  .resultado span {
+    color: var(--suave);
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  .planes {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .plan {
+    position: relative;
+    display: grid;
+    gap: 0.4rem;
+    align-content: start;
+    padding: 1.7rem;
+    background: #fff;
+    border: 1px solid var(--linea);
+  }
+
+  .plan.destacado {
+    background: var(--azul);
+    color: var(--papel);
+    border-color: var(--azul);
+  }
+
+  .etiqueta {
+    position: absolute;
+    top: -0.7rem;
+    left: 1.7rem;
+    padding: 0.25rem 0.75rem;
+    background: var(--burdeos);
+    color: #fff;
+    font-family: system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+
+  .plan-nombre {
+    margin: 0;
+    font-weight: 700;
+  }
+
+  .plan-precio {
+    margin: 0.2rem 0 0;
+    font-size: 2rem;
+  }
+
+  .plan-nota {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    font-size: 0.86rem;
+    color: var(--suave);
+  }
+
+  .plan.destacado .plan-nota {
+    color: rgba(247, 246, 243, 0.78);
+  }
+
+  .plan ul {
+    display: grid;
+    gap: 0.4rem;
+    margin: 0.9rem 0;
+    padding: 0;
+    list-style: none;
+    font-family: system-ui, sans-serif;
+    font-size: 0.9rem;
+    color: var(--suave);
+  }
+
+  .plan.destacado ul {
+    color: rgba(247, 246, 243, 0.9);
+  }
+
+  .plan li::before {
+    content: '·';
+    margin-right: 0.5rem;
+    font-weight: 700;
+    color: var(--burdeos);
+  }
+
+  .plan.destacado .btn.ghost {
+    background: var(--papel);
+    border-color: var(--papel);
+    color: var(--azul);
+  }
+
+  .aviso-honorarios {
+    margin: 1.6rem 0 0;
+    max-width: 60ch;
+    font-family: system-ui, sans-serif;
+    font-size: 0.85rem;
+    color: var(--suave);
+  }
+
+  .pasos {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pasos li {
+    display: grid;
+    gap: 0.3rem;
+    padding: 1.3rem;
+    background: #fff;
+    border: 1px solid var(--linea);
+  }
+
+  .num {
+    font-family: system-ui, sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: var(--burdeos);
+  }
+
+  .pasos strong {
+    font-size: 1.05rem;
+  }
+
+  .pasos span:last-child {
+    color: var(--suave);
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+
+  .equipo {
+    background: var(--papel-2);
+  }
+
+  .personas {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .persona {
+    display: grid;
+    gap: 0.22rem;
+    justify-items: start;
+    padding: 1.5rem;
+    background: #fff;
+    border: 1px solid var(--linea);
+  }
+
+  .rol,
+  .col,
+  .exp {
+    font-family: system-ui, sans-serif;
+    font-size: 0.85rem;
+    color: var(--suave);
+  }
+
+  .col {
+    font-size: 0.78rem;
+  }
+
+  .resenas-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  blockquote {
+    margin: 0;
+    padding: 1.6rem;
+    background: #fff;
+    border: 1px solid var(--linea);
+  }
+
+  .estrellas {
+    margin: 0 0 0.6rem;
+    color: #c8922e;
+    letter-spacing: 0.1em;
+  }
+
+  blockquote p {
+    margin: 0;
+    line-height: 1.7;
+  }
+
+  blockquote footer {
+    margin-top: 1rem;
+    font-family: system-ui, sans-serif;
+    font-size: 0.84rem;
+    color: var(--suave);
+  }
+
+  .preguntas {
+    background: var(--papel-2);
+  }
+
+  .faq {
+    display: grid;
+    gap: 0.7rem;
+    max-width: 54rem;
+  }
+
+  details {
+    background: #fff;
+    border: 1px solid var(--linea);
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    min-height: 52px;
+    padding: 0.9rem 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  details p {
+    margin: 0;
+    padding: 0 1.2rem 1.1rem;
+    font-family: system-ui, sans-serif;
+    color: var(--suave);
+    line-height: 1.65;
+  }
+
+  .consulta {
+    background: var(--tinta);
+    color: var(--papel);
+  }
+
+  .consulta h2 {
+    color: var(--papel);
+  }
+
+  .consulta-grid {
+    display: grid;
+    gap: 2.2rem;
+  }
+
+  .consulta-texto {
+    max-width: 44ch;
+    color: rgba(247, 246, 243, 0.8);
+    line-height: 1.7;
+  }
+
+  .tel-grande {
+    display: inline-block;
+    margin-top: 1.2rem;
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: var(--papel);
+    text-decoration: none;
+    border-bottom: 2px solid var(--burdeos);
+  }
+
+  .donde {
+    margin-top: 1.8rem;
+    font-family: system-ui, sans-serif;
+    font-size: 0.9rem;
+    color: rgba(247, 246, 243, 0.75);
+  }
+
+  .donde p {
+    margin: 0.2rem 0;
+  }
+
+  form {
+    display: grid;
+    gap: 1rem;
+    padding: clamp(1.3rem, 3vw, 2rem);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+  }
+
+  label {
+    display: grid;
+    gap: 0.4rem;
+    font-family: system-ui, sans-serif;
+    font-size: 0.85rem;
+  }
+
+  input,
+  textarea,
+  select {
+    min-height: 48px;
+    padding: 0.8rem 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--papel);
+    font: inherit;
+    font-family: system-ui, sans-serif;
+  }
+
+  select option {
+    color: #16202c;
+  }
+
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline: 2px solid var(--burdeos);
+    outline-offset: 2px;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .chips span {
+    padding: 0.5rem 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    font-size: 0.88rem;
+    cursor: pointer;
+  }
+
+  button {
+    min-height: 54px;
+    border: 0;
+    border-radius: 4px;
+    background: var(--burdeos);
+    color: #fff;
+    font-family: system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .form-nota {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    font-size: 0.8rem;
+    color: rgba(247, 246, 243, 0.7);
+  }
+
+  .foot {
+    display: grid;
+    gap: 0.8rem;
+    padding: 2.4rem clamp(1.1rem, 4vw, 3.5rem) 2rem;
+    font-family: system-ui, sans-serif;
+    font-size: 0.88rem;
+    color: var(--suave);
+  }
+
+  .foot p {
+    margin: 0;
+  }
+
+  .foot-brand {
+    font-family: 'Charter', Georgia, serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--tinta);
+  }
+
+  .mini-legal {
+    margin-top: 0.6rem !important;
+    max-width: 70ch;
+    font-size: 0.76rem;
+  }
+
+  .mini {
+    font-size: 0.76rem;
+  }
+
+  .barra-movil {
+    position: fixed;
+    inset: auto 0 1.9rem 0;
+    z-index: 30;
+    display: flex;
+    gap: 0.6rem;
+    padding: 0.6rem 1rem;
+    background: rgba(247, 246, 243, 0.96);
+    border-top: 1px solid var(--linea);
+    backdrop-filter: blur(10px);
+  }
+
+  .barra-movil .btn {
+    flex: 1;
+  }
+
+  @media (min-width: 880px) {
+    .top nav {
+      display: flex;
+    }
+
+    .hero {
+      grid-template-columns: 1.15fr 0.85fr;
+    }
+
+    .confianza {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .sec-head {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 2rem;
+    }
+
+    .grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .resultados-grid,
+    .planes,
+    .resenas-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .pasos,
+    .personas {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .consulta-grid {
+      grid-template-columns: 0.9fr 1.1fr;
+      align-items: start;
+    }
+
+    form {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ancho,
+    button,
+    .form-nota {
+      grid-column: span 2;
+    }
+
+    .foot {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+    }
+
+    .barra-movil {
+      display: none;
+    }
+  }
+</style>

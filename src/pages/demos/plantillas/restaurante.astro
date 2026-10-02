@@ -143,6 +143,27 @@ const resenas = [
   },
 ];
 
+const eventos = [
+  {
+    t: 'Comidas de empresa',
+    d: 'Menú cerrado desde 32 € por persona, sala reservada hasta 24 comensales y factura a nombre de la empresa.',
+  },
+  {
+    t: 'Celebraciones familiares',
+    d: 'Bautizos, comuniones y cumpleaños con menú a elegir y tarta de la casa incluida.',
+  },
+  {
+    t: 'Catering en tu sitio',
+    d: 'Llevamos la cocina a donde haga falta, con servicio de sala si lo necesitas.',
+  },
+];
+
+const prensa = [
+  { medio: 'Guía Repsol', nota: 'Recomendado 2026' },
+  { medio: 'El Comidista', nota: '«Arroz de los que se recuerdan»' },
+  { medio: 'Sevilla Gourmet', nota: 'Mejor relación calidad-precio' },
+];
+
 const galeria = ['La sala', 'La brasa', 'La barra', 'El patio'];
 ---
 
@@ -284,6 +305,42 @@ const galeria = ['La sala', 'La brasa', 'La barra', 'El patio'];
           </figure>
         ))
       }
+    </section>
+
+    <section class="eventos" id="eventos">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Grupos y eventos</p>
+          <h2>Cuando sois muchos y no cabe la improvisación</h2>
+        </div>
+        <p class="sec-note">
+          Te pasamos el menú cerrado por escrito y confirmamos la sala. Sin señal para grupos
+          de menos de doce.
+        </p>
+      </header>
+      <div class="eventos-grid">
+        {
+          eventos.map((e) => (
+            <article>
+              <h3>{e.t}</h3>
+              <p>{e.d}</p>
+              <a href="#reserva">
+                Pedir propuesta <span aria-hidden="true">→</span>
+              </a>
+            </article>
+          ))
+        }
+      </div>
+      <ul class="prensa">
+        {
+          prensa.map((p2) => (
+            <li>
+              <strong>{p2.medio}</strong>
+              <span>{p2.nota}</span>
+            </li>
+          ))
+        }
+      </ul>
     </section>
 
     <section class="local" id="local">
@@ -999,6 +1056,72 @@ const galeria = ['La sala', 'La brasa', 'La barra', 'El patio'];
     text-align: center;
   }
 
+  /* --- Eventos y prensa --- */
+  .eventos-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .eventos article {
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+    padding: 1.6rem;
+    border-radius: 16px;
+    background: #fff;
+    border: 1px solid var(--linea);
+  }
+
+  .eventos h3 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+
+  .eventos p {
+    margin: 0;
+    color: var(--suave);
+    line-height: 1.6;
+  }
+
+  .eventos a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 44px;
+    font-family: system-ui, sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--acento);
+    text-decoration: none;
+  }
+
+  .prensa {
+    display: grid;
+    gap: 0.8rem;
+    margin: 2rem 0 0;
+    padding: 1.4rem;
+    border-radius: 16px;
+    background: var(--papel-2);
+    list-style: none;
+  }
+
+  .prensa li {
+    display: grid;
+    gap: 0.1rem;
+  }
+
+  .prensa strong {
+    font-family: system-ui, sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--acento);
+  }
+
+  .prensa span {
+    font-size: 0.98rem;
+  }
+
   /* --- El local --- */
   .local {
     display: grid;
@@ -1309,6 +1432,15 @@ const galeria = ['La sala', 'La brasa', 'La barra', 'El patio'];
 
     .local {
       grid-template-columns: 1.1fr 0.9fr;
+    }
+
+    .eventos-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .prensa {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
     }
 
     .resenas-grid {

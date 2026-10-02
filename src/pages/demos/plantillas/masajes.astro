@@ -98,6 +98,23 @@ const resenas = [
   { t: 'El trato es de otra época, en el buen sentido. Salgo del centro como nueva.', a: 'Isabel R.' },
 ];
 
+const dolencias = [
+  'Cervicalgia y dolor de cabeza tensional',
+  'Lumbalgia y ciática',
+  'Hombro congelado',
+  'Epicondilitis (codo de tenista)',
+  'Fascitis plantar',
+  'Sobrecarga de gemelos y isquios',
+  'Latigazo cervical',
+  'Preparación y recuperación de carrera',
+];
+
+const empresa = [
+  { t: 'Sesiones en tu oficina', d: 'Silla de masaje y fisioterapeuta en tus instalaciones, en turnos de 15 minutos por persona.' },
+  { t: 'Bono para empleados', d: 'Tarifa cerrada por sesión y facturación mensual única para la empresa.' },
+  { t: 'Charla de ergonomía', d: 'Una hora sobre postura en el puesto, con revisión de puestos reales.' },
+];
+
 const preguntas = [
   { q: '¿Cuántas sesiones voy a necesitar?', a: 'Depende de lo que traigas, pero en la primera visita te damos una estimación honesta. Muchas contracturas se resuelven en dos o tres sesiones.' },
   { q: '¿Tengo que llevar algo?', a: 'Nada. Ponemos toallas, sábanas y todo lo necesario. Si vienes de entrenar, hay ducha.' },
@@ -264,6 +281,46 @@ const preguntas = [
             </div>
           ))
         }
+      </div>
+    </section>
+
+    <section class="dolencias">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Qué tratamos</p>
+          <h2>Si te suena alguna de estas, es nuestro terreno</h2>
+        </div>
+        <p class="sec-note">
+          Y si lo tuyo necesita un traumatólogo o un médico, te lo decimos en la primera
+          visita y te derivamos.
+        </p>
+      </header>
+      <ul class="lista-dolencias">
+        {dolencias.map((d) => <li>{d}</li>)}
+      </ul>
+    </section>
+
+    <section class="empresa">
+      <div class="empresa-grid">
+        <div>
+          <p class="eyebrow claro">Para empresas</p>
+          <h2>Fisioterapia en el trabajo</h2>
+          <p class="empresa-texto">
+            La factura de las bajas por lumbalgia sale más cara que esto. Montamos sesiones
+            dentro de tu empresa con una tarifa cerrada y una sola factura al mes.
+          </p>
+          <a class="btn claro" href="#cita">Pedir propuesta para mi empresa</a>
+        </div>
+        <ul>
+          {
+            empresa.map((e) => (
+              <li>
+                <strong>{e.t}</strong>
+                <span>{e.d}</span>
+              </li>
+            ))
+          }
+        </ul>
       </div>
     </section>
 
@@ -966,6 +1023,85 @@ const preguntas = [
     color: var(--suave);
   }
 
+  /* --- Dolencias y empresas --- */
+  .lista-dolencias {
+    display: grid;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .lista-dolencias li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.9rem 1.1rem;
+    border-radius: 12px;
+    background: #fff;
+    border: 1px solid var(--linea);
+    font-size: 0.95rem;
+  }
+
+  .lista-dolencias li::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--verde-claro);
+  }
+
+  .empresa {
+    background: var(--verde);
+    color: var(--crema);
+  }
+
+  .empresa h2 {
+    color: var(--crema);
+  }
+
+  .empresa-grid {
+    display: grid;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .empresa-texto {
+    max-width: 46ch;
+    color: rgba(247, 245, 240, 0.82);
+    line-height: 1.7;
+  }
+
+  .btn.claro {
+    margin-top: 1.4rem;
+    background: var(--crema);
+    color: var(--verde);
+  }
+
+  .empresa ul {
+    display: grid;
+    gap: 0.8rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .empresa li {
+    display: grid;
+    gap: 0.2rem;
+    padding: 1.1rem 1.3rem;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.09);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+  }
+
+  .empresa li span {
+    font-size: 0.9rem;
+    color: rgba(247, 245, 240, 0.78);
+    line-height: 1.55;
+  }
+
   .resenas {
     background: var(--verde-suave);
   }
@@ -1206,6 +1342,14 @@ const preguntas = [
 
     .personas {
       grid-template-columns: repeat(3, 1fr);
+    }
+
+    .lista-dolencias {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .empresa-grid {
+      grid-template-columns: 0.95fr 1.05fr;
     }
 
     .resenas-grid {

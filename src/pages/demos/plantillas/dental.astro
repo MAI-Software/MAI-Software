@@ -86,6 +86,25 @@ const resenas = [
   { t: 'Llevo con la ortodoncia ocho meses y me han explicado cada paso. Precio cerrado desde el principio.', a: 'Nuria B.', f: 'hace 3 meses' },
 ];
 
+const casos = [
+  { titulo: 'Ortodoncia invisible', detalle: 'Mujer, 29 años · 14 meses de tratamiento' },
+  { titulo: 'Rehabilitación con implantes', detalle: 'Hombre, 58 años · 2 implantes y corona' },
+  { titulo: 'Blanqueamiento y carillas', detalle: 'Mujer, 41 años · 3 visitas' },
+];
+
+const tecnologia = [
+  { nombre: 'Escáner intraoral 3D', nota: 'Sin pasta de moldes' },
+  { nombre: 'Radiografía digital', nota: 'Hasta 80 % menos de radiación' },
+  { nombre: 'Cirugía guiada por ordenador', nota: 'Implantes con férula planificada' },
+  { nombre: 'Esterilización clase B', nota: 'Trazabilidad por lote y paciente' },
+];
+
+const garantias = [
+  { t: 'Diez años en implantes', d: 'Por escrito, con revisiones anuales incluidas en la garantía.' },
+  { t: 'Presupuesto cerrado', d: 'El precio firmado es el que se paga, aunque el tratamiento se alargue.' },
+  { t: 'Revisión a los seis meses', d: 'Incluida en cualquier tratamiento, sin coste.' },
+];
+
 const preguntas = [
   { q: '¿La primera visita tiene coste?', a: 'No. Incluye exploración, radiografía panorámica y presupuesto cerrado por escrito. Sin compromiso de quedarte.' },
   { q: '¿Se puede financiar?', a: 'Sí: hasta 12 meses sin intereses con la clínica, y a más plazo con financiera. Se firma antes de empezar, con el cuadro de cuotas delante.' },
@@ -271,6 +290,82 @@ const preguntas = [
           </ul>
           <p class="fin-nota">Ejemplos orientativos sujetos a estudio. TAE 0 % en la modalidad de clínica.</p>
         </div>
+      </div>
+    </section>
+
+    <section class="casos" id="casos">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Casos</p>
+          <h2>Antes y después de pacientes de la clínica</h2>
+        </div>
+        <p class="sec-note">
+          Publicados con permiso firmado. Cada caso indica edad y duración, porque sin eso una
+          foto no dice nada.
+        </p>
+      </header>
+      <div class="casos-grid">
+        {
+          casos.map((caso) => (
+            <figure>
+              <div class="par">
+                <div class="hueco hueco-caso">
+                  <span class="etiqueta-foto">Antes</span>
+                </div>
+                <div class="hueco hueco-caso">
+                  <span class="etiqueta-foto">Después</span>
+                </div>
+              </div>
+              <figcaption>
+                <strong>{caso.titulo}</strong>
+                <span>{caso.detalle}</span>
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="tecnologia">
+      <div class="tec-grid">
+        <div>
+          <p class="eyebrow claro">Equipamiento</p>
+          <h2>Con qué se trabaja</h2>
+          <p class="tec-texto">
+            Lo que cambia la experiencia no es el sillón: es no tener que morder pasta para un
+            molde y ver tu boca en pantalla mientras te explican lo que pasa.
+          </p>
+        </div>
+        <ul>
+          {
+            tecnologia.map((t) => (
+              <li>
+                <strong>{t.nombre}</strong>
+                <span>{t.nota}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <section class="garantias">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Garantías</p>
+          <h2>Lo que te llevas por escrito</h2>
+        </div>
+      </header>
+      <div class="garantias-grid">
+        {
+          garantias.map((g) => (
+            <div class="garantia">
+              <span class="tick" aria-hidden="true">✓</span>
+              <strong>{g.t}</strong>
+              <span>{g.d}</span>
+            </div>
+          ))
+        }
       </div>
     </section>
 
@@ -999,6 +1094,139 @@ const preguntas = [
     color: rgba(255, 255, 255, 0.7);
   }
 
+  /* --- Casos, tecnología y garantías --- */
+  .casos {
+    background: var(--fondo-2);
+  }
+
+  .casos-grid {
+    display: grid;
+    gap: 1.4rem;
+  }
+
+  .casos figure {
+    margin: 0;
+  }
+
+  .par {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+  }
+
+  .hueco {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 0.4rem;
+    aspect-ratio: 4 / 3;
+    border: 2px dashed rgba(18, 33, 46, 0.22);
+    border-radius: 14px;
+    background: rgba(18, 33, 46, 0.04);
+    color: var(--suave);
+    text-align: center;
+  }
+
+  .hueco-caso {
+    position: relative;
+    aspect-ratio: 3 / 4;
+  }
+
+  .etiqueta-foto {
+    position: absolute;
+    top: 0.6rem;
+    left: 0.6rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(18, 33, 46, 0.72);
+    color: #fff;
+    font-size: 0.7rem;
+  }
+
+  .casos figcaption {
+    display: grid;
+    gap: 0.15rem;
+    margin-top: 0.8rem;
+  }
+
+  .casos figcaption span {
+    font-size: 0.85rem;
+    color: var(--suave);
+  }
+
+  .tecnologia {
+    background: var(--azul);
+    color: #fff;
+  }
+
+  .tecnologia h2 {
+    color: #fff;
+  }
+
+  .tec-grid {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .tec-texto {
+    max-width: 46ch;
+    color: rgba(255, 255, 255, 0.82);
+    line-height: 1.7;
+  }
+
+  .tecnologia ul {
+    display: grid;
+    gap: 0.8rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .tecnologia li {
+    display: grid;
+    gap: 0.15rem;
+    padding: 1rem 1.2rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .tecnologia li span {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .garantias-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .garantia {
+    display: grid;
+    gap: 0.3rem;
+    padding: 1.4rem;
+    border-radius: 14px;
+    background: #fff;
+    border: 1px solid var(--linea);
+  }
+
+  .tick {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    margin-bottom: 0.3rem;
+    border-radius: 50%;
+    background: var(--azul-suave);
+    color: var(--azul);
+    font-weight: 700;
+  }
+
+  .garantia span:last-child {
+    color: var(--suave);
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+
   .resenas-grid {
     display: grid;
     gap: 1rem;
@@ -1239,6 +1467,19 @@ const preguntas = [
 
     .personas {
       grid-template-columns: repeat(3, 1fr);
+    }
+
+    .casos-grid,
+    .garantias-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .tec-grid {
+      grid-template-columns: 0.9fr 1.1fr;
+    }
+
+    .tecnologia ul {
+      grid-template-columns: repeat(2, 1fr);
     }
 
     .fin-grid {
