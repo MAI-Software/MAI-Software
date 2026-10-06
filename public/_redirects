@@ -1,0 +1,10 @@
+# Redirecciones de Cloudflare Pages.
+#
+# El juego Knot It Out se publico primero con el nombre equivocado ("Nudo", que
+# era solo el <title> de su build web). Google llego a conocer las URLs viejas y
+# las reporta como "No se ha encontrado (404)" en Search Console, asi que se
+# mandan a la ficha nueva en vez de dejarlas muertas.
+/proyectos/nudo      /proyectos/knot-it-out/      301
+/proyectos/nudo/     /proyectos/knot-it-out/      301
+/en/projects/nudo    /en/projects/knot-it-out/    301
+/en/projects/nudo/   /en/projects/knot-it-out/    301
