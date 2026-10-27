@@ -1254,3 +1254,15 @@ button {
 .archive-about {
   padding: clamp(1.2rem, 2.4vw, 2rem);
 }
+
+/* Las páginas legales son texto largo y nada más: la lámina les da columna */
+.legal-page .legal-block,
+.privacy-page p,
+.legal-page > .lead {
+  padding: clamp(1rem, 2vw, 1.5rem) clamp(1.1rem, 2.2vw, 1.8rem);
+  border-radius: var(--radius-lg);
+  background: rgba(8, 11, 20, 0.5);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(14px) saturate(1.15);
+  -webkit-backdrop-filter: blur(14px) saturate(1.15);
+}
