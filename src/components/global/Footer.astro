@@ -109,7 +109,11 @@ const [exploreGroup, ...restGroups] = footerGroups;
     margin-top: clamp(var(--space-8), 8vw, var(--space-10));
     padding-block: var(--space-9) var(--space-6);
     border-top: 1px solid var(--line);
-    background: var(--ink-1000);
+    /* Translúcido a propósito: con el pie opaco, el logotipo que forman las
+       partículas se cortaba en seco justo en su borde superior. */
+    background: rgba(4, 6, 12, 0.72);
+    backdrop-filter: blur(20px) saturate(1.1);
+    -webkit-backdrop-filter: blur(20px) saturate(1.1);
   }
 
   .footer-top {

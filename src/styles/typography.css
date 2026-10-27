@@ -32,23 +32,17 @@ p {
   max-width: 62ch;
 }
 
+/* Antetítulo. Sin la rayita delante: es el tic de plantilla que delata una
+   web hecha a plantilla. El peso y el espaciado ya lo separan del titular. */
 .eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-3);
   font-family: var(--font-display);
   font-size: var(--font-size-xs);
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--cyan);
-}
-
-.eyebrow::before {
-  content: '';
-  width: 22px;
-  height: 1px;
-  background: currentColor;
 }
 
 .lead {

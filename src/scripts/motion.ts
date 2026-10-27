@@ -362,8 +362,14 @@ function setupParticles() {
     sy: number;
     tx: number;
     ty: number;
+    /** Punto de control: la mota llega curvando, no en línea recta. */
+    cx: number;
+    cy: number;
     /** Retraso de entrada, para que la palabra cuaje en vez de aparecer. */
     delay: number;
+    /** Dirección y empuje de salida al soltarse. */
+    fx: number;
+    fy: number;
   };
 
   let petals: Petal[] = [];
@@ -585,7 +591,7 @@ function setupParticles() {
        motas hacen falta, no al revés. */
     /* El molde se muestrea a la medida exacta en píxeles de dispositivo:
        ni de más (gasto) ni de menos (filo de imagen ampliada). */
-    muestrearLogo(Math.min(1600, Math.round(w * 0.52 * dpr)));
+    muestrearLogo(Math.min(2400, Math.round(w * 0.52 * dpr)));
 
     /* Las motas que vuelan son las justas para que se vea el viaje; el filo
        de la palabra lo pone el lienzo guardado, no ellas. */
@@ -598,13 +604,41 @@ function setupParticles() {
     cellPx = cell;
     pintarPalabra();
 
-    motas = points.map((pt) => ({
-      sx: Math.random() * w,
-      sy: Math.random() * h,
-      tx: pt.x,
-      ty: pt.y,
-      delay: Math.random() * 0.22,
-    }));
+    const centroX = wordBox.x + wordBox.w / 2;
+    const centroY = wordBox.y + wordBox.h / 2;
+
+    motas = points.map((pt) => {
+      /* Salen de los bordes, no de cualquier punto: así se ve de dónde viene
+         la nube en vez de aparecer materia de la nada en medio del texto. */
+      const lado = Math.random();
+      const sx = lado < 0.5 ? (lado < 0.25 ? -60 : w + 60) : Math.random() * w;
+      const sy = lado < 0.5 ? Math.random() * h : lado < 0.75 ? -60 : h + 60;
+
+      /* Punto de control desplazado en perpendicular: el viaje describe un
+         arco. Sin esto, mil líneas rectas al mismo sitio parecen una tubería. */
+      const mx = (sx + pt.x) / 2;
+      const my = (sy + pt.y) / 2;
+      const dx = pt.x - sx;
+      const dy = pt.y - sy;
+      const largo = Math.hypot(dx, dy) || 1;
+      const curva = (Math.random() - 0.5) * largo * 0.45;
+
+      // Las de fuera entran antes: la palabra se arma de los bordes al centro
+      const lejos = Math.hypot(pt.x - centroX, pt.y - centroY) / (Math.hypot(w, h) || 1);
+      const salida = Math.atan2(pt.y - centroY, pt.x - centroX) + (Math.random() - 0.5) * 1.2;
+
+      return {
+        sx,
+        sy,
+        tx: pt.x,
+        ty: pt.y,
+        cx: mx + (-dy / largo) * curva,
+        cy: my + (dx / largo) * curva,
+        delay: Math.min(0.42, lejos * 0.3 + Math.random() * 0.16),
+        fx: Math.cos(salida) * (0.8 + Math.random() * 1.6),
+        fy: Math.sin(salida) * (0.8 + Math.random() * 1.6),
+      };
+    });
 
     /* Un fillStyle por grupo: color redondeado a 16 niveles y alfa a 5.
        Con esto, 12.000 motas se pintan en un centenar de llamadas. */
@@ -680,8 +714,8 @@ function setupParticles() {
     /* El lienzo entra cuando las motas ya casi han llegado: primero se ve el
        viaje, después el trazo termina de cerrarse. */
     const nitidez = Math.min(1, Math.max(0, (suave - 0.25) / 0.6));
-    if (wordCanvas && suave > 0.02) {
-      ctx.globalAlpha = nitidez * nitidez;
+    if (wordCanvas && suave > 0.02 && dispersion < 0.95) {
+      ctx.globalAlpha = nitidez * nitidez * (1 - dispersion);
       ctx.drawImage(wordCanvas, wordBox.x, wordBox.y, wordBox.w, wordBox.h);
     }
 
@@ -690,8 +724,10 @@ function setupParticles() {
       const lado = cellPx;
       const mitad = lado / 2;
       /* Las motas llevan el viaje; cuando el trazo fino ya está, se apagan
-         para no engordarle los cantos con sus celdas grandes. */
-      ctx.globalAlpha = suave * (1 - nitidez * 0.88);
+         para no engordarle los cantos con sus celdas grandes. Al dispersarse
+         vuelven a encenderse un momento: son ellas las que se van. */
+      const brillo = dispersion > 0 ? 1 - dispersion : 1 - nitidez * 0.88;
+      ctx.globalAlpha = suave * Math.max(0, brillo);
 
       for (const grupo of grupos) {
         ctx.fillStyle = grupo.estilo;
@@ -700,9 +736,21 @@ function setupParticles() {
           const m = motas[i]!;
           // Cada mota arranca con su retraso: el trazo se va rellenando
           const t = Math.min(1, Math.max(0, (suave - m.delay) / (1 - m.delay)));
-          const e = t * t * (3 - 2 * t);
-          const x = m.sx + (m.tx - m.sx) * e;
-          const y = m.sy + (m.ty - m.sy) * e;
+          /* Entrada con frenada (ease-out cúbica): llegan rápido y posan
+             despacio, que es como cae algo de verdad. */
+          const e = 1 - (1 - t) ** 3;
+          const u = 1 - e;
+          // Curva de Bézier cuadrática: el viaje hace arco
+          let x = u * u * m.sx + 2 * u * e * m.cx + e * e * m.tx;
+          let y = u * u * m.sy + 2 * u * e * m.cy + e * e * m.ty;
+
+          /* Al soltarse salen despedidas hacia fuera en vez de desvanecerse
+             en el sitio, que dejaba el rectángulo de la palabra marcado. */
+          if (dispersion > 0) {
+            const vuelo = dispersion * dispersion * 320;
+            x += m.fx * vuelo;
+            y += m.fy * vuelo;
+          }
           /* Sin cuadrar a píxel: a este tamaño el suavizado del canvas une
              las celdas, y redondear volvía a abrir la rejilla. */
           ctx.rect(x - mitad, y - mitad, lado, lado);
@@ -738,6 +786,9 @@ function setupParticles() {
 
   let lastGather = 0;
   let releasing = false;
+  /* 0 mientras la palabra está, 1 cuando la nube ya se ha ido. Gobierna el
+     vuelo de salida de las motas y el apagado del trazo. */
+  let dispersion = 0;
 
   /* Al soltar la palabra hacen falta ganas de irse: sin empujón se quedaban
      apelotonadas donde estaba el texto, formando un rectángulo. */
@@ -748,9 +799,15 @@ function setupParticles() {
       const dx = p.x - cx;
       const dy = p.y - cy;
       const dist = Math.hypot(dx, dy) || 1;
-      const speed = 1.4 + Math.random() * 2.6;
-      p.vx = (dx / dist) * speed + (Math.random() - 0.5) * 0.8;
-      p.vy = (dy / dist) * speed + (Math.random() - 0.5) * 0.8;
+      /* Ángulo abierto y velocidad muy desigual: con un empujón radial limpio
+         la nube se iba en bloque y volvía a leerse la forma de la palabra. */
+      const angulo = Math.atan2(dy, dx) + (Math.random() - 0.5) * 1.6;
+      const speed = 1.8 + Math.random() * Math.random() * 7;
+      p.vx = Math.cos(angulo) * speed;
+      p.vy = Math.sin(angulo) * speed - Math.random() * 0.6;
+      // Deriva de reposo nueva: cada una se va por su lado y no vuelven en fila
+      p.bvx = (Math.random() - 0.5) * 0.3;
+      p.bvy = -0.03 - Math.random() * 0.14;
     }
   };
 
@@ -765,6 +822,10 @@ function setupParticles() {
     releasing = gather < lastGather - 0.0001;
     if (releasing && !wasReleasing) scatter();
     lastGather = gather;
+
+    /* Mientras suelta, la dispersión sube deprisa; al volver a juntarse se
+       reinicia de golpe para que el siguiente ciclo empiece limpio. */
+    dispersion = releasing ? Math.min(1, dispersion + 0.02) : 0;
 
     const repelOn = finePointer && gather > 0.35 && pointer.active;
 
@@ -781,7 +842,7 @@ function setupParticles() {
       p.vy += (p.bvy - p.vy) * 0.012;
 
       // Formados casi no derivan: si no, el trazo se emborrona
-      const free = releasing ? 1 : 1 - gather * 0.97;
+      const free = releasing ? 1.35 : 1 - gather * 0.97;
       p.x += (p.vx + Math.sin(time / 2600 + p.phase) * p.sway * 0.35) * free;
       p.y += p.vy * free;
       p.angle += p.spin * free;
