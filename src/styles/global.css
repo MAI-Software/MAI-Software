@@ -191,55 +191,8 @@ button {
    siguen presentes al bajar: antes solo existían dentro del hero y la
    página se quedaba desnuda a partir del primer scroll. Cada uno se
    desplaza a distinta velocidad para que el fondo no parezca un cartón. */
-.beam {
-  position: absolute;
-  border-radius: var(--radius-pill);
-  background: var(--gradient-brand);
-  /* Más finos y apagados desde que hay partículas: antes, con el halo de
-     70px, se leían como manchones borrosos en vez de haces. */
-  opacity: 0.2;
-  filter: blur(1px);
-  box-shadow: 0 0 46px rgba(56, 130, 251, 0.24);
-  rotate: -34deg;
-  will-change: transform;
-}
-
-/* Cada recorrido va en vh y acotado al avance de la página: por mucho que
-   se baje, ninguno se sale de pantalla. */
-.beam-1 {
-  top: 6%;
-  right: 4%;
-  width: 320px;
-  height: 18px;
-  translate: 0 calc(var(--scene-p, 0) * 34vh);
-}
-
-.beam-2 {
-  top: 46%;
-  left: -70px;
-  width: 260px;
-  height: 14px;
-  opacity: 0.16;
-  translate: 0 calc(var(--scene-p, 0) * -26vh);
-}
-
-.beam-3 {
-  top: 78%;
-  right: 12%;
-  width: 400px;
-  height: 16px;
-  opacity: 0.13;
-  translate: 0 calc(var(--scene-p, 0) * -46vh);
-}
-
-.beam-4 {
-  top: 24%;
-  left: 18%;
-  width: 180px;
-  height: 11px;
-  opacity: 0.11;
-  translate: 0 calc(var(--scene-p, 0) * 40vh);
-}
+/* Los haces se pintan ahora en el lienzo de partículas (motion.ts):
+   desde allí encienden el polvo que pasa cerca y proyectan sombra. */
 
 /* --- Luz guía ---
    Nace bajo el foco de la cabecera y baja según avanza la lectura, como
@@ -1265,4 +1218,100 @@ button {
   border: 1px solid var(--line);
   backdrop-filter: blur(14px) saturate(1.15);
   -webkit-backdrop-filter: blur(14px) saturate(1.15);
+}
+
+/* --- Pulso de luz en el borde -------------------------------------------
+   Un barrido de color de marca que da la vuelta muy despacio al borde de
+   cada lámina. Va en la propia caja y no en un pseudo-elemento, para no
+   chocar con los que ya usan las tarjetas. */
+@property --ring {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes ring-turn {
+  to {
+    --ring: 360deg;
+  }
+}
+
+.sheet,
+.hero-copy,
+.section-head,
+.feed-head,
+.archive-head,
+.demos-head,
+.contact-head,
+.studio-inner,
+.feed-note,
+.offer-note,
+.demo-note,
+.archive-about {
+  border-color: transparent;
+  background-image:
+    linear-gradient(rgba(8, 11, 20, 0.58), rgba(8, 11, 20, 0.58)),
+    conic-gradient(
+      from var(--ring),
+      rgba(98, 66, 252, 0) 0deg,
+      rgba(98, 66, 252, 0.5) 28deg,
+      rgba(16, 200, 252, 0.72) 62deg,
+      rgba(56, 130, 251, 0.28) 96deg,
+      rgba(98, 66, 252, 0) 150deg,
+      rgba(98, 66, 252, 0) 360deg
+    );
+  background-origin: padding-box, border-box;
+  background-clip: padding-box, border-box;
+  animation: ring-turn 18s linear infinite;
+}
+
+.hero-copy {
+  background-image:
+    linear-gradient(rgba(8, 11, 20, 0.66), rgba(8, 11, 20, 0.66)),
+    conic-gradient(
+      from var(--ring),
+      rgba(98, 66, 252, 0) 0deg,
+      rgba(98, 66, 252, 0.65) 26deg,
+      rgba(16, 200, 252, 0.9) 58deg,
+      rgba(56, 130, 251, 0.35) 94deg,
+      rgba(98, 66, 252, 0) 152deg,
+      rgba(98, 66, 252, 0) 360deg
+    );
+  animation-duration: 22s;
+}
+
+/* Desfase entre cajas: si todas laten a la vez parece un parpadeo global */
+.feed-head {
+  animation-delay: -4s;
+}
+
+.feed-note,
+.offer-note,
+.demo-note {
+  animation-delay: -9s;
+  animation-duration: 15s;
+}
+
+.archive-about,
+.studio-inner {
+  animation-delay: -13s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet,
+  .hero-copy,
+  .section-head,
+  .feed-head,
+  .archive-head,
+  .demos-head,
+  .contact-head,
+  .studio-inner,
+  .feed-note,
+  .offer-note,
+  .demo-note,
+  .archive-about {
+    animation: none;
+    border-color: var(--line);
+    background-image: none;
+  }
 }

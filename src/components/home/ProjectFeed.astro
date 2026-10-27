@@ -190,11 +190,15 @@ const t = useTranslations(locale);
     right: -0.6rem;
   }
 
+  /* Ocupa el ancho entero de la fila, hasta el borde de la última tarjeta:
+     así entra en una sola línea en vez de partirse en dos. */
   .feed-note {
     margin-top: var(--space-4);
-    max-width: 62ch;
+    width: 100%;
+    max-width: none;
     font-size: var(--font-size-sm);
     color: var(--text-muted);
+    text-wrap: pretty;
   }
 
   @media (min-width: 700px) {

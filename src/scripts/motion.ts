@@ -351,6 +351,12 @@ function setupParticles() {
     /** Separación por el puntero, suavizada */
     rx: number;
     ry: number;
+    /** Cuánta luz de haz recibe ahora mismo, de 0 a 1. */
+    luz: number;
+    /** Nodo de la red: unos pocos se enlazan con sus vecinos. */
+    nodo: boolean;
+    /** Brilla con halo propio cuando la nube se suelta. */
+    brilla: boolean;
   };
 
   /* El polvo fino es lo que hace legible la palabra: muchas motas pequeñas,
@@ -371,6 +377,39 @@ function setupParticles() {
     fx: number;
     fy: number;
   };
+
+  /* --- Haces de luz ---
+     Antes eran cuatro barras de CSS detrás del lienzo: no podían iluminar a
+     las partículas ni proyectar nada, porque vivían en otra capa. Ahora se
+     dibujan aquí, así que el polvo que les pasa cerca se enciende, se aparta
+     de su estela y el propio haz deja una sombra bajo él. */
+  type Haz = {
+    /** Centro, en fracción del lienzo: sobrevive a los cambios de tamaño. */
+    fx: number;
+    fy: number;
+    largo: number;
+    grosor: number;
+    ang: number;
+    /** Velocidad de deriva en su propio eje, px por fotograma. */
+    vel: number;
+    fase: number;
+    color: Rgb;
+    fuerza: number;
+  };
+
+  const haces: Haz[] = [
+    { fx: 0.82, fy: 0.1, largo: 320, grosor: 15, ang: -0.59, vel: 0.1, fase: 0, color: [56, 130, 251], fuerza: 0.9 },
+    { fx: 0.08, fy: 0.46, largo: 270, grosor: 12, ang: -0.59, vel: -0.07, fase: 1.9, color: [98, 66, 252], fuerza: 0.7 },
+    { fx: 0.72, fy: 0.8, largo: 420, grosor: 14, ang: -0.59, vel: 0.055, fase: 3.4, color: [16, 200, 252], fuerza: 0.62 },
+    { fx: 0.2, fy: 0.26, largo: 190, grosor: 10, ang: -0.59, vel: -0.12, fase: 5.1, color: [120, 150, 255], fuerza: 0.5 },
+  ];
+
+  /** Radio de influencia del haz sobre el polvo, en píxeles. */
+  const HAZ_R = 110;
+
+  /** Hasta dónde se enlazan dos nodos de la red. */
+  const RED_R = 190;
+  const RED_R2 = RED_R * RED_R;
 
   let petals: Petal[] = [];
   let motas: Mota[] = [];
@@ -530,10 +569,12 @@ function setupParticles() {
         const i = (y * logoW + x) * 4;
         const a = d[i + 3]!;
         if (a < 20) continue;
-        const r = Math.round(d[i]! / 20) * 20;
-        const g = Math.round(d[i + 1]! / 20) * 20;
-        const b = Math.round(d[i + 2]! / 20) * 20;
-        const al = Math.max(0.12, Math.round((a / 255) * 8) / 8);
+        /* Redondeo fino. Con pasos de 20 niveles, el degradado de la A se
+           veía a bandas: el ahorro de grupos no compensa el escalón. */
+        const r = Math.round(d[i]! / 5) * 5;
+        const g = Math.round(d[i + 1]! / 5) * 5;
+        const b = Math.round(d[i + 2]! / 5) * 5;
+        const al = Math.max(0.08, Math.round((a / 255) * 24) / 24);
         const clave = `rgba(${r}, ${g}, ${b}, ${al})`;
         const lista = cubos.get(clave);
         if (lista) lista.push(i);
@@ -584,7 +625,16 @@ function setupParticles() {
       ty: 0,
       rx: 0,
       ry: 0,
+      luz: 0,
+      nodo: false,
+      brilla: Math.random() < 0.06,
     })).map((petal) => ({ ...petal, vx: petal.bvx, vy: petal.bvy }));
+
+    /* Nodos de la red: ni muchos ni al azar puro. Un número fijo, repartido
+       en el reparto del array, para que no se amontonen en una esquina. */
+    const nodos = Math.min(70, Math.max(26, Math.round(petals.length / 18)));
+    const salto = Math.max(1, Math.floor(petals.length / nodos));
+    for (let i = 0; i < petals.length; i += salto) petals[i]!.nodo = true;
 
     /* Tamaño de celda: por debajo de tres píxeles el mosaico deja de verse
        como mosaico y la palabra se lee como tipografía. De ahí sale cuántas
@@ -703,8 +753,73 @@ function setupParticles() {
 
   const rounded = typeof ctx.roundRect === 'function';
 
+  /** Centro del haz en píxeles, con su deriva y su vaivén lento. */
+  const hazCentro = (haz: Haz, time: number) => {
+    const t = time / 1000;
+    // Recorre su eje y vuelve a entrar por el otro lado: nunca se para
+    const avance = ((t * haz.vel * 60) % (haz.largo * 4)) - haz.largo * 2;
+    const vaiven = Math.sin(t * 0.21 + haz.fase) * 40;
+    return {
+      x: haz.fx * w + Math.cos(haz.ang) * avance + Math.cos(haz.ang + Math.PI / 2) * vaiven,
+      y: haz.fy * h + Math.sin(haz.ang) * avance + Math.sin(haz.ang + Math.PI / 2) * vaiven,
+    };
+  };
+
+  /** Distancia de un punto al segmento del haz, y su posición en el eje. */
+  const distanciaAlHaz = (haz: Haz, cx: number, cy: number, px: number, py: number) => {
+    const dx = Math.cos(haz.ang);
+    const dy = Math.sin(haz.ang);
+    const rx = px - cx;
+    const ry = py - cy;
+    const sobreEje = Math.max(-haz.largo / 2, Math.min(haz.largo / 2, rx * dx + ry * dy));
+    const ex = cx + dx * sobreEje;
+    const ey = cy + dy * sobreEje;
+    return { d: Math.hypot(px - ex, py - ey), dx, dy };
+  };
+
+  /** Capsula tumbada sobre el eje del haz. */
+  const capsula = (cx: number, cy: number, haz: Haz, largo: number, grosor: number) => {
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(haz.ang);
+    ctx.beginPath();
+    if (rounded) ctx.roundRect(-largo / 2, -grosor / 2, largo, grosor, grosor / 2);
+    else ctx.rect(-largo / 2, -grosor / 2, largo, grosor);
+    ctx.fill();
+    ctx.restore();
+  };
+
+  const pintarHaces = (time: number) => {
+    for (const haz of haces) {
+      const { x, y } = hazCentro(haz, time);
+      // Latido muy lento: un haz fijo se lee como una raya pegada al cristal
+      const pulso = 0.78 + 0.22 * Math.sin(time / 2600 + haz.fase);
+      const [r, g, b] = haz.color;
+
+      /* Sombra: una banda oscura desplazada bajo el haz. Es lo que hace que
+         parezca que la luz pasa por delante del fondo y no dentro de él. */
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = 0.3 * haz.fuerza * pulso;
+      ctx.fillStyle = 'rgb(2, 3, 8)';
+      capsula(x + 7, y + 11, haz, haz.largo * 0.96, haz.grosor * 1.9);
+
+      // Halo y núcleo, sumando luz
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.globalAlpha = 0.07 * haz.fuerza * pulso;
+      ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+      capsula(x, y, haz, haz.largo, haz.grosor * 4.2);
+      ctx.globalAlpha = 0.11 * haz.fuerza * pulso;
+      capsula(x, y, haz, haz.largo * 0.98, haz.grosor * 2.1);
+      ctx.globalAlpha = 0.2 * haz.fuerza * pulso;
+      capsula(x, y, haz, haz.largo * 0.94, haz.grosor * 0.85);
+    }
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalAlpha = 1;
+  };
+
   const draw = (time: number, gather: number) => {
     ctx.clearRect(0, 0, w, h);
+    pintarHaces(time);
 
     /* `form` va por detrás de `gather`: los pétalos primero llegan a su sitio
        y solo al final cuaja la palabra. */
@@ -759,6 +874,34 @@ function setupParticles() {
       }
     }
 
+    /* --- Red de conexiones ---
+       Unos pocos pétalos hacen de nodo y se enlazan con los que tienen
+       cerca. Se ve cuando la nube está suelta y se apaga al formarse la
+       palabra: ahí el protagonismo es del trazo. */
+    const redVisible = 1 - suave;
+    if (redVisible > 0.03) {
+      const nodos = petals.filter((p) => p.nodo);
+      ctx.lineWidth = 0.7;
+      for (let i = 0; i < nodos.length; i++) {
+        const a = nodos[i]!;
+        for (let j = i + 1; j < nodos.length; j++) {
+          const b = nodos[j]!;
+          const dx = b.x - a.x;
+          const dy = b.y - a.y;
+          const d2 = dx * dx + dy * dy;
+          if (d2 > RED_R2) continue;
+          const cerca = 1 - Math.sqrt(d2) / RED_R;
+          /* Tenue a propósito: una telaraña marcada sobre el texto es ruido,
+             y la idea es que se intuya, no que se lea. */
+          ctx.strokeStyle = `rgba(120, 170, 255, ${(cerca * 0.14 * redVisible).toFixed(3)})`;
+          ctx.beginPath();
+          ctx.moveTo(a.x + a.rx, a.y + a.ry);
+          ctx.lineTo(b.x + b.rx, b.y + b.ry);
+          ctx.stroke();
+        }
+      }
+    }
+
     // --- Los pétalos ---
     for (const p of petals) {
       const x = p.x + p.rx;
@@ -771,14 +914,29 @@ function setupParticles() {
       ctx.fillStyle = `rgb(${r | 0}, ${g | 0}, ${b | 0})`;
 
       /* Formados se apagan: el trazo lo pone el polvo fino y los pétalos
-         solo le dan vida por encima. */
-      ctx.globalAlpha = p.a * twinkle * (1 - suave * 0.55);
+         solo le dan vida por encima. Lo que toca un haz, en cambio, brilla:
+         p.luz lo calcula el paso físico, que ya mide esa distancia. */
+      const base = p.a * twinkle * (1 - suave * 0.55);
+      ctx.globalAlpha = Math.min(1, base * (1 + p.luz * 2.4));
 
       ctx.beginPath();
       const ancho = p.r * (1.9 - suave * 1.0);
       const alto = p.r * (0.85 + suave * 0.05);
       ctx.ellipse(x, y, ancho, alto, p.angle * (1 - suave), 0, Math.PI * 2);
       ctx.fill();
+
+      /* Unas pocas respiran luz propia. Sube cuando la nube se suelta y
+         cuando pasa un haz, así la dispersión tiene brasas. */
+      if (p.brilla) {
+        const vida = 0.5 + 0.5 * Math.sin(time / 2200 + p.phase * 2);
+        const halo = (0.3 + dispersion * 0.7) * vida * (1 - suave * 0.7) + p.luz * 0.5;
+        if (halo > 0.02) {
+          ctx.globalAlpha = Math.min(0.5, halo * 0.5);
+          ctx.beginPath();
+          ctx.arc(x, y, p.r * (3.4 + halo * 4.5), 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
     }
 
     ctx.globalAlpha = 1;
@@ -828,6 +986,8 @@ function setupParticles() {
     dispersion = releasing ? Math.min(1, dispersion + 0.02) : 0;
 
     const repelOn = finePointer && gather > 0.35 && pointer.active;
+    // Un centro por haz y fotograma: calcularlo por partícula era absurdo
+    const centrosHaz = haces.map((haz) => hazCentro(haz, time));
 
     for (const p of petals) {
       // Al soltar ya no tira el destino: si no, volverían a la palabra
@@ -846,6 +1006,28 @@ function setupParticles() {
       p.x += (p.vx + Math.sin(time / 2600 + p.phase) * p.sway * 0.35) * free;
       p.y += p.vy * free;
       p.angle += p.spin * free;
+
+      /* Estela de los haces: la partícula que entra en uno se enciende, se
+         aparta un poco de su eje y se deja arrastrar en su dirección. */
+      let luz = 0;
+      let arrastreX = 0;
+      let arrastreY = 0;
+      for (let hi = 0; hi < haces.length; hi++) {
+        const haz = haces[hi]!;
+        const c = centrosHaz[hi]!;
+        const { d, dx, dy } = distanciaAlHaz(haz, c.x, c.y, p.x, p.y);
+        if (d >= HAZ_R) continue;
+        const fuerza = (1 - d / HAZ_R) ** 2 * haz.fuerza;
+        luz = Math.max(luz, fuerza);
+        // Perpendicular al haz: la partícula se abre al paso de la luz
+        const lado = (p.x - c.x) * -dy + (p.y - c.y) * dx >= 0 ? 1 : -1;
+        arrastreX += (-dy * lado * 0.22 + dx * 0.16) * fuerza;
+        arrastreY += (dx * lado * 0.22 + dy * 0.16) * fuerza;
+      }
+      // El encendido sube rápido y baja despacio: deja rastro al pasar
+      p.luz += (luz - p.luz) * (luz > p.luz ? 0.3 : 0.04);
+      p.x += arrastreX;
+      p.y += arrastreY;
 
       /* Con la palabra formada, el puntero aparta las celdas cercanas y
          estas vuelven solas al soltarlas. */

@@ -328,8 +328,19 @@ const previews = projects.slice(0, 6);
       grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr);
     }
 
+    /* La lámina cruza hasta el borde derecho del carrusel y este se le monta
+       encima: el texto gana fondo bajo las tarjetas en vez de cortarse a
+       mitad de la pantalla. */
+    .hero-copy {
+      grid-area: 1 / 1 / 2 / -1;
+      padding-right: calc(48% + var(--space-6));
+    }
+
     .hero-stack {
       display: block;
+      grid-area: 1 / 2 / 2 / -1;
+      position: relative;
+      z-index: 2;
     }
   }
 </style>
