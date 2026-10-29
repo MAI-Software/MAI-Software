@@ -1,0 +1,1033 @@
+---
+import DemoLayout from '../../../layouts/DemoLayout.astro';
+
+/* Plantilla de estudio de tatuajes. Aquí la web no vende: filtra. Quien
+   escribe sin referencias, sin zona y sin tamaño hace perder una hora a
+   todo el mundo, así que la página explica cómo se pide presupuesto y qué
+   hace falta para que la respuesta sea útil a la primera. */
+
+const artistas = [
+  {
+    n: 'Rubén Mata',
+    alias: '@rubenmata.ink',
+    estilos: 'Blackwork · Neotradicional',
+    espera: 'Lista abierta · 3 semanas',
+    nota: 'Piezas grandes de una sesión larga. No hace letras sueltas.',
+  },
+  {
+    n: 'Alba Sierra',
+    alias: '@albasierra.tattoo',
+    estilos: 'Fine line · Microrrealismo',
+    espera: 'Lista abierta · 5 semanas',
+    nota: 'Trabajo fino y detalle pequeño. Diseño propio sobre tu idea.',
+  },
+  {
+    n: 'Koke Villar',
+    alias: '@kokevillar',
+    estilos: 'Japonés tradicional',
+    espera: 'Lista cerrada hasta enero',
+    nota: 'Proyectos de brazo o espalda completos, por sesiones.',
+  },
+];
+
+const estilos = [
+  { t: 'Blackwork', d: 'Negro sólido, geometría y contraste alto.' },
+  { t: 'Fine line', d: 'Línea fina, botánico y lettering delicado.' },
+  { t: 'Neotradicional', d: 'Contorno marcado, color plano y composición clásica.' },
+  { t: 'Microrrealismo', d: 'Retrato y objeto pequeños con sombra suave.' },
+  { t: 'Japonés', d: 'Máscaras, koi y fondo de viento, por proyecto.' },
+  { t: 'Cover-up', d: 'Tapar un tatuaje antiguo. Requiere ver la pieza en persona.' },
+];
+
+const pasos = [
+  {
+    t: 'Mándanos la idea',
+    d: 'Zona, tamaño aproximado en centímetros, dos o tres referencias y si hay algo que tapar.',
+  },
+  {
+    t: 'Te decimos artista y rango',
+    d: 'Quién encaja con ese estilo, cuántas sesiones hacen falta y el rango de precio. Sin compromiso.',
+  },
+  {
+    t: 'Señal y fecha',
+    d: 'Se reserva el hueco con una señal que se descuenta del total. Cambiar la fecha con 72 h de aviso no cuesta nada.',
+  },
+  {
+    t: 'Diseño y sesión',
+    d: 'El boceto se enseña el día de la cita y se ajusta contigo antes de empezar.',
+  },
+];
+
+const cuidados = [
+  'Film las primeras dos horas, luego lavar con agua tibia y jabón neutro.',
+  'Crema fina tres veces al día durante dos semanas. Nada de vaselina.',
+  'Sin piscina, playa ni gimnasio durante quince días.',
+  'Costra fuera: se cae sola. Si rascas, se va la tinta con ella.',
+  'Protección solar alta de por vida en la zona tatuada.',
+];
+
+const preguntas = [
+  {
+    q: '¿Cuánto cuesta un tatuaje?',
+    a: 'Depende del tamaño, la zona y el detalle, no del tiempo a ojo. Mándanos la idea con referencias y te damos el rango cerrado antes de reservar nada.',
+  },
+  {
+    q: '¿Hace falta señal?',
+    a: 'Sí, y se descuenta del precio final. Es lo que hace que el hueco sea tuyo y que el artista dedique tiempo al diseño.',
+  },
+  {
+    q: '¿Puedo llevar mi propio diseño?',
+    a: 'Puedes traer referencias, pero el diseño lo adapta el artista a tu cuerpo y a su estilo. Lo que no hacemos es copiar el tatuaje de otra persona.',
+  },
+  {
+    q: '¿Retocáis?',
+    a: 'Un retoque gratuito dentro de los tres primeros meses, siempre que se hayan seguido los cuidados.',
+  },
+  {
+    q: '¿Menores de edad?',
+    a: 'No tatuamos a menores de 18 años, ni con autorización.',
+  },
+];
+
+const galeria = ['Blackwork', 'Fine line', 'Neotradicional', 'Japonés', 'Microrrealismo', 'Cover-up'];
+---
+
+<DemoLayout
+  title="Estudio Raíz · tatuajes en Bilbao"
+  description="Plantilla de ejemplo: web para estudio de tatuajes con portfolio por artista, estilos, presupuesto con referencias, señal y cuidados."
+>
+  <div class="site">
+    <header class="top">
+      <a class="brand" href="#inicio">
+        <span class="mark" aria-hidden="true"></span>
+        <span class="brand-text">
+          Estudio Raíz
+          <small>Tatuaje · Bilbao</small>
+        </span>
+      </a>
+      <nav aria-label="Principal">
+        <a href="#artistas">Artistas</a>
+        <a href="#estilos">Estilos</a>
+        <a href="#galeria">Galería</a>
+        <a href="#proceso">Cómo reservar</a>
+        <a href="#preguntas">Preguntas</a>
+      </nav>
+      <a class="btn" href="#cita">Pedir presupuesto</a>
+    </header>
+
+    <section class="hero" id="inicio">
+      <div class="hero-text">
+        <p class="chip">Lista abierta en dos de los tres artistas</p>
+        <h1>Trae la idea. Nosotros la convertimos en algo que aguante treinta años.</h1>
+        <p class="lead">
+          Estudio de tres artistas con estilos distintos. Te decimos cuál encaja con lo que
+          traes, cuántas sesiones hacen falta y qué va a costar, antes de que reserves.
+        </p>
+        <div class="hero-actions">
+          <a class="btn big" href="#cita">Pedir presupuesto</a>
+          <a class="btn ghost big" href="#galeria">Ver trabajos</a>
+        </div>
+        <ul class="hero-datos">
+          <li><strong>12 años</strong><span>en Bilbao</span></li>
+          <li><strong>3 artistas</strong><span>estilos distintos</span></li>
+          <li><strong>Material</strong><span>de un solo uso</span></li>
+        </ul>
+      </div>
+
+      <div class="hueco hueco-hero">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="5" width="18" height="14" rx="2" />
+          <circle cx="8.5" cy="10" r="1.6" />
+          <path d="m4 17 5-4.5 3.5 3L16 12l4 4" />
+        </svg>
+        <span>Tu foto aquí · el estudio o una pieza, 1200 × 900</span>
+      </div>
+    </section>
+
+    <section class="artistas" id="artistas">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Artistas</p>
+          <h2>Quién tatúa qué, y cuánto se espera</h2>
+        </div>
+        <p class="sec-note">
+          Cada uno lleva su lista. Si el tuyo la tiene cerrada, te avisamos cuando abra en
+          lugar de pasarte a otro sin decirlo.
+        </p>
+      </header>
+
+      <div class="grid">
+        {
+          artistas.map((a) => (
+            <article class="card">
+              <div class="hueco hueco-retrato">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="8.5" r="3.5" />
+                  <path d="M5 20c1.2-3.6 4-5.4 7-5.4s5.8 1.8 7 5.4" />
+                </svg>
+              </div>
+              <h3>{a.n}</h3>
+              <p class="alias">{a.alias}</p>
+              <p class="estilos">{a.estilos}</p>
+              <p class="card-texto">{a.nota}</p>
+              <p class="espera">{a.espera}</p>
+              <a class="card-cta" href="#cita">
+                Escribir a {a.n.split(' ')[0]} <span aria-hidden="true">→</span>
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="estilos" id="estilos">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Estilos</p>
+          <h2>Lo que hacemos y lo que no</h2>
+        </div>
+      </header>
+      <ul class="estilos-grid">
+        {
+          estilos.map((e) => (
+            <li>
+              <strong>{e.t}</strong>
+              <span>{e.d}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="galeria" id="galeria">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Galería</p>
+          <h2>Trabajo cerrado y curado</h2>
+        </div>
+        <p class="sec-note">
+          Fotos tomadas al menos un mes después, con el tatuaje ya curado. Es la única forma
+          honesta de enseñar cómo queda.
+        </p>
+      </header>
+      <div class="galeria-grid">
+        {
+          galeria.map((g) => (
+            <figure class="hueco hueco-pieza">
+              <figcaption>{g} · tu foto aquí</figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="proceso" id="proceso">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Cómo reservar</p>
+          <h2>De la idea a la aguja, en cuatro pasos</h2>
+        </div>
+      </header>
+      <ol class="pasos">
+        {
+          pasos.map((p, i) => (
+            <li>
+              <span class="num">{String(i + 1).padStart(2, '0')}</span>
+              <strong>{p.t}</strong>
+              <span>{p.d}</span>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="cuidados">
+      <div class="cuidados-grid">
+        <div>
+          <p class="eyebrow claro">Cuidados</p>
+          <h2>Lo que hagas las dos primeras semanas decide cómo queda</h2>
+          <p class="cuidados-texto">
+            Te lo damos impreso al salir, pero lo dejamos aquí porque todo el mundo lo busca a
+            los tres días con el móvil en la mano.
+          </p>
+        </div>
+        <ul>
+          {cuidados.map((c) => <li>{c}</li>)}
+        </ul>
+      </div>
+    </section>
+
+    <section class="preguntas" id="preguntas">
+      <header class="sec-head">
+        <div>
+          <p class="eyebrow">Preguntas frecuentes</p>
+          <h2>Lo que se pregunta antes de escribir</h2>
+        </div>
+      </header>
+      <div class="faq">
+        {
+          preguntas.map((p, i) => (
+            <details open={i === 0}>
+              <summary>{p.q}</summary>
+              <p>{p.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="cita" id="cita">
+      <div class="cita-grid">
+        <div>
+          <p class="eyebrow claro">Presupuesto</p>
+          <h2>Cuéntanos la idea con referencias</h2>
+          <p class="cita-texto">
+            Cuanto más concreto, más útil es la respuesta. Contestamos en 48 horas de martes a
+            sábado.
+          </p>
+          <div class="donde">
+            <p><strong>Calle Ronda 12, Bilbao</strong></p>
+            <p>Martes a sábado 11:00 – 20:00 · Solo con cita</p>
+            <p>944 000 000 · hola@estudioraiz.es</p>
+          </div>
+        </div>
+
+        <form>
+          <label>
+            Nombre
+            <input type="text" placeholder="Tu nombre" required />
+          </label>
+          <label>
+            Teléfono o Instagram
+            <input type="text" placeholder="600 000 000 o @tucuenta" required />
+          </label>
+          <label>
+            Zona del cuerpo
+            <input type="text" placeholder="Antebrazo interior, gemelo…" />
+          </label>
+          <label>
+            Tamaño aproximado
+            <select>
+              <option>Menos de 5 cm</option>
+              <option>5 – 10 cm</option>
+              <option selected>10 – 20 cm</option>
+              <option>Más de 20 cm</option>
+              <option>Brazo o pierna completos</option>
+            </select>
+          </label>
+          <label class="ancho">
+            Artista que te encaja
+            <select>
+              {artistas.map((a) => <option>{`${a.n} · ${a.estilos}`}</option>)}
+              <option>No lo sé, recomendadme</option>
+            </select>
+          </label>
+          <label class="ancho">
+            La idea
+            <textarea rows="4" placeholder="Qué quieres tatuarte, si tapa algo y qué referencias tienes"></textarea>
+          </label>
+          <label class="ancho archivo">
+            Referencias
+            <span class="hueco hueco-archivo">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 16V4m0 0 4 4m-4-4L8 8" />
+                <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+              </svg>
+              <span>Arrastra tus imágenes o toca para elegirlas</span>
+            </span>
+          </label>
+          <button type="button">Pedir presupuesto</button>
+          <p class="form-nota">Sin señal no se reserva fecha, pero el presupuesto no cuesta nada.</p>
+        </form>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <div>
+        <p class="foot-brand">Estudio Raíz</p>
+        <p>Calle Ronda 12, Bilbao · 944 000 000 · hola@estudioraiz.es</p>
+        <p class="mini-legal">
+          Estudio con autorización sanitaria nº 00000. No se tatúa a menores de 18 años.
+        </p>
+      </div>
+      <p class="mini">Plantilla de ejemplo. Nombres, artistas y datos son ficticios.</p>
+    </footer>
+
+    <div class="barra-movil">
+      <a class="btn ghost" href="tel:+34944000000">Llamar</a>
+      <a class="btn" href="#cita">Pedir presupuesto</a>
+    </div>
+  </div>
+</DemoLayout>
+
+<style>
+  .site {
+    --tinta: #0e0d10;
+    --papel: #f4f1ec;
+    --papel-2: #e6e1d8;
+    --rojo: #d1495b;
+    --suave: #6f6a63;
+    --linea: rgba(14, 13, 16, 0.16);
+
+    background: var(--papel);
+    color: var(--tinta);
+    font-family: 'Futura', 'Avenir Next', system-ui, sans-serif;
+    padding-bottom: 5.5rem;
+  }
+
+  .top {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 0.85rem clamp(1.1rem, 4vw, 3.5rem);
+    background: rgba(244, 241, 236, 0.95);
+    border-bottom: 1px solid var(--linea);
+    backdrop-filter: blur(10px);
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    text-decoration: none;
+  }
+
+  .mark {
+    width: 34px;
+    height: 34px;
+    border-radius: 4px;
+    background: var(--tinta);
+    box-shadow: inset 0 0 0 3px var(--papel), inset 0 0 0 5px var(--rojo);
+  }
+
+  .brand-text {
+    display: grid;
+    font-size: 1.06rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    line-height: 1.15;
+  }
+
+  .brand-text small {
+    font-size: 0.64rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    color: var(--suave);
+  }
+
+  .top nav {
+    display: none;
+    gap: 1.4rem;
+    font-size: 0.88rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .top nav a {
+    color: var(--suave);
+    text-decoration: none;
+  }
+
+  .top nav a:hover {
+    color: var(--rojo);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 0 1.3rem;
+    border-radius: 2px;
+    background: var(--tinta);
+    color: var(--papel);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: transform 0.15s ease, background-color 0.15s ease;
+  }
+
+  .btn:hover {
+    transform: translateY(-1px);
+    background: var(--rojo);
+  }
+
+  .btn.ghost {
+    background: transparent;
+    border: 1px solid var(--linea);
+    color: var(--tinta);
+  }
+
+  .btn.big {
+    min-height: 54px;
+    padding: 0 1.9rem;
+    font-size: 0.92rem;
+  }
+
+  section {
+    padding: clamp(2.6rem, 6vw, 4.5rem) clamp(1.1rem, 4vw, 3.5rem);
+  }
+
+  .hero {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .chip {
+    display: inline-block;
+    margin: 0 0 1.2rem;
+    padding: 0.35rem 0.85rem;
+    border: 1px solid var(--rojo);
+    color: var(--rojo);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(2rem, 4.2vw, 3.1rem);
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    max-width: 20ch;
+    text-transform: uppercase;
+  }
+
+  .lead {
+    max-width: 52ch;
+    color: var(--suave);
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 1.8rem;
+  }
+
+  .hero-datos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.8rem;
+    margin: 2rem 0 0;
+    padding: 1.4rem 0 0;
+    border-top: 1px solid var(--linea);
+    list-style: none;
+  }
+
+  .hero-datos li {
+    display: grid;
+    gap: 0.1rem;
+  }
+
+  .hero-datos strong {
+    font-size: 1.3rem;
+  }
+
+  .hero-datos span {
+    font-size: 0.82rem;
+    color: var(--suave);
+  }
+
+  /* --- Huecos de imagen --- */
+  .hueco {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 0.5rem;
+    aspect-ratio: 4 / 3;
+    border: 2px dashed rgba(14, 13, 16, 0.24);
+    background: rgba(14, 13, 16, 0.04);
+    color: var(--suave);
+    text-align: center;
+  }
+
+  .hueco svg {
+    width: 30px;
+    height: 30px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.7;
+  }
+
+  .hueco span {
+    font-size: 0.78rem;
+  }
+
+  .hueco-retrato {
+    aspect-ratio: 1;
+    width: 68px;
+    border-radius: 50%;
+    border-width: 1px;
+    margin-bottom: 0.7rem;
+  }
+
+  .hueco-retrato svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .hueco-pieza {
+    position: relative;
+    margin: 0;
+    aspect-ratio: 1;
+  }
+
+  .hueco-pieza figcaption {
+    font-size: 0.78rem;
+  }
+
+  .hueco-archivo {
+    aspect-ratio: auto;
+    min-height: 92px;
+    padding: 1rem;
+    border-radius: 2px;
+    border-color: rgba(244, 241, 236, 0.35);
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(244, 241, 236, 0.75);
+  }
+
+  .eyebrow {
+    margin: 0;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--rojo);
+  }
+
+  .eyebrow.claro {
+    color: rgba(244, 241, 236, 0.8);
+  }
+
+  .sec-head {
+    display: grid;
+    gap: 0.7rem;
+    margin-bottom: 2.2rem;
+  }
+
+  h2 {
+    margin: 0.3rem 0 0;
+    font-size: clamp(1.6rem, 3.2vw, 2.2rem);
+    line-height: 1.15;
+    max-width: 24ch;
+    text-transform: uppercase;
+  }
+
+  .sec-note {
+    margin: 0;
+    max-width: 48ch;
+    font-size: 0.92rem;
+    color: var(--suave);
+  }
+
+  .grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .card {
+    display: grid;
+    gap: 0.3rem;
+    align-content: start;
+    padding: 1.6rem;
+    background: #fff;
+    border: 1px solid var(--linea);
+  }
+
+  .card h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    text-transform: uppercase;
+  }
+
+  .alias {
+    margin: 0;
+    font-size: 0.86rem;
+    color: var(--rojo);
+  }
+
+  .estilos {
+    margin: 0.3rem 0 0;
+    font-size: 0.84rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--suave);
+  }
+
+  .card-texto {
+    margin: 0.5rem 0 0;
+    color: var(--suave);
+    line-height: 1.6;
+  }
+
+  .espera {
+    margin: 0.6rem 0 0;
+    padding: 0.3rem 0.7rem;
+    justify-self: start;
+    background: var(--papel-2);
+    font-size: 0.78rem;
+  }
+
+  .card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 44px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--tinta);
+    text-decoration: none;
+  }
+
+  .estilos-grid {
+    display: grid;
+    gap: 0.8rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .estilos-grid li {
+    display: grid;
+    gap: 0.2rem;
+    padding: 1.1rem 1.3rem;
+    background: #fff;
+    border-left: 3px solid var(--rojo);
+  }
+
+  .estilos-grid strong {
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .estilos-grid span {
+    font-size: 0.9rem;
+    color: var(--suave);
+  }
+
+  .galeria {
+    background: var(--papel-2);
+  }
+
+  .galeria-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+  }
+
+  .pasos {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pasos li {
+    display: grid;
+    gap: 0.3rem;
+    padding: 1.3rem;
+    background: #fff;
+    border: 1px solid var(--linea);
+  }
+
+  .num {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: var(--rojo);
+  }
+
+  .pasos strong {
+    font-size: 1.02rem;
+    text-transform: uppercase;
+  }
+
+  .pasos span:last-child {
+    color: var(--suave);
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+
+  .cuidados {
+    background: var(--tinta);
+    color: var(--papel);
+  }
+
+  .cuidados h2 {
+    color: var(--papel);
+  }
+
+  .cuidados-grid {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .cuidados-texto {
+    max-width: 44ch;
+    color: rgba(244, 241, 236, 0.78);
+    line-height: 1.7;
+  }
+
+  .cuidados ul {
+    display: grid;
+    gap: 0.7rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .cuidados li {
+    padding: 0.9rem 1.1rem;
+    background: rgba(255, 255, 255, 0.07);
+    border-left: 2px solid var(--rojo);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .preguntas {
+    background: var(--papel-2);
+  }
+
+  .faq {
+    display: grid;
+    gap: 0.7rem;
+    max-width: 54rem;
+  }
+
+  details {
+    background: #fff;
+    border: 1px solid var(--linea);
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    min-height: 52px;
+    padding: 0.9rem 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  details p {
+    margin: 0;
+    padding: 0 1.2rem 1.1rem;
+    color: var(--suave);
+    line-height: 1.65;
+  }
+
+  .cita {
+    background: var(--tinta);
+    color: var(--papel);
+  }
+
+  .cita h2 {
+    color: var(--papel);
+  }
+
+  .cita-grid {
+    display: grid;
+    gap: 2.2rem;
+  }
+
+  .cita-texto {
+    max-width: 44ch;
+    color: rgba(244, 241, 236, 0.8);
+    line-height: 1.7;
+  }
+
+  .donde {
+    margin-top: 1.6rem;
+    font-size: 0.92rem;
+    color: rgba(244, 241, 236, 0.75);
+  }
+
+  .donde p {
+    margin: 0.2rem 0;
+  }
+
+  form {
+    display: grid;
+    gap: 1rem;
+    padding: clamp(1.3rem, 3vw, 2rem);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+  }
+
+  label {
+    display: grid;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  input,
+  textarea,
+  select {
+    min-height: 48px;
+    padding: 0.8rem 0.9rem;
+    border: 1px solid rgba(244, 241, 236, 0.28);
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--papel);
+    font: inherit;
+    font-size: 0.95rem;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  select option {
+    color: #0e0d10;
+  }
+
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline: 2px solid var(--rojo);
+    outline-offset: 2px;
+  }
+
+  button {
+    min-height: 54px;
+    border: 0;
+    border-radius: 2px;
+    background: var(--rojo);
+    color: #fff;
+    font: inherit;
+    font-weight: 700;
+    font-size: 0.92rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .form-nota {
+    margin: 0;
+    font-size: 0.78rem;
+    color: rgba(244, 241, 236, 0.7);
+  }
+
+  .foot {
+    display: grid;
+    gap: 0.8rem;
+    padding: 2.4rem clamp(1.1rem, 4vw, 3.5rem) 2rem;
+    font-size: 0.86rem;
+    color: var(--suave);
+  }
+
+  .foot p {
+    margin: 0;
+  }
+
+  .foot-brand {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--tinta);
+  }
+
+  .mini-legal {
+    margin-top: 0.6rem !important;
+    max-width: 70ch;
+    font-size: 0.76rem;
+  }
+
+  .mini {
+    font-size: 0.76rem;
+  }
+
+  .barra-movil {
+    position: fixed;
+    inset: auto 0 1.9rem 0;
+    z-index: 30;
+    display: flex;
+    gap: 0.6rem;
+    padding: 0.6rem 1rem;
+    background: rgba(244, 241, 236, 0.96);
+    border-top: 1px solid var(--linea);
+    backdrop-filter: blur(10px);
+  }
+
+  .barra-movil .btn {
+    flex: 1;
+  }
+
+  @media (min-width: 880px) {
+    .top nav {
+      display: flex;
+    }
+
+    .hero {
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+
+    .sec-head {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 2rem;
+    }
+
+    .grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .estilos-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .galeria-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .pasos {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .cuidados-grid {
+      grid-template-columns: 0.9fr 1.1fr;
+    }
+
+    .cita-grid {
+      grid-template-columns: 0.9fr 1.1fr;
+      align-items: start;
+    }
+
+    form {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ancho,
+    button,
+    .form-nota {
+      grid-column: span 2;
+    }
+
+    .foot {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+    }
+
+    .barra-movil {
+      display: none;
+    }
+  }
+</style>

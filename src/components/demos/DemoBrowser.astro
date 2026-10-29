@@ -10,43 +10,69 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = useTranslations(locale);
+
+/* La demo de creador está publicada aparte y prohíbe que la incrusten
+   (frame-ancestors 'none'), así que de esas se enseña captura y se abren en
+   pestaña. Las de dentro se navegan en el marco. */
+const destino = (demo: (typeof demoTemplates)[number]) =>
+  demo.externalUrl ?? withBase(demoPath(demo.slug));
+
+const grupos = [
+  { id: 'creador' as const, titulo: t('demos.tier.creador'), pie: t('demos.tier.creador.note') },
+  { id: 'negocio' as const, titulo: t('demos.tier.negocio'), pie: t('demos.tier.negocio.note') },
+];
+
+const primera = demoTemplates[0]!;
 ---
 
 <div class="demo-browser">
   <div class="demo-list" role="tablist" aria-label={t('demos.list')}>
     {
-      demoTemplates.map((demo, index) => (
-        <button
-          type="button"
-          role="tab"
-          class:list={['demo-item', { active: index === 0 }]}
-          id={`demo-tab-${demo.slug}`}
-          aria-selected={index === 0 ? 'true' : 'false'}
-          aria-controls="demo-preview"
-          tabindex={index === 0 ? 0 : -1}
-          data-demo={demo.slug}
-          data-src={withBase(demoPath(demo.slug))}
-          data-format={demo.format}
-          data-name={demo.name[locale]}
-        >
-          <span class="demo-dot" style={`--accent:${demo.accent}`} aria-hidden="true" />
-          <span class="demo-text">
-            <span class="demo-sector">{demo.sector[locale]}</span>
-            <span class="demo-name">{demo.name[locale]}</span>
-            <span class="demo-pitch">{demo.pitch[locale]}</span>
-            <span class="demo-highlights">
-              {demo.highlights[locale].map((item) => (
-                <span>{item}</span>
-              ))}
-            </span>
-          </span>
-        </button>
+      grupos.map((grupo) => (
+        <div class="demo-grupo">
+          <div class="grupo-cab">
+            <h2>{grupo.titulo}</h2>
+            <p>{grupo.pie}</p>
+          </div>
+
+          {demoTemplates
+            .filter((demo) => demo.tier === grupo.id)
+            .map((demo) => (
+              <button
+                type="button"
+                role="tab"
+                class:list={['demo-item', { active: demo.slug === primera.slug }]}
+                id={`demo-tab-${demo.slug}`}
+                aria-selected={demo.slug === primera.slug ? 'true' : 'false'}
+                aria-controls="demo-preview"
+                tabindex={demo.slug === primera.slug ? 0 : -1}
+                data-demo={demo.slug}
+                data-src={destino(demo)}
+                data-shot={demo.shot ? withBase(demo.shot) : ''}
+                data-externa={demo.externalUrl ? 'si' : ''}
+                data-format={demo.format}
+                data-name={demo.name[locale]}
+              >
+                <span class="demo-dot" style={`--accent:${demo.accent}`} aria-hidden="true" />
+                <span class="demo-text">
+                  <span class="demo-sector">{demo.sector[locale]}</span>
+                  <span class="demo-name">{demo.name[locale]}</span>
+                  <span class="demo-pitch">{demo.pitch[locale]}</span>
+                  <span class="demo-highlights">
+                    {demo.highlights[locale].map((item) => (
+                      <span>{item}</span>
+                    ))}
+                  </span>
+                </span>
+              </button>
+            ))}
+        </div>
       ))
     }
 
     <div class="demo-ask">
       <p>{t('demos.ask')}</p>
-      <a href={contactPath(locale)} class="btn btn-brand btn-sm">{t('demos.askCta')}</a>
+      <a href={contactPath(locale)} class="btn btn-sm">{t('demos.askCta')}</a>
     </div>
   </div>
 
@@ -62,24 +88,61 @@ const t = useTranslations(locale);
         <a
           class="demo-open"
           data-frame-open
+          data-dentro={t('demos.open')}
+          data-fuera={t('demos.openNew')}
           href={withBase(demoPath(demoTemplates[0]!.slug))}
           target="_blank"
           rel="noopener"
         >
-          {t('demos.open')}
+          {primera.externalUrl ? t('demos.openNew') : t('demos.open')}
         </a>
       </div>
 
-      <div class="demo-screen">
+      <div class="demo-screen" data-screen>
         <iframe
           id="demo-preview"
           role="tabpanel"
-          aria-labelledby={`demo-tab-${demoTemplates[0]!.slug}`}
-          src={withBase(demoPath(demoTemplates[0]!.slug))}
-          title={demoTemplates[0]!.name[locale]}
+          aria-labelledby={`demo-tab-${primera.slug}`}
+          src={primera.externalUrl ? '' : destino(primera)}
+          title={primera.name[locale]}
           loading="lazy"
+          hidden={Boolean(primera.externalUrl)}
         ></iframe>
+
+        {/* Para las demos publicadas fuera: captura y botón de abrir */}
+        <a
+          class="demo-shot"
+          data-shot-link
+          href={destino(primera)}
+          target="_blank"
+          rel="noopener"
+          hidden={!primera.externalUrl}
+        >
+          <img
+            data-shot-img
+            src={primera.shot ? withBase(primera.shot) : ''}
+            alt=""
+            width="620"
+            height="1298"
+            loading="lazy"
+          />
+          <span class="demo-shot-pie">{t('demos.openNew')}</span>
+        </a>
       </div>
+    </div>
+
+    <div class="demo-cta">
+      <p>
+        <strong data-cta-name>{primera.name[locale]}</strong>
+        <span>{t('demos.ctaText')}</span>
+      </p>
+      <button type="button" class="btn btn-brand" data-cta-toggle aria-expanded="false" aria-controls="demo-form">
+        {t('demos.ctaButton')}
+      </button>
+    </div>
+
+    <div id="demo-form" class="demo-form" data-cta-panel hidden>
+      <slot name="form" />
     </div>
 
     <p class="demo-note">{t('demos.note')}</p>
@@ -98,7 +161,30 @@ const t = useTranslations(locale);
     const iframe = document.querySelector<HTMLIFrameElement>('#demo-preview');
     const name = document.querySelector<HTMLElement>('[data-frame-name]');
     const open = document.querySelector<HTMLAnchorElement>('[data-frame-open]');
+    const shotLink = document.querySelector<HTMLAnchorElement>('[data-shot-link]');
+    const shotImg = document.querySelector<HTMLImageElement>('[data-shot-img]');
+    const ctaName = document.querySelector<HTMLElement>('[data-cta-name]');
+    const ctaToggle = document.querySelector<HTMLButtonElement>('[data-cta-toggle]');
+    const ctaPanel = document.querySelector<HTMLElement>('[data-cta-panel]');
+    const mensaje = document.querySelector<HTMLTextAreaElement>('#cf-message');
     if (tabs.length === 0 || !frame || !iframe) return;
+
+    /* El formulario se abre aquí mismo: mandar a otra página a quien ya ha
+       visto la demo que le encaja es perder la mitad de los contactos. */
+    ctaToggle?.addEventListener('click', () => {
+      const abierto = ctaToggle.getAttribute('aria-expanded') === 'true';
+      ctaToggle.setAttribute('aria-expanded', String(!abierto));
+      if (ctaPanel) ctaPanel.hidden = abierto;
+      if (!abierto) {
+        const activa = tabs.find((tab) => tab.classList.contains('active'));
+        const nombre = activa?.dataset.name ?? '';
+        if (mensaje && !mensaje.value.trim()) {
+          mensaje.value = `Me interesa la demo «${nombre}». Mi negocio es:`;
+        }
+        ctaPanel?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        mensaje?.focus();
+      }
+    });
 
     const select = (tab: HTMLButtonElement, moveFocus = false) => {
       for (const other of tabs) {
@@ -109,12 +195,36 @@ const t = useTranslations(locale);
       }
 
       const src = tab.dataset.src ?? '';
-      if (iframe.getAttribute('src') !== src) iframe.setAttribute('src', src);
+      const externa = tab.dataset.externa === 'si';
+      const nombre = tab.dataset.name ?? '';
+
+      if (externa) {
+        /* Las de fuera no se dejan incrustar: en vez de un marco en blanco,
+           su captura con el enlace para abrirla. */
+        iframe.hidden = true;
+        iframe.removeAttribute('src');
+        if (shotLink) {
+          shotLink.hidden = false;
+          shotLink.href = src;
+        }
+        if (shotImg) shotImg.src = tab.dataset.shot ?? '';
+      } else {
+        if (shotLink) shotLink.hidden = true;
+        iframe.hidden = false;
+        if (iframe.getAttribute('src') !== src) iframe.setAttribute('src', src);
+      }
+
       iframe.setAttribute('aria-labelledby', tab.id);
-      iframe.title = tab.dataset.name ?? '';
+      iframe.title = nombre;
       frame.dataset.format = tab.dataset.format ?? 'desktop';
-      if (name) name.textContent = tab.dataset.name ?? '';
-      if (open) open.href = src;
+      if (name) name.textContent = nombre;
+      if (open) {
+        open.href = src;
+        // "Pantalla completa" no aplica a una demo que vive en otro dominio
+        open.textContent = externa ? open.dataset.fuera ?? '' : open.dataset.dentro ?? '';
+      }
+      if (ctaName) ctaName.textContent = nombre;
+      if (mensaje) mensaje.dataset.demo = nombre;
       if (moveFocus) tab.focus();
     };
 
@@ -154,6 +264,29 @@ const t = useTranslations(locale);
   .demo-list {
     display: grid;
     gap: var(--space-3);
+  }
+
+  .demo-grupo {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .grupo-cab {
+    display: grid;
+    gap: 0.3rem;
+    padding-bottom: var(--space-2);
+  }
+
+  .grupo-cab h2 {
+    margin: 0;
+    font-size: var(--font-size-lg);
+  }
+
+  .grupo-cab p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+    line-height: 1.6;
   }
 
   .demo-item {
@@ -341,6 +474,81 @@ const t = useTranslations(locale);
     margin: 0;
     color: var(--text-soft);
     font-size: var(--font-size-sm);
+  }
+
+  /* --- Captura de las demos publicadas fuera --- */
+  .demo-shot {
+    display: block;
+    position: relative;
+    max-width: min(390px, 100%);
+    margin-inline: auto;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 8px solid #1b1e2b;
+    text-decoration: none;
+  }
+
+  .demo-shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .demo-shot-pie {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: 0.6rem 1rem;
+    background: rgba(4, 6, 12, 0.82);
+    color: var(--text);
+    font-family: var(--font-display);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    text-align: center;
+    backdrop-filter: blur(10px);
+  }
+
+  .demo-shot:hover .demo-shot-pie,
+  .demo-shot:focus-visible .demo-shot-pie {
+    background: var(--violet);
+  }
+
+  /* --- Llamada y formulario --- */
+  .demo-cta {
+    display: grid;
+    gap: var(--space-3);
+    align-items: center;
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius-lg);
+    background: rgba(8, 11, 20, 0.58);
+    border: 1px solid var(--line-strong);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  }
+
+  .demo-cta p {
+    display: grid;
+    gap: 0.2rem;
+    margin: 0;
+  }
+
+  .demo-cta strong {
+    font-family: var(--font-display);
+    font-size: var(--font-size-lg);
+  }
+
+  .demo-cta span {
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  .demo-form {
+    margin-top: var(--space-3);
+  }
+
+  @media (min-width: 620px) {
+    .demo-cta {
+      grid-template-columns: 1fr auto;
+    }
   }
 
   @media (min-width: 1000px) {

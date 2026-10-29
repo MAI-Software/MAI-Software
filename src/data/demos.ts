@@ -1,14 +1,15 @@
 import type { Locale } from './company';
 
 /**
- * Plantillas de demostración.
+ * Webs de demostración.
  *
- * Son webs de ejemplo completas, no capturas: cada una se abre y se navega.
- * Sirven para que un negocio vea en dos minutos cómo quedaría lo suyo, así
- * que el contenido es ficticio a propósito y está marcado como tal.
+ * Dos familias: las de creador (enlace en la biografía con media kit) y las
+ * de negocio, más largas. Unas viven dentro de esta web y se pueden navegar
+ * en el marco; otras son demos publicadas aparte, que no se dejan incrustar,
+ * así que de esas se enseña una captura y se abren en una pestaña.
  *
- * `format` decide cómo se previsualiza: 'mobile' en marco de teléfono (las
- * verticales tipo enlace en la biografía) y 'desktop' en marco de navegador.
+ * `format` decide el marco: 'mobile' en teléfono (las verticales) y
+ * 'desktop' en navegador.
  */
 export interface DemoTemplate {
   slug: string;
@@ -20,23 +21,37 @@ export interface DemoTemplate {
   format: 'mobile' | 'desktop';
   /** Color de acento, solo para el punto de la lista. */
   accent: string;
+  /** Para quién es: ordena la lista y agrupa la página. */
+  tier: 'creador' | 'negocio';
+  /**
+   * Demo publicada fuera de esta web. Va con cabeceras que prohíben
+   * incrustarla, así que se enseña `shot` y se abre en pestaña nueva.
+   */
+  externalUrl?: string;
+  /** Captura para las externas, en /public. */
+  shot?: string;
+  /** Todavía en obra: se lista pero no se puede abrir. */
+  pronto?: boolean;
 }
 
 export const demoTemplates: DemoTemplate[] = [
   {
-    slug: 'influencer',
-    name: { es: 'Web para influencer', en: 'Influencer page' },
-    sector: { es: 'Creadores de contenido', en: 'Content creators' },
+    slug: 'lua',
+    name: { es: 'Web para creadores', en: 'Creator page' },
+    sector: { es: 'Influencers y creadores', en: 'Influencers and creators' },
     pitch: {
-      es: 'Una página vertical pensada para la biografía de Instagram o TikTok: todos tus enlaces, tus últimos vídeos y las marcas con las que trabajas, en un solo sitio que abre en un segundo.',
-      en: 'A vertical page made for your Instagram or TikTok bio: every link, your latest videos and the brands you work with, in one place that opens in a second.',
+      es: 'La que enseñamos a las marcas: portada con cifras reales, media kit descargable, tarifas por formato y formulario de colaboraciones. Vertical, pensada para el enlace de la biografía.',
+      en: 'The one we show to brands: cover with real figures, downloadable media kit, rates by format and a collaboration form. Vertical, made for the bio link.',
     },
     highlights: {
-      es: ['Diseñada para verse en el móvil', 'Enlaces, vídeos y colaboraciones', 'Formulario para marcas'],
-      en: ['Designed to be seen on a phone', 'Links, videos and brand deals', 'Form for brands'],
+      es: ['Cifras y media kit en PDF', 'Tarifas por formato', 'Formulario para marcas'],
+      en: ['Figures and PDF media kit', 'Rates by format', 'Form for brands'],
     },
     format: 'mobile',
-    accent: '#ff3d8b',
+    accent: '#c0714a',
+    tier: 'creador',
+    externalUrl: 'https://demo-lua-marin.pages.dev/',
+    shot: '/demos/lua.webp',
   },
   {
     slug: 'estetica',
@@ -51,6 +66,7 @@ export const demoTemplates: DemoTemplate[] = [
       en: ['Prices and financing up front', 'Before and after with consent', 'Free consultation in two steps'],
     },
     format: 'desktop',
+    tier: 'negocio',
     accent: '#b08b4f',
   },
   {
@@ -66,6 +82,7 @@ export const demoTemplates: DemoTemplate[] = [
       en: ['Treatments explained without jargon', 'Team, credentials and insurers', 'First visit and financing'],
     },
     format: 'desktop',
+    tier: 'negocio',
     accent: '#3f8fd6',
   },
   {
@@ -81,7 +98,24 @@ export const demoTemplates: DemoTemplate[] = [
       en: ['24 h line in the header', 'Fees in three formats', 'Results with figures and timelines'],
     },
     format: 'desktop',
+    tier: 'negocio',
     accent: '#8c2f39',
+  },
+  {
+    slug: 'tatuajes',
+    name: { es: 'Web para estudio de tatuajes', en: 'Tattoo studio website' },
+    sector: { es: 'Tatuaje y perforación', en: 'Tattoo and piercing' },
+    pitch: {
+      es: 'Portfolio por artista y por estilo, cómo se pide presupuesto con la idea y las referencias, señal y cuidados posteriores. Lo que pregunta todo el mundo antes de escribir.',
+      en: 'Portfolio by artist and by style, how to ask for a quote with the idea and references, deposit and aftercare. What everyone asks before writing.',
+    },
+    highlights: {
+      es: ['Portfolio por artista', 'Presupuesto con referencias', 'Señal y cuidados explicados'],
+      en: ['Portfolio by artist', 'Quote with references', 'Deposit and aftercare explained'],
+    },
+    format: 'desktop',
+    accent: '#d1495b',
+    tier: 'negocio',
   },
   {
     slug: 'masajes',
@@ -96,6 +130,7 @@ export const demoTemplates: DemoTemplate[] = [
       en: ['Treatments with length and price', 'Packs and first session', 'Booking by WhatsApp or form'],
     },
     format: 'desktop',
+    tier: 'negocio',
     accent: '#6f9c76',
   },
   {
@@ -111,6 +146,7 @@ export const demoTemplates: DemoTemplate[] = [
       en: ['Menu by section, always legible', 'Hours and directions', 'Booking by phone or form'],
     },
     format: 'desktop',
+    tier: 'negocio',
     accent: '#e0793a',
   },
 ];

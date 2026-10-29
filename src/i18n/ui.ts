@@ -27,6 +27,15 @@ export const ui = {
     'demos.intro':
       'Webs completas que puedes abrir y recorrer, no capturas. Elige un sector a la izquierda y verás la plantilla funcionando a la derecha. Todas se adaptan al móvil y se entregan con tus textos, tus fotos y tu dominio.',
     'demos.list': 'Plantillas por sector',
+    'demos.tier.creador': 'Para creadores',
+    'demos.tier.creador.note':
+      'Una página vertical con tus cifras, tu media kit y un formulario para marcas. Se monta rápido porque el contenido lo pones tú.',
+    'demos.tier.negocio': 'Para negocios',
+    'demos.tier.negocio.note':
+      'Webs más largas: servicios con su precio de partida, equipo, preguntas frecuentes y el formulario que trae clientes. Cada sector pide lo suyo.',
+    'demos.openNew': 'Abrir la demo en una pestaña',
+    'demos.ctaText': '¿Te encaja? Cuéntanos tu caso y te decimos qué necesitas.',
+    'demos.ctaButton': 'Pedir información',
     'demos.open': 'Abrir a pantalla completa',
     'demos.note':
       'Los nombres, precios y datos de las plantillas son inventados: están para enseñar la estructura.',
@@ -239,6 +248,15 @@ export const ui = {
     'demos.intro':
       'Full websites you can open and walk through, not screenshots. Pick a sector on the left and the template runs on the right. They all adapt to phones and ship with your copy, your photos and your domain.',
     'demos.list': 'Templates by sector',
+    'demos.tier.creador': 'For creators',
+    'demos.tier.creador.note':
+      'A vertical page with your figures, your media kit and a form for brands. It goes up fast because the content is yours.',
+    'demos.tier.negocio': 'For businesses',
+    'demos.tier.negocio.note':
+      'Longer websites: services with a starting price, team, FAQs and the form that brings clients. Every sector asks for its own.',
+    'demos.openNew': 'Open the demo in a tab',
+    'demos.ctaText': 'Does it fit? Tell us your case and we will tell you what you need.',
+    'demos.ctaButton': 'Ask for information',
     'demos.open': 'Open full screen',
     'demos.note':
       'Names, prices and data in the templates are made up: they are there to show the structure. The samples are written in Spanish.',

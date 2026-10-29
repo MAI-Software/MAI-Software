@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import DemoBrowser from '../../components/demos/DemoBrowser.astro';
+import ContactForm from '../../components/global/ContactForm.astro';
 import WebOffer from '../../components/home/WebOffer.astro';
 import { company } from '../../data/company';
 import { useTranslations, homePath } from '../../i18n/utils';
@@ -30,7 +31,9 @@ const crumbs = [
         <p class="lead">{t('demos.intro')}</p>
       </header>
 
-      <DemoBrowser locale={locale} />
+      <DemoBrowser locale={locale}>
+        <ContactForm slot="form" locale={locale} />
+      </DemoBrowser>
     </div>
   </section>
 

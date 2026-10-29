@@ -4,6 +4,7 @@ import Hero from '../components/home/Hero.astro';
 import CategoryIndex from '../components/home/CategoryIndex.astro';
 import ProjectFeed from '../components/home/ProjectFeed.astro';
 import Process from '../components/home/Process.astro';
+import LiveLinks from '../components/global/LiveLinks.astro';
 import ClientSites from '../components/home/ClientSites.astro';
 import WebOffer from '../components/home/WebOffer.astro';
 import ContactSection from '../components/home/ContactSection.astro';
@@ -60,6 +61,11 @@ const software = all.filter((p) => p.data.category !== 'game').slice(0, 3);
       />
     )
   }
+  <section class="section section-line">
+    <div class="container">
+      <LiveLinks locale={locale} />
+    </div>
+  </section>
   <Process locale={locale} />
   <ClientSites locale={locale} />
   <WebOffer locale={locale} />
